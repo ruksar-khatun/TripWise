@@ -25,7 +25,10 @@ android {
             properties.load(localPropertiesFile.inputStream())
         }
         val mapsApiKey = properties.getProperty("MAPS_API_KEY", "\"\"")
+        val chatBackendUrl = properties.getProperty("CHAT_BACKEND_URL", "\"http://10.0.2.2:3000/\"")
+        
         buildConfigField("String", "MAPS_API_KEY", mapsApiKey)
+        buildConfigField("String", "CHAT_BACKEND_URL", chatBackendUrl)
     }
 
     buildTypes {

@@ -33,4 +33,5 @@ sealed class Screen(val route: String) {
     object EditPreferences : Screen("edit_preferences")
     object Settings : Screen("settings")
     object CurrentTrip : Screen("current_trip")
+    object TravelAssistant : Screen("travel_assistant")
 }

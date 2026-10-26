@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,7 +43,8 @@ fun HomeScreen(
     onProfileClick: () -> Unit,
     onCreateTripClick: () -> Unit,
     onSavedPlacesClick: () -> Unit,
-    onCurrentTripClick: () -> Unit
+    onCurrentTripClick: () -> Unit,
+    onAiAssistantClick: () -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf("") }
     val user = appState.userProfile
@@ -131,17 +133,72 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Quick Actions Row
+        // Quick Actions Row (Scrollable to prevent overflow on narrow devices)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 24.dp)
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(18.dp)
         ) {
+            QuickActionButton("Ask AI", Icons.Default.AutoAwesome, SeaBlue, onAiAssistantClick)
             QuickActionButton("New Trip", Icons.Default.Add, SeaBlue, onCreateTripClick)
             QuickActionButton("Explore", Icons.Default.Explore, DuskBlue, onExploreClick)
             QuickActionButton("Saved", Icons.Default.Bookmark, SeaSalt, onSavedPlacesClick)
             QuickActionButton("Today", Icons.Default.Today, SeaBlue, onCurrentTripClick)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Ask TripWise AI Banner
+        TripWiseCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            onClick = onAiAssistantClick
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(SeaBlue.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AutoAwesome,
+                        contentDescription = null,
+                        tint = SeaBlue,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Ask TripWise AI Assistant ✨",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = DuskBlue
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Get custom itineraries, local food tips & budget advice",
+                        fontSize = 12.sp,
+                        color = DuskBlue.copy(alpha = 0.7f)
+                    )
+                }
+
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = null,
+                    tint = SeaBlue
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))

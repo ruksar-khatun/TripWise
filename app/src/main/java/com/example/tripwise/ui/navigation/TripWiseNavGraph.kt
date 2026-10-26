@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.example.tripwise.data.AppState
 import com.example.tripwise.ui.components.TripWiseBottomBar
 import com.example.tripwise.ui.screens.auth.*
+import com.example.tripwise.ui.screens.chat.ChatAssistantScreen
 import com.example.tripwise.ui.screens.home.*
 import com.example.tripwise.ui.screens.profile.*
 import com.example.tripwise.ui.screens.trip.*
@@ -95,7 +96,14 @@ fun TripWiseNavGraph(
                     onProfileClick = { navController.navigate(Screen.Profile.route) },
                     onCreateTripClick = { navController.navigate(Screen.CreateTrip.route) },
                     onSavedPlacesClick = { navController.navigate(Screen.SavedPlaces.route) },
-                    onCurrentTripClick = { navController.navigate(Screen.CurrentTrip.route) }
+                    onCurrentTripClick = { navController.navigate(Screen.CurrentTrip.route) },
+                    onAiAssistantClick = { navController.navigate(Screen.TravelAssistant.route) }
+                )
+            }
+            composable(Screen.TravelAssistant.route) {
+                ChatAssistantScreen(
+                    appState = appState,
+                    onBackClick = { navController.popBackStack() }
                 )
             }
             composable(Screen.Explore.route) {
