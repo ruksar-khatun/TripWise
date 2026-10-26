@@ -48,7 +48,7 @@ TripWise is a premium, modern, and minimal Android mobile application designed t
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/tripwise.git
+   git clone https://github.com/ruksar-khatun/TripWise.git
    ```
 2. **Configure API Keys**:
    - Open `local.properties` in the root directory.
