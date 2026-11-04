@@ -16,5 +16,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         dependencies {
             add("testImplementation", libs.findLibrary("junit4").get())
         }
+        // Full stack traces for failing tests in CI logs.
+        tasks.withType(org.gradle.api.tasks.testing.Test::class.java).configureEach {
+            testLogging {
+                events("failed")
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+            }
+        }
     }
 }
