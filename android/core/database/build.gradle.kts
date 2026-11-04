@@ -17,3 +17,8 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 }
+
+// Robolectric reads java.io.FileDescriptor internals, which JDK 17+ blocks unless opened explicitly.
+tasks.withType<Test>().configureEach {
+    jvmArgs("--add-opens=java.base/java.io=ALL-UNNAMED")
+}

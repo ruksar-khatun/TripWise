@@ -17,6 +17,7 @@ import com.tripwise.core.network.dto.AuthResponse
 import com.tripwise.core.network.dto.TokensDto
 import com.tripwise.core.network.dto.UserDto
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -56,6 +57,13 @@ private class FakeAuthNetwork : AuthNetworkDataSource {
     }
 }
 
+/**
+ * DataStore does its file I/O on real background threads, so tests wait for the session state
+ * itself instead of relying on virtual-time idling.
+ */
+private suspend fun DefaultAuthRepository.awaitSession(predicate: (SessionState) -> Boolean): SessionState =
+    session.first(predicate)
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultAuthRepositoryTest {
     @get:Rule val tmp = TemporaryFolder()
@@ -74,16 +82,15 @@ class DefaultAuthRepositoryTest {
 
     @Test fun `no stored session starts signed out`() = runTest {
         val repo = repo()
-        testScheduler.advanceUntilIdle()
-        assertEquals(SessionState.SignedOut(), repo.session.value)
+        assertEquals(SessionState.SignedOut(), repo.awaitSession { it != SessionState.Unknown })
     }
 
     @Test fun `stored session restores signed in, then refreshes profile from server`() = runTest {
         tokens.tokens = AuthTokens("a", "r")
         cache.save(UserProfile("u1", "Cached Name", "u1@example.com", null, CurrencyCode("INR")))
         val repo = repo()
-        testScheduler.advanceUntilIdle()
-        assertEquals("Fresh Name", (repo.session.value as SessionState.SignedIn).user.displayName)
+        val state = repo.awaitSession { (it as? SessionState.SignedIn)?.user?.displayName == "Fresh Name" }
+        assertEquals("Fresh Name", (state as SessionState.SignedIn).user.displayName)
     }
 
     @Test fun `offline start keeps the cached profile`() = runTest {
@@ -91,13 +98,13 @@ class DefaultAuthRepositoryTest {
         cache.save(UserProfile("u1", "Cached Name", "u1@example.com", null, CurrencyCode("INR")))
         network.meResult = Outcome.Failure(AppError.Network)
         val repo = repo()
-        testScheduler.advanceUntilIdle()
-        assertEquals("Cached Name", (repo.session.value as SessionState.SignedIn).user.displayName)
+        val state = repo.awaitSession { it is SessionState.SignedIn }
+        assertEquals("Cached Name", (state as SessionState.SignedIn).user.displayName)
     }
 
     @Test fun `sign in stores tokens, a different account wipes previous local data`() = runTest {
         val repo = repo()
-        testScheduler.advanceUntilIdle()
+        repo.awaitSession { it != SessionState.Unknown }
         val baseline = local.clears
         assertEquals(Outcome.Success(Unit), repo.signIn(" u1@example.com ", "pw"))
         assertEquals(AuthTokens("access-u1", "refresh-u1"), tokens.tokens)
@@ -111,6 +118,7 @@ class DefaultAuthRepositoryTest {
     @Test fun `failed sign in leaves the user signed out`() = runTest {
         network.loginResult = Outcome.Failure(AppError.InvalidCredentials)
         val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
         assertEquals(Outcome.Failure(AppError.InvalidCredentials), repo.signIn("x", "y"))
         assertEquals(SessionState.SignedOut(), repo.session.value)
         assertNull(tokens.tokens)
@@ -118,6 +126,7 @@ class DefaultAuthRepositoryTest {
 
     @Test fun `sign out revokes on server and clears everything even when offline`() = runTest {
         val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
         repo.signIn("u1@example.com", "pw")
         network.logoutResult = Outcome.Failure(AppError.Network)
         val before = local.clears
@@ -131,14 +140,15 @@ class DefaultAuthRepositoryTest {
 
     @Test fun `server-side expiry ends the session with expired flag`() = runTest {
         val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
         repo.signIn("u1@example.com", "pw")
         events.notifyExpired()
-        testScheduler.advanceUntilIdle()
-        assertEquals(SessionState.SignedOut(expired = true), repo.session.value)
+        assertEquals(SessionState.SignedOut(expired = true), repo.awaitSession { it is SessionState.SignedOut })
     }
 
     @Test fun `account deletion only signs out when the server confirms`() = runTest {
         val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
         repo.signIn("u1@example.com", "pw")
         network.deleteResult = Outcome.Failure(AppError.InvalidCredentials)
         assertEquals(Outcome.Failure(AppError.InvalidCredentials), repo.deleteAccount("wrong"))
