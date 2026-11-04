@@ -15,12 +15,15 @@ import { authRouter } from './routes/auth.js';
 import { meRouter } from './routes/me.js';
 import { CatalogService } from './catalog/service.js';
 import { destinationsRouter } from './routes/destinations.js';
+import { PlacesService } from './places/service.js';
+import { placesRouter } from './routes/places.js';
 import { ErrorCode, type ApiErrorBody } from './http/errors.js';
 import { healthRouter } from './routes/health.js';
 import { errorHandler, notFound } from './middleware/errors.js';
 
 export interface AppDeps {
   db: Database;
+  places?: PlacesService;
   /** Injectable clock for tests. */
   now?: () => Date;
 }
@@ -69,6 +72,7 @@ export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   v1.use('/auth', authRouter(auth, { strictLimit: env.NODE_ENV !== 'test' }));
   v1.use('/me', meRouter(auth, requireAuth(tokenConfig)));
   v1.use('/destinations', destinationsRouter(new CatalogService(deps.db)));
+  v1.use('/places', placesRouter(deps.places ?? new PlacesService(env.PLACES_API_KEY), requireAuth(tokenConfig)));
   // Next phases mount here (all behind requireAuth): /trips, /saved, /expenses, /sync, /ai, /destinations
 
   app.use('/api/v1', v1);

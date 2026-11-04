@@ -10,6 +10,9 @@ export const ErrorCode = {
   NOT_FOUND: 'NOT_FOUND',
   CONFLICT: 'CONFLICT',
   RATE_LIMITED: 'RATE_LIMITED',
+  /** A server-side integration (Places, Gemini) has no API key configured. */
+  NOT_CONFIGURED: 'NOT_CONFIGURED',
+  UPSTREAM_FAILED: 'UPSTREAM_FAILED',
   AI_UNAVAILABLE: 'AI_UNAVAILABLE',
   AI_QUOTA_EXCEEDED: 'AI_QUOTA_EXCEEDED',
   AI_INVALID_OUTPUT: 'AI_INVALID_OUTPUT',
@@ -45,6 +48,12 @@ export class HttpError extends Error {
   }
   static forbidden(message = 'Forbidden') {
     return new HttpError(403, ErrorCode.FORBIDDEN, message);
+  }
+  static notConfigured(feature: string) {
+    return new HttpError(503, ErrorCode.NOT_CONFIGURED, `${feature} is not configured on this server`);
+  }
+  static upstream(message: string) {
+    return new HttpError(502, ErrorCode.UPSTREAM_FAILED, message);
   }
   static conflict(serverVersion: number) {
     return new HttpError(409, ErrorCode.CONFLICT, 'Version conflict', { serverVersion });
