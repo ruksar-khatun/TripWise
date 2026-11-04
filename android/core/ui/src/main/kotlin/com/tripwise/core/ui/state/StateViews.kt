@@ -75,10 +75,14 @@ fun ErrorState(
     error: AppError,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.core_ui_error_title),
+    title: String = stringResource(if (error == AppError.NotConfigured) R.string.core_ui_not_available_title else R.string.core_ui_error_title),
 ) {
     MessageLayout(
-        icon = if (error == AppError.Network) TwIcons.Offline else TwIcons.Error,
+        icon = when (error) {
+            AppError.Network -> TwIcons.Offline
+            AppError.NotConfigured -> TwIcons.Info
+            else -> TwIcons.Error
+        },
         title = title,
         body = stringResource(error.messageRes()),
         modifier = modifier.semantics { liveRegion = LiveRegionMode.Polite },

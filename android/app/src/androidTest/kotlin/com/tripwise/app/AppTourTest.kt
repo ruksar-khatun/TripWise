@@ -70,8 +70,9 @@ class AppTourTest {
         // AI itinerary planner → save as a new trip
         t.scrollTo("Plan with AI")
         if (t.click("Plan with AI", required = false)) {
-            t.waitFor("Generate itinerary")
+            t.waitFor("Destination")
             t.shot("planner-preferences", settleMs = 1_000)
+            t.scrollTo("Generate itinerary")
             t.click("Generate itinerary")
             runCatching { t.waitFor("Day 1", timeoutMs = 60_000) }
             t.shot("planner-result", settleMs = 1_500)

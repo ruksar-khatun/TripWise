@@ -21,6 +21,7 @@
     <string name="core_ui_error_not_configured">This feature isn\'t set up on the server yet.</string>
     <string name="core_ui_error_server">Something went wrong on our side. Please try again.</string>
     <string name="core_ui_error_unknown">Something went wrong. Please try again.</string>
+    <string name="core_ui_not_available_title">Not available yet</string>
     <string name="core_ui_error_title">Something went wrong</string>
 
     <!-- Interests -->
