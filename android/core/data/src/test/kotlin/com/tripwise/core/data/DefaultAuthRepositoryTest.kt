@@ -95,7 +95,7 @@ class DefaultAuthRepositoryTest {
         assertEquals("Cached Name", (repo.session.value as SessionState.SignedIn).user.displayName)
     }
 
-    @Test fun `sign in stores tokens; a different account wipes previous local data`() = runTest {
+    @Test fun `sign in stores tokens, a different account wipes previous local data`() = runTest {
         val repo = repo()
         testScheduler.advanceUntilIdle()
         val baseline = local.clears

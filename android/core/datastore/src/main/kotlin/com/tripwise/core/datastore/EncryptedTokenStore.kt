@@ -67,19 +67,21 @@ internal class EncryptedTokenStore(
         cache
     }
 
-    override suspend fun save(tokens: AuthTokens) = mutex.withLock {
+    override suspend fun save(tokens: AuthTokens): Unit = mutex.withLock {
         cache = tokens
         loaded = true
         val cipher = aead ?: return@withLock
         val plain = Json.encodeToString(Payload.serializer(), Payload(tokens.accessToken, tokens.refreshToken)).toByteArray()
         val encrypted = Base64.encodeToString(cipher.encrypt(plain, ASSOCIATED_DATA), Base64.NO_WRAP)
         dataStore.edit { it[KEY] = encrypted }
+        Unit
     }
 
-    override suspend fun clear() = mutex.withLock {
+    override suspend fun clear(): Unit = mutex.withLock {
         cache = null
         loaded = true
         dataStore.edit { it.remove(KEY) }
+        Unit
     }
 
     private suspend fun read(): AuthTokens? {

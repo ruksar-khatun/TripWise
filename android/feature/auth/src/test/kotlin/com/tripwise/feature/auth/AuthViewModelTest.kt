@@ -16,7 +16,7 @@ import org.junit.Test
 class AuthViewModelTest {
     @get:Rule val mainDispatcherRule = MainDispatcherRule()
 
-    @Test fun `no errors before first submit; client validation blocks the call`() = runTest {
+    @Test fun `no errors before first submit, client validation blocks the call`() = runTest {
         val auth = FakeAuthRepository()
         val vm = SignUpViewModel(auth)
         vm.onAction(AuthAction.EmailChanged("bad"))
@@ -48,7 +48,7 @@ class AuthViewModelTest {
         assertTrue(auth.session.value is SessionState.SignedIn)
     }
 
-    @Test fun `wrong credentials show a form error; server field errors map to fields`() = runTest {
+    @Test fun `wrong credentials show a form error, server field errors map to fields`() = runTest {
         val auth = FakeAuthRepository().apply { nextResult = Outcome.Failure(AppError.InvalidCredentials) }
         val signIn = SignInViewModel(auth)
         signIn.onAction(AuthAction.EmailChanged("a@b.co"))

@@ -74,7 +74,7 @@ class DaoTest {
                 execSQL(
                     "INSERT INTO expenses (id, trip_id, category, amount_minor, currency, note, spent_on, updated_at, sync_state, deleted) " +
                         "VALUES (?, ?, ?, ?, ?, NULL, ?, ?, 'PENDING', ?)",
-                    arrayOf(e.id, e.tripId, e.category, e.amountMinor, e.currency, e.spentOn.toString(), now.toEpochMilli(), if (e.deleted) 1 else 0),
+                    arrayOf<Any?>(e.id, e.tripId, e.category, e.amountMinor, e.currency, e.spentOn.toString(), now.toEpochMilli(), if (e.deleted) 1 else 0),
                 )
             }
         }
