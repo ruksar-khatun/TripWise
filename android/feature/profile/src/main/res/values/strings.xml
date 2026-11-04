@@ -1,0 +1,5 @@
+<resources>
+    <string name="feature_profile_title">Profile</string>
+    <string name="feature_profile_placeholder_title">Your profile</string>
+    <string name="feature_profile_placeholder_body">Account and settings will appear here.</string>
+</resources>

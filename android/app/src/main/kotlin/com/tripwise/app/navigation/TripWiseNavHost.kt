@@ -1,35 +1,32 @@
 package com.tripwise.app.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.tripwise.app.ui.FoundationScreen
-import kotlinx.serialization.Serializable
+import com.tripwise.app.ui.TripWiseAppState
+import com.tripwise.feature.assistant.navigation.assistantSection
+import com.tripwise.feature.explore.navigation.exploreSection
+import com.tripwise.feature.home.navigation.HomeRoute
+import com.tripwise.feature.home.navigation.homeSection
+import com.tripwise.feature.profile.navigation.profileSection
+import com.tripwise.feature.trips.navigation.tripsSection
 
 /**
- * Type-safe routes. Each feature module will expose its own route + `NavGraphBuilder.xxxScreen()`
- * extension, and this host only wires them together.
+ * The only place that knows about every feature. Cross-feature navigation
+ * (e.g. Home → Destination details) is wired here by passing lambdas into the sections.
+ * An auth graph (session gate → sign-in) will wrap this when authentication is approved.
  */
-@Serializable
-data object FoundationRoute
-
 @Composable
-fun TripWiseNavHost(
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-) {
+fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
     NavHost(
-        navController = navController,
-        startDestination = FoundationRoute,
+        navController = appState.navController,
+        startDestination = HomeRoute,
         modifier = modifier,
     ) {
-        composable<FoundationRoute> {
-            FoundationScreen(contentPadding = contentPadding)
-        }
+        homeSection()
+        exploreSection()
+        tripsSection()
+        assistantSection()
+        profileSection()
     }
 }

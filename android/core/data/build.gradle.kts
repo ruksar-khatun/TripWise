@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.tripwise.android.library)
-    alias(libs.plugins.tripwise.android.hilt)
+    alias(libs.plugins.tripwise.hilt)
 }
 
 android {
@@ -9,9 +9,12 @@ android {
 
 dependencies {
     api(projects.core.domain)
+    implementation(projects.core.common)
     implementation(projects.core.network)
+    implementation(projects.core.database)
+    implementation(projects.core.datastore)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.datastore.preferences)
-    // Room is added (with the androidx.room + KSP setup) when the first entity is introduced.
-    testImplementation(libs.kotlinx.coroutines.test)
+    implementation(libs.androidx.core.ktx)
+
+    testImplementation(projects.core.testing)
 }

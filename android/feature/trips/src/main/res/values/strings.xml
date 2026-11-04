@@ -1,0 +1,5 @@
+<resources>
+    <string name="feature_trips_title">My Trips</string>
+    <string name="feature_trips_placeholder_title">Your trips</string>
+    <string name="feature_trips_placeholder_body">Trips you plan will appear here.</string>
+</resources>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="feature_home_title">TripWise</string>
+    <string name="feature_home_welcome_title">Welcome to TripWise</string>
+    <string name="feature_home_welcome_body">Your dashboard will show upcoming trips, saved places and ideas here.</string>
+    <string name="feature_home_backend_title">Backend connection</string>
+    <string name="feature_home_backend_checking">Checking…</string>
+    <string name="feature_home_backend_connected">Connected to %1$s v%2$s</string>
+    <string name="feature_home_backend_unhealthy">Backend responded but reported a problem.</string>
+    <string name="feature_home_backend_check_again">Check again</string>
+</resources>

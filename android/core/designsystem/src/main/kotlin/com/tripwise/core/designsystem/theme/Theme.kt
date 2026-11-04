@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -60,18 +61,36 @@ fun TripWiseTheme(
         else -> LightColors
     }
 
-    CompositionLocalProvider(LocalSpacing provides Spacing()) {
+    CompositionLocalProvider(
+        LocalSpacing provides Spacing(),
+        LocalTripWiseShapes provides TripWiseShapes(),
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = TripWiseTypography,
-            shapes = TripWiseShapes,
+            shapes = TripWiseMaterialShapes,
             content = content,
         )
     }
 }
 
-/** Accessors for TripWise-specific tokens that MaterialTheme does not carry. */
+/**
+ * Single accessor for all design tokens, so screens read `TripWiseTheme.colors.primary`,
+ * `TripWiseTheme.spacing.lg`, etc. and never hard-code values.
+ */
 object TripWiseTheme {
+    val colors: ColorScheme
+        @Composable @ReadOnlyComposable
+        get() = MaterialTheme.colorScheme
+
+    val typography: Typography
+        @Composable @ReadOnlyComposable
+        get() = MaterialTheme.typography
+
+    val shapes: TripWiseShapes
+        @Composable @ReadOnlyComposable
+        get() = LocalTripWiseShapes.current
+
     val spacing: Spacing
         @Composable @ReadOnlyComposable
         get() = LocalSpacing.current

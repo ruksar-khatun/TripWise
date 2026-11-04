@@ -5,17 +5,24 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.tripwise.app.ui.TripWiseApp
+import com.tripwise.app.ui.rememberTripWiseAppState
+import com.tripwise.core.common.network.NetworkMonitor
 import com.tripwise.core.designsystem.theme.TripWiseTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var networkMonitor: NetworkMonitor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
+            // Theme mode (Light/Dark/System) will come from user preferences once that setting is approved.
             TripWiseTheme {
-                TripWiseApp()
+                TripWiseApp(appState = rememberTripWiseAppState(networkMonitor))
             }
         }
     }

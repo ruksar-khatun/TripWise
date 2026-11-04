@@ -1,17 +1,13 @@
 package com.tripwise.core.network.api
 
-import kotlinx.serialization.Serializable
+import com.tripwise.core.network.dto.HealthDto
 import retrofit2.http.GET
 
-/** Retrofit contract for the TripWise backend. Feature endpoints are added per feature. */
+/**
+ * Retrofit contract for the TripWise backend (`/api/v1`). Feature endpoints are added per phase.
+ * Paths are relative (no leading slash) so they resolve against [com.tripwise.core.network.NetworkConfig.baseUrl].
+ */
 interface TripWiseApi {
-    @GET("api/health")
-    suspend fun health(): HealthResponse
+    @GET("api/v1/health")
+    suspend fun health(): HealthDto
 }
-
-@Serializable
-data class HealthResponse(
-    val status: String,
-    val service: String,
-    val version: String,
-)

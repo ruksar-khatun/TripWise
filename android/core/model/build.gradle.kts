@@ -1,8 +1,5 @@
 plugins {
     alias(libs.plugins.tripwise.jvm.library)
-    alias(libs.plugins.kotlin.serialization)
 }
-
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-}
+// Domain models are plain immutable Kotlin. No serialization annotations here:
+// DTOs (network) and entities (database) are mapped to/from these in :core:data.

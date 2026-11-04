@@ -20,6 +20,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
 }
 
 gradlePlugin {
@@ -36,9 +37,17 @@ gradlePlugin {
             id = "tripwise.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
-        register("androidHilt") {
-            id = "tripwise.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+        register("androidFeature") {
+            id = "tripwise.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "tripwise.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+        register("hilt") {
+            id = "tripwise.hilt"
+            implementationClass = "HiltConventionPlugin"
         }
         register("jvmLibrary") {
             id = "tripwise.jvm.library"

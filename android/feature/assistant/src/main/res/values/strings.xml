@@ -1,0 +1,5 @@
+<resources>
+    <string name="feature_assistant_title">Assistant</string>
+    <string name="feature_assistant_placeholder_title">Your AI travel assistant</string>
+    <string name="feature_assistant_placeholder_body">Ask questions and plan trips with AI here.</string>
+</resources>

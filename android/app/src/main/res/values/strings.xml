@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">TripWise</string>
-    <string name="foundation_title">TripWise</string>
-    <string name="foundation_subtitle">Project foundation is ready. Features come next.</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_trips">Trips</string>
+    <string name="nav_assistant">Assistant</string>
+    <string name="nav_profile">Profile</string>
 </resources>

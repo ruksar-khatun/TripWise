@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.tripwise.android.application)
     alias(libs.plugins.tripwise.android.compose)
-    alias(libs.plugins.tripwise.android.hilt)
+    alias(libs.plugins.tripwise.hilt)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -18,17 +18,23 @@ android {
         applicationId = "com.tripwise.app"
         versionCode = 1
         versionName = "0.1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // Maps/Places key is injected into the manifest; never committed.
+        // Maps/Places key is injected into the manifest; never committed. Used from the Maps phase on.
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY") ?: ""
     }
+
+    buildFeatures.buildConfig = true
 
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            val debugUrl = localProps.getProperty("BACKEND_BASE_URL") ?: "http://10.0.2.2:3000/"
+            buildConfigField("String", "BACKEND_BASE_URL", "\"$debugUrl\"")
         }
         release {
+            // Must be HTTPS (release network security config blocks cleartext).
+            val releaseUrl = localProps.getProperty("BACKEND_BASE_URL_RELEASE") ?: "https://api.tripwise.invalid/"
+            buildConfigField("String", "BACKEND_BASE_URL", "\"$releaseUrl\"")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -41,9 +47,17 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.ui)
     implementation(projects.core.data)
+    implementation(projects.core.network)
+
+    implementation(projects.feature.home)
+    implementation(projects.feature.explore)
+    implementation(projects.feature.trips)
+    implementation(projects.feature.assistant)
+    implementation(projects.feature.profile)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -53,5 +67,5 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-    testImplementation(libs.junit4)
+    testImplementation(projects.core.testing)
 }

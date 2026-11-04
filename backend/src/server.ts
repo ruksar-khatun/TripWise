@@ -1,10 +1,19 @@
 import { loadEnv } from './config/env.js';
+import { createLogger } from './config/logger.js';
 import { createApp } from './app.js';
 
 const env = loadEnv();
-const app = createApp(env);
+const logger = createLogger(env);
+const app = createApp(env, logger);
 
-app.listen(env.PORT, () => {
-  console.log(`tripwise-backend listening on http://localhost:${env.PORT} (${env.NODE_ENV})`);
-  if (!env.GEMINI_API_KEY) console.warn('GEMINI_API_KEY not set: AI features will be unavailable.');
+const server = app.listen(env.PORT, () => {
+  logger.info(`tripwise-backend listening on http://localhost:${env.PORT} (${env.NODE_ENV})`);
 });
+
+// Graceful shutdown (Cloud Run sends SIGTERM).
+for (const signal of ['SIGTERM', 'SIGINT'] as const) {
+  process.on(signal, () => {
+    logger.info(`${signal} received, shutting down`);
+    server.close(() => process.exit(0));
+  });
+}

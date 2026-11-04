@@ -1,0 +1,5 @@
+<resources>
+    <string name="feature_explore_title">Explore</string>
+    <string name="feature_explore_placeholder_title">Discover destinations</string>
+    <string name="feature_explore_placeholder_body">Search and saved destinations will appear here.</string>
+</resources>
