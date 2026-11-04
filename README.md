@@ -2,7 +2,36 @@
 
 A new, from-scratch travel planner: Android (Kotlin, Jetpack Compose, Material 3) and a Node.js/Express backend that holds the Gemini API key and other server-side integrations.
 
-> Status: **foundation only**. No product features yet.
+> Status: all 13 planned phases implemented. Every push to `main` is built and tested by CI and walked through on a real Android emulator (see **Emulator tour** below).
+
+## Features
+
+| Area | What it does | Needs |
+|---|---|---|
+| Home | Greeting, search, featured + popular carousels, upcoming trip, interests, recently saved | Backend |
+| Explore | Search by name/country, interest filters, adaptive grid, tablet list–detail | Backend |
+| Destination | Photo, facts, highlights, food, things to do, map preview, save/share | Backend (map: `MAPS_API_KEY`) |
+| Activities | Curated attractions by category, nearby places from Google | Nearby: `PLACES_API_KEY` on backend |
+| Maps | Full map with destination, attractions and nearby pins; directions | `MAPS_API_KEY` in `android/local.properties` |
+| AI assistant | Streaming travel chat with trip/destination context, retry/stop | `GEMINI_API_KEY` on backend |
+| AI itinerary | Destination, days, pace, budget, interests → day-by-day plan → save to a trip | `GEMINI_API_KEY` (falls back to a curated basic plan) |
+| Expenses | Cost estimate by category (currency-converted), planned amounts, expense log, totals | Backend (rates) |
+| My Trips | Create, view, delete trips; add/edit/delete itinerary activities; budget | – |
+| Saved | Save/remove with undo, sorting, consistent hearts everywhere | – |
+| Images | Curated photos with a CI contact sheet to verify relevance; gradient fallback | – |
+| Account | Email/password sign-up/in, session restore, sign-out, account deletion | Backend |
+
+## API keys
+
+- **Backend** (`backend/.env`, or Cloud Run secrets): `GEMINI_API_KEY` (Google AI Studio), `PLACES_API_KEY` (Google Cloud, *Places API (New)* enabled), `JWT_SECRET`, `DATABASE_URL`.
+- **Android** (`android/local.properties`): `MAPS_API_KEY` (Google Cloud, *Maps SDK for Android* enabled, restricted to package `com.tripwise.app` / `.debug` + your signing SHA-1).
+- **CI emulator tour**: repository secrets `GEMINI_API_KEY` and `MAPS_API_KEY` (the tour also passes the Maps key to the backend as the Places key, so that key must not be restricted to Android apps only).
+
+Without keys the app still runs; those features show a clear "not set up" state.
+
+## Emulator tour
+
+`.github/workflows/demo.yml` starts the backend, boots an Android 14 emulator, runs `AppTourTest` (a scripted walkthrough) and publishes the screenshots to the `ci-screenshots` branch. Catalog photos are checked by the `catalog-images` CI job, which publishes a labelled contact sheet to the `ci-image-review` branch.
 
 ## Layout
 
