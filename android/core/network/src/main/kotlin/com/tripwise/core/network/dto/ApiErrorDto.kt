@@ -28,5 +28,7 @@ object ApiErrorCode {
     const val AI_UNAVAILABLE = "AI_UNAVAILABLE"
     const val AI_QUOTA_EXCEEDED = "AI_QUOTA_EXCEEDED"
     const val AI_INVALID_OUTPUT = "AI_INVALID_OUTPUT"
+    const val NOT_CONFIGURED = "NOT_CONFIGURED"
+    const val UPSTREAM_FAILED = "UPSTREAM_FAILED"
     const val INTERNAL = "INTERNAL"
 }

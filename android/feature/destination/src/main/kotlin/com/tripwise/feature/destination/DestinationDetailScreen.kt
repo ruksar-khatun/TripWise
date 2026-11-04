@@ -57,7 +57,12 @@ import com.tripwise.core.designsystem.component.TwTextButton
 import com.tripwise.core.designsystem.icon.TwIcons
 import com.tripwise.core.designsystem.theme.TripWiseTheme
 import com.tripwise.core.model.Destination
+import com.tripwise.core.ui.component.AttractionCard
 import com.tripwise.core.ui.component.SaveToggleButton
+import com.tripwise.core.maps.MapPin
+import com.tripwise.core.maps.PinKind
+import com.tripwise.core.maps.TwMapPreview
+import androidx.compose.ui.draw.clip
 import com.tripwise.core.ui.image.RemoteImage
 import com.tripwise.core.ui.preview.PreviewData
 import com.tripwise.core.ui.state.EmptyState
@@ -68,6 +73,8 @@ data class DestinationDetailNavigation(
     val onBack: () -> Unit,
     val onPlanTrip: (destinationId: String) -> Unit,
     val onPlanWithAi: (destinationId: String) -> Unit,
+    val onOpenActivities: (destinationId: String) -> Unit = {},
+    val onOpenMap: (destinationId: String) -> Unit = {},
 )
 
 /**
@@ -173,19 +180,32 @@ private fun ReadyLayout(
                     ) { d.localFood.forEach { TwInfoPill(it, icon = TwIcons.Food, tone = TwPillTone.Success) } }
                 }
             }
-            item(key = "map") {
-                Section(stringResource(R.string.feature_destination_map)) {
-                    TwCard(Modifier.fillMaxWidth()) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(TwIcons.Map, contentDescription = null, tint = TripWiseTheme.colors.secondary)
-                            Text(
-                                stringResource(R.string.feature_destination_map_placeholder),
-                                style = TripWiseTheme.typography.bodyMedium,
-                                color = TripWiseTheme.colors.onSurfaceVariant,
-                                modifier = Modifier.padding(start = TripWiseTheme.spacing.md),
-                            )
+            if (d.attractions.isNotEmpty()) {
+                item(key = "things") {
+                    Column(Modifier.padding(horizontal = gutter, vertical = TripWiseTheme.spacing.md)) {
+                        HorizontalDivider(Modifier.padding(bottom = TripWiseTheme.spacing.lg), color = TripWiseTheme.colors.outlineVariant)
+                        TwSectionHeader(
+                            stringResource(R.string.feature_destination_things_to_do),
+                            actionLabel = stringResource(R.string.feature_destination_see_all),
+                            onAction = { navigation.onOpenActivities(d.id) },
+                        )
+                        Column(Modifier.padding(top = TripWiseTheme.spacing.sm), verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
+                            d.attractions.take(3).forEach { a ->
+                                AttractionCard(a, onShowOnMap = { navigation.onOpenMap(d.id) })
+                            }
                         }
                     }
+                }
+            }
+            item(key = "map") {
+                Section(stringResource(R.string.feature_destination_map)) {
+                    TwMapPreview(
+                        center = d.location,
+                        pins = listOf(MapPin(d.id, d.name, d.location, PinKind.DESTINATION)) +
+                            d.attractions.map { MapPin(it.id, it.name, it.location, PinKind.ATTRACTION) },
+                        onOpen = { navigation.onOpenMap(d.id) },
+                        modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(TripWiseTheme.shapes.card),
+                    )
                 }
             }
         }

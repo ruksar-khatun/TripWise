@@ -98,3 +98,9 @@ class FakeUserRepository(profile: UserProfile? = null) : UserRepository {
     val profile = MutableStateFlow(profile)
     override fun observeProfile(): Flow<UserProfile> = profile.filterNotNull()
 }
+
+class FakePlacesRepository(var result: com.tripwise.core.common.result.Outcome<List<com.tripwise.core.model.NearbyPlace>> =
+    com.tripwise.core.common.result.Outcome.Success(emptyList())) : com.tripwise.core.domain.repository.PlacesRepository {
+    var calls = 0
+    override suspend fun nearby(center: com.tripwise.core.model.GeoPoint, radiusMeters: Int) = result.also { calls++ }
+}

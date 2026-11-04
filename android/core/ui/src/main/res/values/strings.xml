@@ -18,6 +18,7 @@
     <string name="core_ui_error_ai_unavailable">The travel assistant is unavailable right now. Please try again shortly.</string>
     <string name="core_ui_error_ai_quota">You\'ve reached today\'s AI limit. It resets tomorrow.</string>
     <string name="core_ui_error_ai_invalid">The assistant couldn\'t produce a usable answer. Please try again.</string>
+    <string name="core_ui_error_not_configured">This feature isn\'t set up on the server yet.</string>
     <string name="core_ui_error_server">Something went wrong on our side. Please try again.</string>
     <string name="core_ui_error_unknown">Something went wrong. Please try again.</string>
     <string name="core_ui_error_title">Something went wrong</string>
@@ -68,4 +69,11 @@
     <string name="core_ui_budget_progress_description">%1$s spent of %2$s budget</string>
     <string name="core_ui_selected">Selected</string>
     <string name="core_ui_section_retry_title">Couldn\'t load this section</string>
+    <string name="core_ui_duration_minutes">%1$d min</string>
+    <string name="core_ui_duration_hours">%1$d h</string>
+    <string name="core_ui_duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="core_ui_free">Free</string>
+    <string name="core_ui_approx_cost">≈ %1$s</string>
+    <string name="core_ui_add_to_plan">Add to plan</string>
+    <string name="core_ui_show_on_map">Map</string>
 </resources>

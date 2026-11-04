@@ -22,6 +22,7 @@ fun AppError.messageRes(): Int = when (this) {
         AiFailure.QUOTA_EXCEEDED -> R.string.core_ui_error_ai_quota
         AiFailure.INVALID_OUTPUT -> R.string.core_ui_error_ai_invalid
     }
+    AppError.NotConfigured -> R.string.core_ui_error_not_configured
     is AppError.Server -> R.string.core_ui_error_server
     is AppError.Unknown -> R.string.core_ui_error_unknown
 }

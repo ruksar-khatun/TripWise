@@ -20,4 +20,16 @@
     <string name="feature_destination_photo_credit">Photo: %1$s</string>
     <string name="feature_destination_photo">Photo of %1$s</string>
     <string name="feature_destination_photo_page">Photo %1$d of %2$d</string>
+    <string name="feature_destination_things_to_do">Things to do</string>
+    <string name="feature_destination_see_all">See all</string>
+    <string name="feature_destination_activities_title">Things to do in %1$s</string>
+    <string name="feature_destination_tab_curated">Curated</string>
+    <string name="feature_destination_tab_nearby">Nearby now</string>
+    <string name="feature_destination_all_categories">All</string>
+    <string name="feature_destination_nearby_body">Popular places around %1$s from Google.</string>
+    <string name="feature_destination_nearby_empty">No nearby places found.</string>
+    <string name="feature_destination_map_title">%1$s map</string>
+    <string name="feature_destination_approx_note">Curated locations are approximate.</string>
+    <string name="feature_destination_rating_count">%1$s (%2$d)</string>
+    <string name="feature_destination_open_in_maps">Open in Google Maps</string>
 </resources>

@@ -45,6 +45,23 @@ class AppTourTest {
         t.shot("destination-detail-scrolled", settleMs = 2_500)
         t.clickDescription("Save Kyoto")
         t.shot("destination-saved", settleMs = 1_000)
+
+        // Things to do (curated + nearby from Google Places) and the map
+        t.scrollTo("Things to do")
+        t.shot("destination-things-to-do", settleMs = 2_000)
+        if (t.click("See all", required = false)) {
+            t.waitFor("Things to do in", substring = true)
+            t.shot("activities-curated", settleMs = 1_500)
+            t.click("Nearby now", required = false)
+            t.shot("activities-nearby", settleMs = 5_000)
+            t.back()
+        }
+        t.scrollTo("On the map")
+        t.shot("destination-map-preview", settleMs = 4_000)
+        if (t.clickDescription("Open map")) {
+            t.shot("destination-map", settleMs = 7_000)
+            t.back()
+        }
         t.back()
 
         // Saved

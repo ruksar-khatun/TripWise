@@ -33,6 +33,9 @@ sealed interface AppError {
     /** AI-specific failures reported by the backend. */
     data class Ai(val reason: AiFailure) : AppError
 
+    /** A server-side integration (Places, Gemini) has no API key configured. Not retryable by the user. */
+    data object NotConfigured : AppError
+
     /** Server-side failure (5xx). Retryable. */
     data class Server(val httpCode: Int) : AppError
 

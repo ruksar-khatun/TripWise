@@ -45,7 +45,8 @@ class ApiErrorMapper @Inject constructor(private val json: Json) {
         ApiErrorCode.AI_UNAVAILABLE -> AppError.Ai(AiFailure.UNAVAILABLE)
         ApiErrorCode.AI_QUOTA_EXCEEDED -> AppError.Ai(AiFailure.QUOTA_EXCEEDED)
         ApiErrorCode.AI_INVALID_OUTPUT -> AppError.Ai(AiFailure.INVALID_OUTPUT)
-        else -> null // unknown code: fall back to HTTP status
+        ApiErrorCode.NOT_CONFIGURED -> AppError.NotConfigured
+        else -> null // unknown code (incl. UPSTREAM_FAILED): fall back to HTTP status
     }
 
     private fun fromStatus(code: Int): AppError = when (code) {
