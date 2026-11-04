@@ -4,7 +4,7 @@ import com.tripwise.core.common.result.LoadState
 import com.tripwise.core.testing.data.TestData
 import com.tripwise.core.testing.fakes.FakeSavedDestinationRepository
 import com.tripwise.core.testing.rules.MainDispatcherRule
-import kotlinx.coroutines.launch
+import com.tripwise.core.testing.rules.collectInBackground
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -25,7 +25,7 @@ class SavedViewModelTest {
 
     @Test fun `sorts by recent then by name`() = runTest {
         val vm = SavedViewModel(repo)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(listOf("bali", "agra"), vm.uiState.value.ids())
         vm.onAction(SavedAction.SortChanged(SavedSort.NAME))
         assertEquals(listOf("agra", "bali"), vm.uiState.value.ids())
@@ -33,7 +33,7 @@ class SavedViewModelTest {
 
     @Test fun `remove then undo restores the item`() = runTest {
         val vm = SavedViewModel(repo)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         val item = (vm.uiState.value.items as LoadState.Ready).data.first { it.destination.id == "agra" }
         vm.onAction(SavedAction.Remove(item))
         assertEquals(listOf("bali"), vm.uiState.value.ids())
@@ -45,7 +45,7 @@ class SavedViewModelTest {
 
     @Test fun `dismissing the snackbar keeps the removal`() = runTest {
         val vm = SavedViewModel(repo)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         val item = (vm.uiState.value.items as LoadState.Ready).data.first()
         vm.onAction(SavedAction.Remove(item))
         vm.onAction(SavedAction.UndoDismissed)

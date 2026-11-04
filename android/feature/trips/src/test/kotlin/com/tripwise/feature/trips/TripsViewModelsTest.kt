@@ -9,6 +9,7 @@ import com.tripwise.core.testing.fakes.FakeDestinationRepository
 import com.tripwise.core.testing.fakes.FakeTripRepository
 import com.tripwise.core.testing.fakes.FakeUserRepository
 import com.tripwise.core.testing.rules.MainDispatcherRule
+import com.tripwise.core.testing.rules.collectInBackground
 import com.tripwise.feature.trips.create.CreateTripAction
 import com.tripwise.feature.trips.create.CreateTripUiState
 import com.tripwise.feature.trips.create.CreateTripViewModel
@@ -19,7 +20,6 @@ import com.tripwise.feature.trips.detail.TripDetailViewModel
 import com.tripwise.feature.trips.list.TripsAction
 import com.tripwise.feature.trips.list.TripsTab
 import com.tripwise.feature.trips.list.TripsViewModel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -43,7 +43,7 @@ class TripsViewModelsTest {
 
     @Test fun `upcoming includes ongoing, past tab has past only`() = runTest {
         val vm = TripsViewModel(FakeTripRepository(listOf(future, past, ongoing)), clock)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(listOf("ongoing", "future"), (vm.uiState.value.trips as LoadState.Ready).data.map { it.trip.id })
         vm.onAction(TripsAction.TabSelected(TripsTab.PAST))
         assertEquals(listOf("past"), (vm.uiState.value.trips as LoadState.Ready).data.map { it.trip.id })
@@ -51,7 +51,7 @@ class TripsViewModelsTest {
 
     @Test fun `no trips is an empty ready list, not loading`() = runTest {
         val vm = TripsViewModel(FakeTripRepository(emptyList()), clock)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(LoadState.Ready(emptyList<Any>()), vm.uiState.value.trips)
     }
 
@@ -59,7 +59,7 @@ class TripsViewModelsTest {
         val item = ItineraryItem("i1", "future", future.startDate.plusDays(1), LocalTime.NOON, "Museum", ActivityCategory.SIGHTSEEING, null, false)
         val repo = FakeTripRepository(listOf(future), listOf(item))
         val vm = TripDetailViewModel(SavedStateHandle(mapOf("tripId" to "future")), repo, clock)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         val ready = vm.uiState.value as TripDetailUiState.Ready
         assertEquals(listOf(0, 1, 0), ready.days.map { it.items.size })
         assertEquals("i1", ready.nextItem?.id)
@@ -70,7 +70,7 @@ class TripsViewModelsTest {
 
     @Test fun `unknown trip is NotFound`() = runTest {
         val vm = TripDetailViewModel(SavedStateHandle(mapOf("tripId" to "x")), FakeTripRepository(listOf(future)), clock)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(TripDetailUiState.NotFound, vm.uiState.value)
     }
 

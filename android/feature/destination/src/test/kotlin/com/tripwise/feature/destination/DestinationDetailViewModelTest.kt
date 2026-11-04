@@ -4,7 +4,7 @@ import com.tripwise.core.testing.data.TestData
 import com.tripwise.core.testing.fakes.FakeDestinationRepository
 import com.tripwise.core.testing.fakes.FakeSavedDestinationRepository
 import com.tripwise.core.testing.rules.MainDispatcherRule
-import kotlinx.coroutines.launch
+import com.tripwise.core.testing.rules.collectInBackground
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -19,7 +19,7 @@ class DestinationDetailViewModelTest {
     @Test fun `loading, then ready, and save toggles`() = runTest {
         val repo = FakeDestinationRepository(null)
         val vm = DestinationDetailViewModel("bali", repo, saved)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(DestinationDetailUiState.Loading, vm.uiState.value)
 
         repo.destinations.value = listOf(bali)
@@ -31,7 +31,7 @@ class DestinationDetailViewModelTest {
 
     @Test fun `unknown id is NotFound`() = runTest {
         val vm = DestinationDetailViewModel("nope", FakeDestinationRepository(listOf(bali)), saved)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(DestinationDetailUiState.NotFound, vm.uiState.value)
     }
 }

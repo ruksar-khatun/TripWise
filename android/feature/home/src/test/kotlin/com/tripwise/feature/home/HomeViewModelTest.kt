@@ -7,8 +7,8 @@ import com.tripwise.core.testing.fakes.FakeDestinationRepository
 import com.tripwise.core.testing.fakes.FakeSavedDestinationRepository
 import com.tripwise.core.testing.fakes.FakeTripRepository
 import com.tripwise.core.testing.rules.MainDispatcherRule
+import com.tripwise.core.testing.rules.collectInBackground
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -46,7 +46,7 @@ class HomeViewModelTest {
         val next = TestData.trip("next", today.plusDays(5))
         val trips = FakeTripRepository(listOf(past, next))
         val vm = vm(trips = trips)
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals("next", (vm.uiState.value.upcoming as LoadState.Ready).data?.trip?.id)
 
         trips.trips.value = listOf(past)
@@ -55,7 +55,7 @@ class HomeViewModelTest {
 
     @Test fun `toggling save updates popular and recently saved`() = runTest {
         val vm = vm()
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         vm.onAction(HomeAction.ToggleSave("kyoto", true))
         val state = vm.uiState.value
         assertTrue((state.popular as LoadState.Ready).data.first { it.destination.id == "kyoto" }.isSaved)

@@ -9,7 +9,7 @@ import com.tripwise.core.testing.fakes.FakeSavedDestinationRepository
 import com.tripwise.core.testing.fakes.FakeTripRepository
 import com.tripwise.core.testing.fakes.FakeUserRepository
 import com.tripwise.core.testing.rules.MainDispatcherRule
-import kotlinx.coroutines.launch
+import com.tripwise.core.testing.rules.collectInBackground
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -39,7 +39,7 @@ class ProfileTest {
             FakeUserRepository(TestData.profile),
             ObserveTravelStatsUseCase(trips, saved, FakeDestinationRepository(listOf(bali, ubud, kyoto))),
         )
-        backgroundScope.launch { vm.uiState.collect {} }
+        collectInBackground(vm.uiState)
         assertEquals(TravelStats(trips = 3, saved = 1, countries = 2), (vm.uiState.value as LoadState.Ready).data.stats)
     }
 }

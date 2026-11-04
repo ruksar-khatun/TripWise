@@ -33,7 +33,20 @@ fun TripWiseApp(appState: TripWiseAppState, modifier: Modifier = Modifier) {
     } else {
         NavigationSuiteType.None
     }
-    val selectedColors = TripWiseTheme.colors
+    val colors = TripWiseTheme.colors
+    // Composable defaults must be read here, not inside the (non-composable) navigationSuiteItems builder.
+    val itemColors = NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            indicatorColor = colors.secondaryContainer,
+            selectedIconColor = colors.onSecondaryContainer,
+            selectedTextColor = colors.primary,
+        ),
+        navigationRailItemColors = NavigationRailItemDefaults.colors(
+            indicatorColor = colors.secondaryContainer,
+            selectedIconColor = colors.onSecondaryContainer,
+            selectedTextColor = colors.primary,
+        ),
+    )
     NavigationSuiteScaffold(
         modifier = modifier,
         layoutType = layoutType,
@@ -49,18 +62,7 @@ fun TripWiseApp(appState: TripWiseAppState, modifier: Modifier = Modifier) {
                     onClick = { appState.navigateToTopLevel(tab) },
                     icon = { Icon(if (selected) tab.selectedIcon else tab.icon, contentDescription = null) },
                     label = { Text(stringResource(tab.labelRes)) },
-                    colors = NavigationSuiteDefaults.itemColors(
-                        navigationBarItemColors = NavigationBarItemDefaults.colors(
-                            indicatorColor = selectedColors.secondaryContainer,
-                            selectedIconColor = selectedColors.onSecondaryContainer,
-                            selectedTextColor = selectedColors.primary,
-                        ),
-                        navigationRailItemColors = NavigationRailItemDefaults.colors(
-                            indicatorColor = selectedColors.secondaryContainer,
-                            selectedIconColor = selectedColors.onSecondaryContainer,
-                            selectedTextColor = selectedColors.primary,
-                        ),
-                    ),
+                    colors = itemColors,
                 )
             }
         },
