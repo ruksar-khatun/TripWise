@@ -3,7 +3,6 @@ package com.tripwise.core.ui.format
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.core.os.ConfigurationCompat
 import com.tripwise.core.model.Money
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -56,4 +55,4 @@ object Formatters {
 /** Current UI locale, for passing into [Formatters]. */
 val currentLocale: Locale
     @Composable @ReadOnlyComposable
-    get() = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
+    get() = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
