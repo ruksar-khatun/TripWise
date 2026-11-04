@@ -21,6 +21,8 @@ const EnvSchema = z.object({
   PLACES_API_KEY: z.string().optional(),
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+  /** Max AI requests (chat messages + itineraries) per user per day. */
+  AI_DAILY_LIMIT: z.coerce.number().int().min(1).default(100),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

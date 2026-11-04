@@ -17,6 +17,9 @@ import { CatalogService } from './catalog/service.js';
 import { destinationsRouter } from './routes/destinations.js';
 import { PlacesService } from './places/service.js';
 import { placesRouter } from './routes/places.js';
+import { DailyQuota, GeminiClient, type AiClient } from './ai/gemini.js';
+import { ItineraryService } from './ai/itinerary.js';
+import { aiRouter } from './routes/ai.js';
 import { ErrorCode, type ApiErrorBody } from './http/errors.js';
 import { healthRouter } from './routes/health.js';
 import { errorHandler, notFound } from './middleware/errors.js';
@@ -24,6 +27,7 @@ import { errorHandler, notFound } from './middleware/errors.js';
 export interface AppDeps {
   db: Database;
   places?: PlacesService;
+  ai?: AiClient;
   /** Injectable clock for tests. */
   now?: () => Date;
 }
@@ -71,7 +75,13 @@ export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   v1.use('/health', healthRouter);
   v1.use('/auth', authRouter(auth, { strictLimit: env.NODE_ENV !== 'test' }));
   v1.use('/me', meRouter(auth, requireAuth(tokenConfig)));
-  v1.use('/destinations', destinationsRouter(new CatalogService(deps.db)));
+  const catalog = new CatalogService(deps.db);
+  v1.use('/destinations', destinationsRouter(catalog));
+  const ai = deps.ai ?? new GeminiClient(env.GEMINI_API_KEY, env.GEMINI_MODEL);
+  v1.use('/ai', aiRouter(
+    { ai, quota: new DailyQuota(env.AI_DAILY_LIMIT), catalog, itineraries: new ItineraryService(ai, logger) },
+    requireAuth(tokenConfig),
+  ));
   v1.use('/places', placesRouter(deps.places ?? new PlacesService(env.PLACES_API_KEY), requireAuth(tokenConfig)));
   // Next phases mount here (all behind requireAuth): /trips, /saved, /expenses, /sync, /ai, /destinations
 
