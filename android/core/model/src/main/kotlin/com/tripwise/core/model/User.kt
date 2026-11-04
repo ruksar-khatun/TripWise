@@ -20,3 +20,10 @@ sealed interface SessionState {
 
     data class SignedIn(val user: UserProfile) : SessionState
 }
+
+enum class ChatRole { USER, ASSISTANT }
+
+data class ChatMessage(val id: String, val role: ChatRole, val text: String)
+
+/** What the assistant conversation is about (sent to the backend as context). */
+data class AssistantContext(val destinationId: String? = null, val trip: Trip? = null)

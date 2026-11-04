@@ -85,15 +85,15 @@ internal fun ActivitiesScreen(
             when (val d = state.destination) {
                 LoadState.Loading -> LoadingState()
                 is LoadState.Failed -> ErrorState(d.error, onRetry = { onAction(DestinationExtrasAction.Retry) })
-                is LoadState.Ready -> if (d.data == null) {
+                is LoadState.Ready -> { val loaded = d.data; if (loaded == null) {
                     EmptyState(stringResource(R.string.feature_destination_not_found_title), stringResource(R.string.feature_destination_not_found_body))
                 } else {
                     PrimaryTabRow(selectedTabIndex = tab) {
                         Tab(tab == 0, { tab = 0 }, text = { Text(stringResource(R.string.feature_destination_tab_curated)) })
                         Tab(tab == 1, { tab = 1 }, text = { Text(stringResource(R.string.feature_destination_tab_nearby)) })
                     }
-                    if (tab == 0) CuratedTab(state, onAction) else NearbyTab(state, d.data.name, onAction)
-                }
+                    if (tab == 0) CuratedTab(state, onAction) else NearbyTab(state, loaded.name, onAction)
+                } }
             }
         }
     }

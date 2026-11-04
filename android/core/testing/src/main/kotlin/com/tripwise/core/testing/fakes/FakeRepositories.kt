@@ -104,3 +104,11 @@ class FakePlacesRepository(var result: com.tripwise.core.common.result.Outcome<L
     var calls = 0
     override suspend fun nearby(center: com.tripwise.core.model.GeoPoint, radiusMeters: Int) = result.also { calls++ }
 }
+
+class FakeAssistantRepository : com.tripwise.core.domain.repository.AssistantRepository {
+    var events: List<com.tripwise.core.domain.repository.AssistantEvent> =
+        listOf(com.tripwise.core.domain.repository.AssistantEvent.Delta("Hi"), com.tripwise.core.domain.repository.AssistantEvent.Done)
+    val requests = mutableListOf<Pair<List<com.tripwise.core.model.ChatMessage>, com.tripwise.core.model.AssistantContext>>()
+    override fun reply(history: List<com.tripwise.core.model.ChatMessage>, context: com.tripwise.core.model.AssistantContext) =
+        kotlinx.coroutines.flow.flow { requests += history to context; events.forEach { emit(it) } }
+}

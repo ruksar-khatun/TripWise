@@ -10,5 +10,10 @@
     <string name="feature_assistant_suggestion_4">What to pack for this season</string>
     <string name="feature_assistant_input">Ask TripWise…</string>
     <string name="feature_assistant_send">Send</string>
-    <string name="feature_assistant_later_phase">AI chat arrives with the AI phase. This is a preview of the layout.</string>
+    <string name="feature_assistant_suggestion_general_1">Where should I go in December?</string>
+    <string name="feature_assistant_suggestion_general_2">Plan a 5-day trip to Japan on a mid budget</string>
+    <string name="feature_assistant_suggestion_general_3">Tips for travelling with kids</string>
+    <string name="feature_assistant_thinking">Thinking…</string>
+    <string name="feature_assistant_retry">Retry</string>
+    <string name="feature_assistant_stop">Stop</string>
 </resources>

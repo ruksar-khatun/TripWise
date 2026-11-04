@@ -34,6 +34,16 @@ class AppTourTest {
         t.swipeUp()
         t.shot("home-scrolled", settleMs = 2_500)
 
+        // AI assistant (Gemini via backend; shows "not set up" if the server has no key)
+        t.clickDescription("Open TripWise assistant")
+        t.waitFor("How can I help you travel?")
+        t.shot("assistant-empty", settleMs = 1_000)
+        t.click("Where should I go in December?", required = false)
+        runCatching { t.waitFor("Thinking…", timeoutMs = 5_000) }
+        Thread.sleep(12_000) // let the streamed reply arrive
+        t.shot("assistant-reply", settleMs = 1_000)
+        t.back()
+
         // Explore → destination detail
         t.click("Explore")
         t.waitFor("destinations", substring = true)
