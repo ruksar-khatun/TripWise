@@ -75,14 +75,26 @@ internal fun HomeScreen(
 ) {
     val gutter = TripWiseTheme.spacing.lg
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().statusBarsPadding(),
         contentPadding = PaddingValues(bottom = TripWiseTheme.spacing.xxl),
         verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.xl),
     ) {
-        item(key = "header") { Header(state.greeting, navigation, Modifier.statusBarsPadding().padding(horizontal = gutter)) }
+        item(key = "header") { Header(state.greeting, navigation, Modifier.padding(horizontal = gutter)) }
 
         item(key = "search") {
             TwSearchLauncher(stringResource(R.string.feature_home_search), navigation.onSearchClick, Modifier.padding(horizontal = gutter))
+        }
+
+        item(key = "featured") {
+            DestinationRow(
+                title = stringResource(R.string.feature_home_featured),
+                state = state.featured,
+                onSeeAll = navigation.onSeeAllDestinations,
+                onClick = navigation.onDestinationClick,
+                onToggle = { onAction(HomeAction.ToggleSave(it.destination.id, !it.isSaved)) },
+                onRetry = { onAction(HomeAction.Retry) },
+                cardWidth = 280.dp,
+            )
         }
 
         item(key = "upcoming") {
@@ -190,13 +202,14 @@ private fun DestinationRow(
     onClick: (String) -> Unit,
     onToggle: (SaveableDestination) -> Unit,
     onRetry: () -> Unit,
+    cardWidth: androidx.compose.ui.unit.Dp = 168.dp,
 ) {
     val gutter = TripWiseTheme.spacing.lg
     Column(verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
         TwSectionHeader(title, Modifier.padding(horizontal = gutter), stringResource(R.string.feature_home_see_all), onSeeAll)
         when (state) {
             LoadState.Loading -> Row(Modifier.padding(horizontal = gutter), horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
-                repeat(3) { TwSkeleton(Modifier.size(width = 168.dp, height = 210.dp), height = 210.dp, shape = TripWiseTheme.shapes.card) }
+                repeat(3) { TwSkeleton(Modifier.size(width = cardWidth, height = cardWidth * 1.25f), height = cardWidth * 1.25f, shape = TripWiseTheme.shapes.card) }
             }
             is LoadState.Failed -> SectionErrorCard(state.error, onRetry, Modifier.padding(horizontal = gutter))
             is LoadState.Ready -> LazyRow(
@@ -204,7 +217,7 @@ private fun DestinationRow(
                 horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md),
             ) {
                 items(state.data, key = { it.destination.id }) { item ->
-                    DestinationCarouselCard(item, onClick = { onClick(item.destination.id) }, onToggleSave = { onToggle(item) })
+                    DestinationCarouselCard(item, onClick = { onClick(item.destination.id) }, onToggleSave = { onToggle(item) }, width = cardWidth)
                 }
             }
         }
@@ -258,6 +271,7 @@ private fun HomeReadyPreview() = TripWiseTheme {
             HomeUiState(
                 today = PreviewData.today, greeting = Greeting.EVENING,
                 upcoming = LoadState.Ready(UpcomingTrip(PreviewData.trip, PreviewData.budget)),
+                featured = LoadState.Ready(listOf(PreviewData.saveable(2), PreviewData.saveable(3))),
                 popular = LoadState.Ready(PreviewData.destinations.indices.map { PreviewData.saveable(it, it == 1) }),
                 recentlySaved = LoadState.Ready(listOf(PreviewData.saveable(1, true))),
             ),

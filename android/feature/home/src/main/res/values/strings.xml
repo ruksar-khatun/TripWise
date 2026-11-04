@@ -10,6 +10,7 @@
     <string name="feature_home_no_trip_title">Plan your next adventure</string>
     <string name="feature_home_no_trip_body">Create a trip to keep dates, plans and budget in one place.</string>
     <string name="feature_home_plan_trip">Plan a trip</string>
+    <string name="feature_home_featured">Featured destinations</string>
     <string name="feature_home_popular">Popular destinations</string>
     <string name="feature_home_see_all">See all</string>
     <string name="feature_home_interests">Browse by interest</string>

@@ -35,7 +35,8 @@ class AppTourTest {
         t.shot("home-scrolled", settleMs = 2_500)
 
         // AI assistant (Gemini via backend; shows "not set up" if the server has no key)
-        t.clickDescription("Open TripWise assistant")
+        t.scrollTo("Ask TripWise")
+        t.click("Ask TripWise")
         t.waitFor("How can I help you travel?")
         t.shot("assistant-empty", settleMs = 1_000)
         t.click("Where should I go in December?", required = false)

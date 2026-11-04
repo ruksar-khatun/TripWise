@@ -18,6 +18,7 @@ data class HomeUiState(
     val today: LocalDate,
     val greeting: Greeting,
     val upcoming: LoadState<UpcomingTrip?> = LoadState.Loading,
+    val featured: LoadState<List<SaveableDestination>> = LoadState.Loading,
     val popular: LoadState<List<SaveableDestination>> = LoadState.Loading,
     val recentlySaved: LoadState<List<SaveableDestination>> = LoadState.Loading,
 )

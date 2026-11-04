@@ -54,6 +54,10 @@ class HomeViewModel @Inject constructor(
         observeSaveable(destinationRepository.observePopular(limit = 8)).asLoadState()
     }
 
+    private val featured = refresh.flatMapLatest {
+        observeSaveable(destinationRepository.observeFeatured()).asLoadState()
+    }
+
     private val recentlySaved = refresh.flatMapLatest {
         savedRepository.observeSaved()
             .map { list -> list.take(6).map { SaveableDestination(it.destination, isSaved = true) } }
@@ -61,8 +65,8 @@ class HomeViewModel @Inject constructor(
     }
 
     val uiState: StateFlow<HomeUiState> =
-        combine(upcoming, popular, recentlySaved) { upcoming, popular, saved ->
-            HomeUiState(today, greeting, upcoming, popular, saved)
+        combine(upcoming, featured, popular, recentlySaved) { upcoming, featured, popular, saved ->
+            HomeUiState(today, greeting, upcoming, featured, popular, saved)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState(today, greeting))
 
     fun onAction(action: HomeAction) {
