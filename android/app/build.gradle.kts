@@ -18,6 +18,7 @@ android {
         applicationId = "com.tripwise.app"
         versionCode = 1
         versionName = "0.1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Maps/Places key is injected into the manifest; never committed. Used from the Maps phase on.
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY") ?: ""
     }
@@ -76,4 +77,11 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(projects.core.testing)
+
+    // Emulator tour (scripted walkthrough with screenshots), run by .github/workflows/demo.yml
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

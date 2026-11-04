@@ -1,0 +1,93 @@
+name: Emulator demo
+
+# Boots a real Android emulator, runs the backend locally, walks through the app (AppTourTest)
+# and publishes the screenshots to the `ci-screenshots` branch (docs/README there lists them).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: demo
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  tour:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Start backend (embedded Postgres)
+        working-directory: backend
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PLACES_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          JWT_SECRET: ci-demo-secret-ci-demo-secret-ci-demo-secret
+          NODE_ENV: development
+          LOG_LEVEL: warn
+        run: |
+          npm ci
+          npm run build
+          nohup node dist/server.js > ../backend.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf localhost:3000/api/v1/health && break; sleep 1; done
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Configure keys
+        working-directory: android
+        run: echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > local.properties
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Build test APKs
+        working-directory: android
+        run: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+
+      - name: Run tour on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          working-directory: android
+          script: |
+            adb shell settings put system screen_off_timeout 1800000
+            ./gradlew :app:connectedDebugAndroidTest --continue || echo "TOUR_FAILED=1" >> $GITHUB_ENV
+            mkdir -p ../tour && adb pull /sdcard/Android/data/com.tripwise.app.debug/files/tour ../tour/ || true
+            adb logcat -d -s AppTour:* TestRunner:* AndroidRuntime:E > ../tour/logcat.txt || true
+
+      - name: Publish screenshots to ci-screenshots branch
+        if: always()
+        run: |
+          mkdir -p out && cp -r tour/* out/ 2>/dev/null || true
+          find out -name '*.png' | sort
+          cp backend.log out/ 2>/dev/null || true
+          cp -r android/app/build/reports/androidTests out/test-report 2>/dev/null || true
+          cd out
+          git init -q -b ci-screenshots
+          git add -A
+          git -c user.name=tripwise-ci -c user.email=ci@users.noreply.github.com commit -qm "Tour for ${GITHUB_SHA}" || exit 0
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-screenshots
+
+      - name: Fail if tour failed
+        if: env.TOUR_FAILED == '1'
+        run: exit 1
