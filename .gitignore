@@ -23,3 +23,4 @@ backend/dist/
 backend/.env
 backend/coverage/
 backend/.data/
+tour-screenshots/
