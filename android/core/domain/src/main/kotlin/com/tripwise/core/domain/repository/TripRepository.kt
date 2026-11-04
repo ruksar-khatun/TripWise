@@ -24,4 +24,12 @@ interface TripRepository {
     suspend fun createTrip(trip: NewTrip): Outcome<String>
 
     suspend fun deleteTrip(id: String)
+
+    /** Adds items (e.g. an accepted itinerary plan) to a trip. */
+    suspend fun addItineraryItems(tripId: String, items: List<ItineraryItem>)
+
+    /** Creates or updates one item. */
+    suspend fun saveItineraryItem(item: ItineraryItem)
+
+    suspend fun deleteItineraryItem(itemId: String)
 }

@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,7 +61,6 @@ import com.tripwise.core.designsystem.component.TwSkeleton
 import com.tripwise.core.designsystem.component.TwStatTile
 import com.tripwise.core.designsystem.icon.TwIcons
 import com.tripwise.core.designsystem.theme.TripWiseTheme
-import com.tripwise.core.model.CategoryBudget
 import com.tripwise.core.model.ItineraryItem
 import com.tripwise.core.ui.component.BudgetProgress
 import com.tripwise.core.ui.component.TripStatusPill
@@ -83,7 +81,9 @@ internal fun TripDetailScreen(
     viewModel: TripDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val editor by viewModel.editor.collectAsStateWithLifecycle()
     TripDetailScreen(state, viewModel::onAction, onBack, onPlanWithAi)
+    editor?.let { ItemEditorDialog(it, viewModel::onAction) }
 }
 
 @Composable
@@ -194,7 +194,7 @@ private fun Ready(
             when (page) {
                 0 -> OverviewTab(state) { onPlanWithAi(trip.id) }
                 1 -> ItineraryTab(state, onAction) { onPlanWithAi(trip.id) }
-                else -> BudgetTab(state)
+                else -> com.tripwise.feature.trips.budget.BudgetTab()
             }
         }
     }
@@ -286,13 +286,15 @@ private fun ItineraryTab(state: TripDetailUiState.Ready, onAction: (TripDetailAc
                 }
             }
             items(items, key = { it.id }) { item ->
-                ItineraryRow(item) { onAction(TripDetailAction.SetItemDone(item.id, it)) }
+                ItineraryRow(item, onEdit = { onAction(TripDetailAction.EditItem(item)) }) { onAction(TripDetailAction.SetItemDone(item.id, it)) }
             }
             item {
                 Column(Modifier.padding(top = TripWiseTheme.spacing.lg), verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
                     TwButton(stringResource(R.string.feature_trips_generate_ai), onPlanWithAi, Modifier.fillMaxWidth(), leadingIcon = TwIcons.Assistant)
-                    TwOutlinedButton(stringResource(R.string.feature_trips_add_activity), {}, Modifier.fillMaxWidth(), enabled = false, leadingIcon = TwIcons.Add)
-                    LaterPhaseCaption()
+                    TwOutlinedButton(
+                        stringResource(R.string.feature_trips_add_activity), { day?.let { onAction(TripDetailAction.AddItem(it.date)) } },
+                        Modifier.fillMaxWidth(), leadingIcon = TwIcons.Add,
+                    )
                 }
             }
         }
@@ -300,14 +302,13 @@ private fun ItineraryTab(state: TripDetailUiState.Ready, onAction: (TripDetailAc
 }
 
 @Composable
-private fun ItineraryRow(item: ItineraryItem, onDoneChange: (Boolean) -> Unit) {
+private fun ItineraryRow(item: ItineraryItem, onEdit: () -> Unit, onDoneChange: (Boolean) -> Unit) {
     val locale = currentLocale
     val doneLabel = stringResource(R.string.feature_trips_mark_done, item.title)
     Surface(
         shape = TripWiseTheme.shapes.card,
         color = TripWiseTheme.colors.surfaceContainerLowest,
-        modifier = Modifier.toggleable(value = item.isDone, role = Role.Checkbox, onValueChange = onDoneChange)
-            .semantics(mergeDescendants = true) {},
+        onClick = onEdit,
     ) {
         Row(Modifier.padding(TripWiseTheme.spacing.md), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -331,71 +332,9 @@ private fun ItineraryRow(item: ItineraryItem, onDoneChange: (Boolean) -> Unit) {
                     color = TripWiseTheme.colors.onSurfaceVariant,
                 )
             }
-            // Row is the toggle target; checkbox is visual only (null onCheckedChange) to avoid a double tap target.
-            Checkbox(checked = item.isDone, onCheckedChange = null, modifier = Modifier.semantics { this.contentDescription = doneLabel })
+            Checkbox(checked = item.isDone, onCheckedChange = onDoneChange, modifier = Modifier.semantics { this.contentDescription = doneLabel })
         }
     }
-}
-
-@Composable
-private fun BudgetTab(state: TripDetailUiState.Ready) {
-    val budget = state.budget
-    val locale = currentLocale
-    LazyColumn(
-        contentPadding = PaddingValues(TripWiseTheme.spacing.lg),
-        verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md),
-        modifier = Modifier.navigationBarsPadding(),
-    ) {
-        if (budget == null) {
-            item { Text(stringResource(R.string.feature_trips_no_budget), style = TripWiseTheme.typography.bodyLarge) }
-        } else {
-            item {
-                TwCard(Modifier.fillMaxWidth()) {
-                    Text(Formatters.money(budget.spent, locale), style = TripWiseTheme.typography.headlineMedium)
-                    BudgetProgress(budget, Modifier.padding(top = TripWiseTheme.spacing.sm))
-                }
-            }
-            item { TwSectionHeader(stringResource(R.string.feature_trips_tab_budget), Modifier.padding(top = TripWiseTheme.spacing.sm)) }
-            items(budget.categories, key = { it.category.name }) { CategoryRow(it) }
-        }
-        item {
-            Column(Modifier.padding(top = TripWiseTheme.spacing.lg), verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
-                TwOutlinedButton(stringResource(R.string.feature_trips_add_expense), {}, Modifier.fillMaxWidth(), enabled = false, leadingIcon = TwIcons.Add)
-                LaterPhaseCaption()
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoryRow(c: CategoryBudget) {
-    val locale = currentLocale
-    val fraction = if (c.planned.amountMinor <= 0) 0f else c.spent.amountMinor.toFloat() / c.planned.amountMinor
-    val label = stringResource(c.category.ui.label)
-    val amounts = stringResource(R.string.feature_trips_planned_spent, Formatters.money(c.spent, locale), Formatters.money(c.planned, locale))
-    Column(Modifier.semantics(mergeDescendants = true) {}) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(c.category.ui.icon, contentDescription = null, Modifier.size(20.dp), tint = TripWiseTheme.colors.secondary)
-            Text(label, style = TripWiseTheme.typography.bodyLarge, modifier = Modifier.weight(1f).padding(start = TripWiseTheme.spacing.md))
-            Text(
-                amounts,
-                style = TripWiseTheme.typography.bodyMedium,
-                color = if (fraction > 1f) TripWiseTheme.colors.error else TripWiseTheme.colors.onSurfaceVariant,
-            )
-        }
-        TwProgressBar(fraction, "$label: $amounts", Modifier.padding(top = TripWiseTheme.spacing.sm))
-    }
-}
-
-@Composable
-private fun LaterPhaseCaption() {
-    Text(
-        stringResource(R.string.feature_trips_later_phase),
-        style = TripWiseTheme.typography.bodySmall,
-        color = TripWiseTheme.colors.onSurfaceVariant,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-    )
 }
 
 @PreviewLightDark

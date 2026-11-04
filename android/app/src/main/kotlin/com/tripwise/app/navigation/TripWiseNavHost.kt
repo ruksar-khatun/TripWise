@@ -23,6 +23,8 @@ import com.tripwise.feature.destination.navigation.navigateToDestinationMap
 import com.tripwise.feature.explore.navigation.ExploreRoute
 import com.tripwise.feature.explore.navigation.exploreSection
 import com.tripwise.feature.home.HomeNavigation
+import com.tripwise.feature.itinerary.navigation.navigateToPlanner
+import com.tripwise.feature.itinerary.navigation.plannerScreen
 import com.tripwise.feature.home.navigation.HomeRoute
 import com.tripwise.feature.home.navigation.homeSection
 import com.tripwise.feature.profile.navigation.profileSection
@@ -48,7 +50,7 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
     val destinationNavigation = DestinationDetailNavigation(
         onBack = back,
         onPlanTrip = { nav.navigateToCreateTrip(it) },
-        onPlanWithAi = { nav.navigateToAssistant(destinationId = it) },
+        onPlanWithAi = { nav.navigateToPlanner(destinationId = it) },
         onOpenActivities = { nav.navigateToActivities(it) },
         onOpenMap = { nav.navigateToDestinationMap(it) },
     )
@@ -100,12 +102,16 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
             onTripClick = { nav.navigateToTripDetail(it) },
             onNewTrip = { nav.navigateToCreateTrip() },
             onBack = back,
-            onPlanWithAi = { nav.navigateToAssistant(tripId = it) },
+            onPlanWithAi = { nav.navigateToPlanner(tripId = it) },
             onTripCreated = { nav.navigateToTripDetail(it, replaceCreate = true) },
         )
         profileSection(appVersion = BuildConfig.VERSION_NAME)
         destinationScreen(destinationNavigation)
         assistantScreen(onBack = back)
+        plannerScreen(onBack = back, onSaved = { tripId ->
+            nav.popBackStack()
+            nav.navigateToTripDetail(tripId)
+        })
     }
 }
 

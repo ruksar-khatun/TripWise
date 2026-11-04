@@ -8,6 +8,7 @@ import com.tripwise.core.data.mapper.toModel
 import com.tripwise.core.database.dao.BudgetDao
 import com.tripwise.core.database.dao.ItineraryDao
 import com.tripwise.core.database.dao.TripDao
+import com.tripwise.core.database.entity.ItineraryItemEntity
 import com.tripwise.core.database.entity.TripEntity
 import com.tripwise.core.domain.repository.DestinationRepository
 import com.tripwise.core.domain.repository.TripRepository
@@ -93,4 +94,21 @@ internal class OfflineFirstTripRepository @Inject constructor(
     }
 
     override suspend fun deleteTrip(id: String) = tripDao.markDeleted(id, Instant.now(clock))
+
+    override suspend fun saveItineraryItem(item: ItineraryItem) = addItineraryItems(item.tripId, listOf(item))
+
+    override suspend fun deleteItineraryItem(itemId: String) = itineraryDao.markDeleted(itemId, Instant.now(clock))
+
+    override suspend fun addItineraryItems(tripId: String, items: List<ItineraryItem>) {
+        val now = Instant.now(clock)
+        itineraryDao.upsert(
+            items.map {
+                ItineraryItemEntity(
+                    id = it.id, tripId = tripId, date = it.date, startTime = it.startTime, title = it.title.take(100),
+                    category = it.category.name, costMinor = it.estimatedCost?.amountMinor, costCurrency = it.estimatedCost?.currency?.code,
+                    isDone = it.isDone, notes = it.notes, updatedAt = now,
+                )
+            },
+        )
+    }
 }

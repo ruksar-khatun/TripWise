@@ -37,6 +37,12 @@ internal abstract class DataModule {
 
     @Binds abstract fun bindAssistantRepository(impl: com.tripwise.core.data.repository.DefaultAssistantRepository): com.tripwise.core.domain.repository.AssistantRepository
 
+    @Binds abstract fun bindItineraryPlanRepository(impl: com.tripwise.core.data.repository.DefaultItineraryPlanRepository): com.tripwise.core.domain.repository.ItineraryPlanRepository
+
+    @Binds abstract fun bindExpenseRepository(impl: com.tripwise.core.data.repository.OfflineFirstExpenseRepository): com.tripwise.core.domain.repository.ExpenseRepository
+
+    @Binds @Singleton abstract fun bindCurrencyRepository(impl: com.tripwise.core.data.repository.DefaultCurrencyRepository): com.tripwise.core.domain.repository.CurrencyRepository
+
     @Binds abstract fun bindPlacesRepository(impl: com.tripwise.core.data.repository.DefaultPlacesRepository): com.tripwise.core.domain.repository.PlacesRepository
 
     @Binds @Singleton abstract fun bindDestinationRepository(impl: CatalogDestinationRepository): DestinationRepository

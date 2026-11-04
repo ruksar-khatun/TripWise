@@ -46,7 +46,7 @@ class AssistantViewModelTest {
         assertEquals("t1", ctx.trip?.id)
     }
 
-    @Test fun `failure removes empty bubble; retry re-sends the last question`() = runTest {
+    @Test fun `failure removes empty bubble, retry re-sends the last question`() = runTest {
         repo.events = listOf(AssistantEvent.Failed(AppError.Ai(AiFailure.UNAVAILABLE)))
         val vm = vm()
         vm.onAction(AssistantAction.SendSuggestion("Hi"))

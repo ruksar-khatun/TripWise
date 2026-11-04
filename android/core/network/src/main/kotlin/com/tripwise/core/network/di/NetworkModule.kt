@@ -79,6 +79,14 @@ object NetworkModule {
         retrofit.create(com.tripwise.core.network.api.PlacesApi::class.java)
 
     @Provides @Singleton
+    fun provideItineraryApi(@Authenticated retrofit: Retrofit): com.tripwise.core.network.api.ItineraryApi =
+        retrofit.create(com.tripwise.core.network.api.ItineraryApi::class.java)
+
+    @Provides @Singleton
+    fun provideCurrencyApi(@Public retrofit: Retrofit): com.tripwise.core.network.api.CurrencyApi =
+        retrofit.create(com.tripwise.core.network.api.CurrencyApi::class.java)
+
+    @Provides @Singleton
     fun provideMeApi(@Authenticated retrofit: Retrofit): MeApi = retrofit.create(MeApi::class.java)
 }
 

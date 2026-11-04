@@ -1,0 +1,34 @@
+<resources>
+    <string name="feature_itinerary_title">AI itinerary</string>
+    <string name="feature_itinerary_back">Back</string>
+    <string name="feature_itinerary_destination">Destination</string>
+    <string name="feature_itinerary_days">Days</string>
+    <string name="feature_itinerary_travellers">Travellers</string>
+    <string name="feature_itinerary_pace">Pace</string>
+    <string name="feature_itinerary_pace_relaxed">Relaxed</string>
+    <string name="feature_itinerary_pace_balanced">Balanced</string>
+    <string name="feature_itinerary_pace_packed">Packed</string>
+    <string name="feature_itinerary_budget">Budget</string>
+    <string name="feature_itinerary_budget_low">Budget</string>
+    <string name="feature_itinerary_budget_mid">Mid-range</string>
+    <string name="feature_itinerary_budget_luxury">Luxury</string>
+    <string name="feature_itinerary_interests">Interests</string>
+    <string name="feature_itinerary_notes">Anything else? (optional)</string>
+    <string name="feature_itinerary_notes_hint">e.g. vegetarian, travelling with kids, no early starts</string>
+    <string name="feature_itinerary_start_date">Start date</string>
+    <string name="feature_itinerary_generate">Generate itinerary</string>
+    <string name="feature_itinerary_generating">Planning your days…</string>
+    <string name="feature_itinerary_regenerate">Regenerate</string>
+    <string name="feature_itinerary_edit_preferences">Edit preferences</string>
+    <string name="feature_itinerary_save_to_trip">Add to my trip</string>
+    <string name="feature_itinerary_save_new_trip">Save as new trip</string>
+    <string name="feature_itinerary_source_ai">Planned with Gemini</string>
+    <string name="feature_itinerary_source_template">Basic plan: the AI planner is unavailable, so this uses TripWise\'s curated highlights.</string>
+    <string name="feature_itinerary_day">Day %1$d</string>
+    <string name="feature_itinerary_estimate_note">Times and costs are estimates per person. Check opening hours before you go.</string>
+    <string name="feature_itinerary_for_trip">For trip: %1$s</string>
+    <string name="feature_itinerary_decrease">Decrease %1$s</string>
+    <string name="feature_itinerary_increase">Increase %1$s</string>
+    <string name="feature_itinerary_change">Change</string>
+    <string name="feature_itinerary_ok">OK</string>
+</resources>

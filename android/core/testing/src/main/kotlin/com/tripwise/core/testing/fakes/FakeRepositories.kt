@@ -92,6 +92,18 @@ class FakeTripRepository(
     override suspend fun deleteTrip(id: String) {
         trips.update { l -> l?.filterNot { it.id == id } }
     }
+
+    override suspend fun addItineraryItems(tripId: String, items: List<ItineraryItem>) {
+        this.items.update { it + items }
+    }
+
+    override suspend fun saveItineraryItem(item: ItineraryItem) {
+        items.update { l -> l.filterNot { it.id == item.id } + item }
+    }
+
+    override suspend fun deleteItineraryItem(itemId: String) {
+        items.update { l -> l.filterNot { it.id == itemId } }
+    }
 }
 
 class FakeUserRepository(profile: UserProfile? = null) : UserRepository {
@@ -111,4 +123,37 @@ class FakeAssistantRepository : com.tripwise.core.domain.repository.AssistantRep
     val requests = mutableListOf<Pair<List<com.tripwise.core.model.ChatMessage>, com.tripwise.core.model.AssistantContext>>()
     override fun reply(history: List<com.tripwise.core.model.ChatMessage>, context: com.tripwise.core.model.AssistantContext) =
         kotlinx.coroutines.flow.flow { requests += history to context; events.forEach { emit(it) } }
+}
+
+class FakeItineraryPlanRepository(var result: com.tripwise.core.common.result.Outcome<com.tripwise.core.model.ItineraryPlan>? = null) :
+    com.tripwise.core.domain.repository.ItineraryPlanRepository {
+    val requests = mutableListOf<com.tripwise.core.model.ItineraryRequest>()
+    var gate: kotlinx.coroutines.CompletableDeferred<Unit>? = null
+    override suspend fun generate(request: com.tripwise.core.model.ItineraryRequest): com.tripwise.core.common.result.Outcome<com.tripwise.core.model.ItineraryPlan> {
+        requests += request
+        gate?.await()
+        return checkNotNull(result) { "set FakeItineraryPlanRepository.result" }
+    }
+}
+
+class FakeExpenseRepository(private val trips: FakeTripRepository? = null) : com.tripwise.core.domain.repository.ExpenseRepository {
+    val expenses = MutableStateFlow<List<com.tripwise.core.model.Expense>>(emptyList())
+    val plans = mutableMapOf<String, Map<com.tripwise.core.model.ExpenseCategory, com.tripwise.core.model.Money>>()
+    override fun observeExpenses(tripId: String) = expenses.map { l -> l.filter { it.tripId == tripId } }
+    override suspend fun saveExpense(tripId: String, expenseId: String?, draft: com.tripwise.core.model.ExpenseDraft): Outcome<Unit> {
+        val id = expenseId ?: "e${expenses.value.size + 1}"
+        expenses.update { l -> l.filterNot { it.id == id } + com.tripwise.core.model.Expense(id, tripId, draft.category, draft.amount, draft.note, draft.spentOn) }
+        return Outcome.Success(Unit)
+    }
+    override suspend fun deleteExpense(expenseId: String) { expenses.update { l -> l.filterNot { it.id == expenseId } } }
+    override suspend fun setPlan(tripId: String, planned: Map<com.tripwise.core.model.ExpenseCategory, com.tripwise.core.model.Money>) { plans[tripId] = planned }
+    override suspend fun setPlanned(tripId: String, category: com.tripwise.core.model.ExpenseCategory, amount: com.tripwise.core.model.Money) {
+        plans[tripId] = (plans[tripId] ?: emptyMap()) + (category to amount)
+    }
+}
+
+class FakeCurrencyRepository(var result: Outcome<com.tripwise.core.model.ExchangeRates> =
+    Outcome.Success(com.tripwise.core.model.ExchangeRates(mapOf("USD" to 1.0, "INR" to 80.0, "JPY" to 150.0), live = true))) :
+    com.tripwise.core.domain.repository.CurrencyRepository {
+    override suspend fun usdRates() = result
 }

@@ -41,7 +41,28 @@ sealed interface TripDetailUiState {
     ) : TripDetailUiState
 }
 
+/** Add/edit itinerary item dialog. [id] null = new. */
+data class ItemEditor(
+    val id: String?,
+    val date: java.time.LocalDate,
+    val time: String,
+    val title: String,
+    val category: com.tripwise.core.model.ActivityCategory,
+    val notes: String,
+    val isDone: Boolean = false,
+    val showErrors: Boolean = false,
+) {
+    val parsedTime: java.time.LocalTime? get() = runCatching { java.time.LocalTime.parse(time.trim().padStart(5, '0')) }.getOrNull()
+    val valid: Boolean get() = title.isNotBlank() && (time.isBlank() || parsedTime != null)
+}
+
 sealed interface TripDetailAction {
+    data class AddItem(val date: java.time.LocalDate) : TripDetailAction
+    data class EditItem(val item: ItineraryItem) : TripDetailAction
+    data class UpdateEditor(val editor: ItemEditor) : TripDetailAction
+    data object SaveItem : TripDetailAction
+    data object DeleteItem : TripDetailAction
+    data object DismissEditor : TripDetailAction
     data class SetItemDone(val itemId: String, val done: Boolean) : TripDetailAction
     data object Retry : TripDetailAction
     data object Delete : TripDetailAction
@@ -58,6 +79,8 @@ class TripDetailViewModel @Inject constructor(
     /** Same key as the TripDetailRoute argument. */
     private val tripId: String = checkNotNull(savedStateHandle["tripId"]) { "tripId argument missing" }
     private val refresh = MutableStateFlow(0)
+    private val _editor = MutableStateFlow<ItemEditor?>(null)
+    val editor: StateFlow<ItemEditor?> = _editor
 
     val uiState: StateFlow<TripDetailUiState> = refresh.flatMapLatest {
         combine(
@@ -75,6 +98,19 @@ class TripDetailViewModel @Inject constructor(
             }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TripDetailUiState.Loading)
+
+    private fun saveItem() {
+        val e = _editor.value ?: return
+        if (!e.valid) { _editor.value = e.copy(showErrors = true); return }
+        val existing = (uiState.value as? TripDetailUiState.Ready)?.days?.flatMap { it.items }?.firstOrNull { it.id == e.id }
+        val item = ItineraryItem(
+            id = e.id ?: java.util.UUID.randomUUID().toString(), tripId = tripId, date = e.date, startTime = e.parsedTime,
+            title = e.title.trim(), category = e.category, estimatedCost = existing?.estimatedCost, isDone = e.isDone,
+            notes = e.notes.trim().ifEmpty { null },
+        )
+        viewModelScope.launch { tripRepository.saveItineraryItem(item) }
+        _editor.value = null
+    }
 
     private fun ready(trip: Trip, items: List<ItineraryItem>, budget: BudgetSummary?): TripDetailUiState.Ready {
         val byDate = items.groupBy { it.date }
@@ -94,6 +130,17 @@ class TripDetailViewModel @Inject constructor(
             is TripDetailAction.SetItemDone -> viewModelScope.launch { tripRepository.setItineraryItemDone(action.itemId, action.done) }
             TripDetailAction.Retry -> refresh.value++
             TripDetailAction.Delete -> viewModelScope.launch { tripRepository.deleteTrip(tripId) }
+            is TripDetailAction.AddItem -> _editor.value = ItemEditor(null, action.date, "", "", com.tripwise.core.model.ActivityCategory.SIGHTSEEING, "")
+            is TripDetailAction.EditItem -> _editor.value = with(action.item) {
+                ItemEditor(id, date, startTime?.toString().orEmpty(), title, category, notes.orEmpty(), isDone)
+            }
+            is TripDetailAction.UpdateEditor -> _editor.value = action.editor
+            TripDetailAction.DismissEditor -> _editor.value = null
+            TripDetailAction.DeleteItem -> _editor.value?.id?.let { id ->
+                viewModelScope.launch { tripRepository.deleteItineraryItem(id) }
+                _editor.value = null
+            }
+            TripDetailAction.SaveItem -> saveItem()
         }
     }
 }

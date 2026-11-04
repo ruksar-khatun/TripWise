@@ -22,4 +22,5 @@ object DatabaseModule {
     @Provides fun provideItineraryDao(db: TripWiseDatabase) = db.itineraryDao()
     @Provides fun provideBudgetDao(db: TripWiseDatabase) = db.budgetDao()
     @Provides fun provideSavedDestinationDao(db: TripWiseDatabase) = db.savedDestinationDao()
+    @Provides fun provideExpenseDao(db: TripWiseDatabase) = db.expenseDao()
 }

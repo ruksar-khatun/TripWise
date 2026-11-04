@@ -61,6 +61,7 @@ dependencies {
     implementation(projects.feature.saved)
     implementation(projects.feature.destination)
     implementation(projects.feature.trips)
+    implementation(projects.feature.itinerary)
     implementation(projects.feature.assistant)
     implementation(projects.feature.profile)
 

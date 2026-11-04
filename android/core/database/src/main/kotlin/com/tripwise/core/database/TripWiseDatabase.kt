@@ -36,4 +36,5 @@ abstract class TripWiseDatabase : RoomDatabase() {
     abstract fun itineraryDao(): ItineraryDao
     abstract fun budgetDao(): BudgetDao
     abstract fun savedDestinationDao(): SavedDestinationDao
+    abstract fun expenseDao(): com.tripwise.core.database.dao.ExpenseDao
 }

@@ -66,6 +66,33 @@ class AppTourTest {
             t.shot("activities-nearby", settleMs = 5_000)
             t.back()
         }
+        // AI itinerary planner → save as a new trip
+        t.scrollTo("Plan with AI")
+        if (t.click("Plan with AI", required = false)) {
+            t.waitFor("Generate itinerary")
+            t.shot("planner-preferences", settleMs = 1_000)
+            t.click("Generate itinerary")
+            runCatching { t.waitFor("Day 1", timeoutMs = 60_000) }
+            t.shot("planner-result", settleMs = 1_500)
+            t.swipeUp()
+            t.shot("planner-result-scrolled", settleMs = 1_000)
+            if (t.click("Save as new trip", required = false)) {
+                runCatching { t.waitFor("Overview", timeoutMs = 10_000) }
+                t.shot("trip-from-plan-overview", settleMs = 2_500)
+                t.click("Itinerary", required = false)
+                t.shot("trip-from-plan-itinerary", settleMs = 1_500)
+                t.click("Budget", required = false)
+                t.click("Estimate", required = false)
+                runCatching { t.waitFor("Estimated total", timeoutMs = 15_000) }
+                t.shot("trip-budget-estimate", settleMs = 1_500)
+                t.click("Use as my budget", required = false)
+                t.swipeUp()
+                t.shot("trip-budget-plan", settleMs = 1_500)
+                t.back()
+            } else {
+                t.back()
+            }
+        }
         t.scrollTo("On the map")
         t.shot("destination-map-preview", settleMs = 4_000)
         if (t.clickDescription("Open map")) {

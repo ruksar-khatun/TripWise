@@ -67,3 +67,27 @@ data class NewTrip(
     val budget: Money?,
     val notes: String?,
 )
+
+data class Expense(
+    val id: String,
+    val tripId: String,
+    val category: ExpenseCategory,
+    val amount: Money,
+    val note: String?,
+    val spentOn: LocalDate,
+)
+
+data class ExpenseDraft(val category: ExpenseCategory, val amount: Money, val note: String?, val spentOn: LocalDate)
+
+/** USD-based exchange rates. [live] is false when the app/server fell back to approximate rates. */
+data class ExchangeRates(val usdTo: Map<String, Double>, val live: Boolean)
+
+data class CostEstimate(
+    val perCategory: Map<ExpenseCategory, Money>,
+    val total: Money,
+    val level: BudgetLevel,
+    val days: Int,
+    val travellers: Int,
+    /** False when converted with approximate fallback rates. */
+    val liveRates: Boolean,
+)
