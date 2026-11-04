@@ -2,6 +2,9 @@ package com.tripwise.core.network.di
 
 import com.tripwise.core.network.NetworkConfig
 import com.tripwise.core.network.api.AuthApi
+import com.tripwise.core.network.api.DestinationApi
+import com.tripwise.core.network.datasource.CatalogNetworkDataSource
+import com.tripwise.core.network.datasource.RetrofitCatalogNetworkDataSource
 import com.tripwise.core.network.api.MeApi
 import com.tripwise.core.network.api.TripWiseApi
 import com.tripwise.core.network.auth.AuthInterceptor
@@ -69,6 +72,9 @@ object NetworkModule {
     fun provideAuthApi(@Public retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
 
     @Provides @Singleton
+    fun provideDestinationApi(@Public retrofit: Retrofit): DestinationApi = retrofit.create(DestinationApi::class.java)
+
+    @Provides @Singleton
     fun provideMeApi(@Authenticated retrofit: Retrofit): MeApi = retrofit.create(MeApi::class.java)
 }
 
@@ -80,6 +86,9 @@ internal abstract class NetworkBindingsModule {
 
     @Binds
     abstract fun bindAuthNetworkDataSource(impl: RetrofitAuthNetworkDataSource): AuthNetworkDataSource
+
+    @Binds
+    abstract fun bindCatalogNetworkDataSource(impl: RetrofitCatalogNetworkDataSource): CatalogNetworkDataSource
 }
 
 internal fun buildOkHttpClient(config: NetworkConfig): OkHttpClient = OkHttpClient.Builder()

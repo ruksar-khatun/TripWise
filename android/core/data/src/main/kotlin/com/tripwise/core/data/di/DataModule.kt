@@ -1,7 +1,7 @@
 package com.tripwise.core.data.di
 
 import com.tripwise.core.common.network.NetworkMonitor
-import com.tripwise.core.data.demo.DemoDestinationRepository
+import com.tripwise.core.data.repository.CatalogDestinationRepository
 import com.tripwise.core.data.repository.DefaultAuthRepository
 import com.tripwise.core.data.repository.DefaultSystemRepository
 import com.tripwise.core.data.repository.LocalUserData
@@ -35,6 +35,5 @@ internal abstract class DataModule {
     @Binds abstract fun bindTripRepository(impl: OfflineFirstTripRepository): TripRepository
     @Binds abstract fun bindSavedDestinationRepository(impl: OfflineFirstSavedDestinationRepository): SavedDestinationRepository
 
-    // Catalog phase replaces this with the backend catalog.
-    @Binds @Singleton abstract fun bindDestinationRepository(impl: DemoDestinationRepository): DestinationRepository
+    @Binds @Singleton abstract fun bindDestinationRepository(impl: CatalogDestinationRepository): DestinationRepository
 }

@@ -28,15 +28,22 @@ jobs:
           path: android/core/database/schemas
           if-no-files-found: ignore
 
-  demo-images:
-    # Checks every demo Unsplash photo URL from GitHub's network (the dev sandbox can't reach Unsplash).
+  catalog-images:
+    # Checks every catalog photo URL from GitHub's network and publishes a labelled contact sheet
+    # to the `ci-image-review` branch for visual verification of image relevance.
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: android
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: ./scripts/check-demo-images.sh
+      - run: sudo apt-get install -y -qq imagemagick jq > /dev/null
+      - run: ./scripts/check-catalog-images.sh
+      - name: Publish contact sheet
+        if: always() && github.ref == 'refs/heads/main'
+        run: |
+          cd out && rm -rf thumbs-keep && git init -q -b ci-image-review && git add -A
+          git -c user.name=tripwise-ci -c user.email=ci@users.noreply.github.com commit -qm "Catalog images for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-image-review
 
   backend:
     runs-on: ubuntu-latest

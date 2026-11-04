@@ -14,6 +14,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
 COPY drizzle ./drizzle
+COPY catalog ./catalog
 USER node
 # Cloud Run provides PORT; DATABASE_URL and JWT_SECRET come from Secret Manager.
 CMD ["node", "dist/server.js"]

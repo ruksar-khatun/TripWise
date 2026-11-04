@@ -1,0 +1,1860 @@
+{
+  "_comment": "Curated TripWise catalog. Attraction coordinates, durations and costs are editorial approximations (verify before publishing). dailyCostUsd = typical mid-range spend per person per day. Photos: Unsplash License; relevance reviewed via the catalog-images CI contact sheet.",
+  "destinations": [
+    {
+      "id": "bali",
+      "name": "Bali",
+      "country": "Indonesia",
+      "region": "Southeast Asia",
+      "summary": "Volcanic highlands, terraced rice fields and surf beaches, with a living Hindu culture woven through daily life.",
+      "highlights": [
+        "Sunrise over Mount Batur",
+        "Tegallalang rice terraces",
+        "Uluwatu cliff temple at sunset",
+        "Ubud's craft villages"
+      ],
+      "localFood": [
+        "Babi guling",
+        "Nasi campur",
+        "Sate lilit",
+        "Lawar"
+      ],
+      "interests": [
+        "BEACHES",
+        "CULTURE",
+        "NATURE"
+      ],
+      "location": {
+        "lat": -8.34,
+        "lng": 115.09
+      },
+      "rating": 4.7,
+      "ratingCount": 2140,
+      "bestTimeToVisit": "Apr – Oct",
+      "currency": "IDR",
+      "languages": [
+        "Indonesian",
+        "Balinese"
+      ],
+      "featured": true,
+      "popularity": 2140,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "bali-1",
+          "name": "Mount Batur sunrise trek",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": -8.242,
+            "lng": 115.375
+          },
+          "durationMinutes": 300,
+          "estimatedCostUsd": 45,
+          "description": "Pre-dawn hike up an active volcano for sunrise above the clouds."
+        },
+        {
+          "id": "bali-2",
+          "name": "Tegallalang Rice Terraces",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": -8.433,
+            "lng": 115.279
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 3,
+          "description": "Sculpted green terraces irrigated by the centuries-old subak system."
+        },
+        {
+          "id": "bali-3",
+          "name": "Uluwatu Temple",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": -8.829,
+            "lng": 115.085
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 4,
+          "description": "Clifftop sea temple with a Kecak fire dance at sunset."
+        },
+        {
+          "id": "bali-4",
+          "name": "Sacred Monkey Forest, Ubud",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": -8.519,
+            "lng": 115.259
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 6,
+          "description": "Jungle sanctuary with temples and long-tailed macaques."
+        },
+        {
+          "id": "bali-5",
+          "name": "Ubud Art Market",
+          "category": "SHOPPING",
+          "location": {
+            "lat": -8.507,
+            "lng": 115.263
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 0,
+          "description": "Handicrafts, batik and woodcarvings in central Ubud."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 40,
+        "FOOD": 20,
+        "LOCAL_TRAVEL": 10,
+        "ACTIVITIES": 20,
+        "SHOPPING": 10
+      }
+    },
+    {
+      "id": "kyoto",
+      "name": "Kyoto",
+      "country": "Japan",
+      "region": "East Asia",
+      "summary": "Japan's former capital: more than a thousand temples, wooden machiya streets and an exceptional food culture.",
+      "highlights": [
+        "Fushimi Inari's torii gates",
+        "Arashiyama bamboo grove",
+        "Gion at dusk",
+        "Kiyomizu-dera"
+      ],
+      "localFood": [
+        "Kaiseki",
+        "Yudofu",
+        "Matcha sweets",
+        "Nishiki Market street food"
+      ],
+      "interests": [
+        "CULTURE",
+        "FOOD",
+        "CITY"
+      ],
+      "location": {
+        "lat": 35.01,
+        "lng": 135.77
+      },
+      "rating": 4.8,
+      "ratingCount": 3320,
+      "bestTimeToVisit": "Mar – May, Oct – Nov",
+      "currency": "JPY",
+      "languages": [
+        "Japanese"
+      ],
+      "featured": true,
+      "popularity": 3320,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "kyoto-1",
+          "name": "Fushimi Inari Taisha",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 34.967,
+            "lng": 135.773
+          },
+          "durationMinutes": 150,
+          "estimatedCostUsd": 0,
+          "description": "Thousands of vermilion torii gates winding up Mount Inari."
+        },
+        {
+          "id": "kyoto-2",
+          "name": "Arashiyama Bamboo Grove",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.017,
+            "lng": 135.672
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 0,
+          "description": "Towering bamboo paths, best before the morning crowds."
+        },
+        {
+          "id": "kyoto-3",
+          "name": "Kiyomizu-dera",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 34.995,
+            "lng": 135.785
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 3,
+          "description": "Wooden hillside temple with a famous stage over the valley."
+        },
+        {
+          "id": "kyoto-4",
+          "name": "Kinkaku-ji (Golden Pavilion)",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.039,
+            "lng": 135.729
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 3,
+          "description": "Gold-leaf pavilion reflected in a mirror pond."
+        },
+        {
+          "id": "kyoto-5",
+          "name": "Nishiki Market",
+          "category": "FOOD",
+          "location": {
+            "lat": 35.005,
+            "lng": 135.765
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 20,
+          "description": "Covered market known as Kyoto's kitchen."
+        },
+        {
+          "id": "kyoto-6",
+          "name": "Gion evening walk",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.004,
+            "lng": 135.775
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 0,
+          "description": "Lantern-lit streets of the historic geisha district."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 90,
+        "FOOD": 45,
+        "LOCAL_TRAVEL": 15,
+        "ACTIVITIES": 25,
+        "SHOPPING": 20
+      }
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "country": "Japan",
+      "region": "East Asia",
+      "summary": "A vast, orderly megacity where neon districts sit beside quiet shrines and some of the world's best restaurants.",
+      "highlights": [
+        "Shibuya Crossing",
+        "Senso-ji in Asakusa",
+        "teamLab digital art",
+        "Day trip to Mount Fuji"
+      ],
+      "localFood": [
+        "Sushi",
+        "Ramen",
+        "Tempura",
+        "Monjayaki"
+      ],
+      "interests": [
+        "CITY",
+        "FOOD",
+        "CULTURE"
+      ],
+      "location": {
+        "lat": 35.68,
+        "lng": 139.69
+      },
+      "rating": 4.7,
+      "ratingCount": 5410,
+      "bestTimeToVisit": "Mar – May, Sep – Nov",
+      "currency": "JPY",
+      "languages": [
+        "Japanese"
+      ],
+      "featured": false,
+      "popularity": 5410,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "tokyo-1",
+          "name": "Senso-ji, Asakusa",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.715,
+            "lng": 139.797
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 0,
+          "description": "Tokyo's oldest temple and the Nakamise shopping street."
+        },
+        {
+          "id": "tokyo-2",
+          "name": "Shibuya Crossing",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.659,
+            "lng": 139.7
+          },
+          "durationMinutes": 45,
+          "estimatedCostUsd": 0,
+          "description": "The world's busiest pedestrian scramble."
+        },
+        {
+          "id": "tokyo-3",
+          "name": "Meiji Jingu",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.676,
+            "lng": 139.699
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 0,
+          "description": "Forest shrine dedicated to Emperor Meiji."
+        },
+        {
+          "id": "tokyo-4",
+          "name": "teamLab Planets",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 35.649,
+            "lng": 139.79
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 25,
+          "description": "Immersive digital art you walk through barefoot."
+        },
+        {
+          "id": "tokyo-5",
+          "name": "Tsukiji Outer Market",
+          "category": "FOOD",
+          "location": {
+            "lat": 35.665,
+            "lng": 139.77
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 25,
+          "description": "Sushi, tamagoyaki and street snacks from early morning."
+        },
+        {
+          "id": "tokyo-6",
+          "name": "Tokyo Skytree",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 35.71,
+            "lng": 139.811
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 20,
+          "description": "634 m tower with city-wide views."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 100,
+        "FOOD": 45,
+        "LOCAL_TRAVEL": 15,
+        "ACTIVITIES": 30,
+        "SHOPPING": 25
+      }
+    },
+    {
+      "id": "seoul",
+      "name": "Seoul",
+      "country": "South Korea",
+      "region": "East Asia",
+      "summary": "Palaces and hanok villages framed by mountains, with round-the-clock markets and a fast-moving pop culture.",
+      "highlights": [
+        "Gyeongbokgung Palace",
+        "Bukchon Hanok Village",
+        "Myeongdong night market",
+        "N Seoul Tower"
+      ],
+      "localFood": [
+        "Bibimbap",
+        "Korean BBQ",
+        "Tteokbokki",
+        "Kimchi jjigae"
+      ],
+      "interests": [
+        "CITY",
+        "FOOD",
+        "CULTURE"
+      ],
+      "location": {
+        "lat": 37.57,
+        "lng": 126.98
+      },
+      "rating": 4.6,
+      "ratingCount": 2870,
+      "bestTimeToVisit": "Apr – Jun, Sep – Nov",
+      "currency": "KRW",
+      "languages": [
+        "Korean"
+      ],
+      "featured": false,
+      "popularity": 2870,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "seoul-1",
+          "name": "Gyeongbokgung Palace",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 37.58,
+            "lng": 126.977
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 3,
+          "description": "Grand Joseon palace with the changing of the guard."
+        },
+        {
+          "id": "seoul-2",
+          "name": "Bukchon Hanok Village",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 37.583,
+            "lng": 126.983
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 0,
+          "description": "Hillside lanes of traditional wooden houses."
+        },
+        {
+          "id": "seoul-3",
+          "name": "Myeongdong",
+          "category": "SHOPPING",
+          "location": {
+            "lat": 37.563,
+            "lng": 126.986
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 20,
+          "description": "Street food stalls and K-beauty shopping."
+        },
+        {
+          "id": "seoul-4",
+          "name": "N Seoul Tower",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 37.551,
+            "lng": 126.988
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 15,
+          "description": "Views over the city from Namsan mountain."
+        },
+        {
+          "id": "seoul-5",
+          "name": "Gwangjang Market",
+          "category": "FOOD",
+          "location": {
+            "lat": 37.57,
+            "lng": 127.0
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 15,
+          "description": "Bindaetteok and mayak gimbap at a century-old market."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 80,
+        "FOOD": 35,
+        "LOCAL_TRAVEL": 10,
+        "ACTIVITIES": 20,
+        "SHOPPING": 20
+      }
+    },
+    {
+      "id": "bangkok",
+      "name": "Bangkok",
+      "country": "Thailand",
+      "region": "Southeast Asia",
+      "summary": "Gilded temples, floating markets and a legendary street-food scene along the Chao Phraya river.",
+      "highlights": [
+        "Wat Arun at sunset",
+        "Grand Palace",
+        "Chatuchak weekend market",
+        "Long-tail boat canals"
+      ],
+      "localFood": [
+        "Pad thai",
+        "Tom yum goong",
+        "Mango sticky rice",
+        "Boat noodles"
+      ],
+      "interests": [
+        "CITY",
+        "FOOD",
+        "CULTURE"
+      ],
+      "location": {
+        "lat": 13.76,
+        "lng": 100.5
+      },
+      "rating": 4.5,
+      "ratingCount": 4020,
+      "bestTimeToVisit": "Nov – Feb",
+      "currency": "THB",
+      "languages": [
+        "Thai"
+      ],
+      "featured": false,
+      "popularity": 4020,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "bangkok-1",
+          "name": "Grand Palace",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 13.75,
+            "lng": 100.491
+          },
+          "durationMinutes": 150,
+          "estimatedCostUsd": 15,
+          "description": "Former royal residence and the Temple of the Emerald Buddha."
+        },
+        {
+          "id": "bangkok-2",
+          "name": "Wat Arun",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 13.744,
+            "lng": 100.489
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 3,
+          "description": "Porcelain-covered riverside temple, glowing at sunset."
+        },
+        {
+          "id": "bangkok-3",
+          "name": "Wat Pho",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 13.746,
+            "lng": 100.493
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 9,
+          "description": "Home of the 46 m reclining Buddha and Thai massage school."
+        },
+        {
+          "id": "bangkok-4",
+          "name": "Chatuchak Weekend Market",
+          "category": "SHOPPING",
+          "location": {
+            "lat": 13.8,
+            "lng": 100.55
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 20,
+          "description": "More than 15,000 stalls of food, crafts and clothes."
+        },
+        {
+          "id": "bangkok-5",
+          "name": "Damnoen Saduak Floating Market",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 13.519,
+            "lng": 99.959
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 30,
+          "description": "Boat vendors selling fruit and noodles on the canals."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 45,
+        "FOOD": 20,
+        "LOCAL_TRAVEL": 8,
+        "ACTIVITIES": 20,
+        "SHOPPING": 15
+      }
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore",
+      "country": "Singapore",
+      "region": "Southeast Asia",
+      "summary": "A green, spotless city-state where hawker centres, futuristic gardens and four cultures meet.",
+      "highlights": [
+        "Gardens by the Bay",
+        "Marina Bay skyline",
+        "Hawker centres",
+        "Sentosa island"
+      ],
+      "localFood": [
+        "Hainanese chicken rice",
+        "Chilli crab",
+        "Laksa",
+        "Kaya toast"
+      ],
+      "interests": [
+        "CITY",
+        "FOOD"
+      ],
+      "location": {
+        "lat": 1.35,
+        "lng": 103.82
+      },
+      "rating": 4.6,
+      "ratingCount": 3650,
+      "bestTimeToVisit": "Feb – Apr",
+      "currency": "SGD",
+      "languages": [
+        "English",
+        "Malay",
+        "Mandarin",
+        "Tamil"
+      ],
+      "featured": false,
+      "popularity": 3650,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "singapore-1",
+          "name": "Gardens by the Bay",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 1.282,
+            "lng": 103.864
+          },
+          "durationMinutes": 150,
+          "estimatedCostUsd": 20,
+          "description": "Supertree Grove and the cooled Flower Dome conservatory."
+        },
+        {
+          "id": "singapore-2",
+          "name": "Marina Bay Sands SkyPark",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 1.283,
+            "lng": 103.86
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 25,
+          "description": "Observation deck 57 floors above the bay."
+        },
+        {
+          "id": "singapore-3",
+          "name": "Maxwell Food Centre",
+          "category": "FOOD",
+          "location": {
+            "lat": 1.28,
+            "lng": 103.845
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 10,
+          "description": "Hawker classics including Hainanese chicken rice."
+        },
+        {
+          "id": "singapore-4",
+          "name": "Sentosa Island",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 1.25,
+            "lng": 103.83
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 30,
+          "description": "Beaches, cable car and attractions off the south coast."
+        },
+        {
+          "id": "singapore-5",
+          "name": "Singapore Botanic Gardens",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 1.315,
+            "lng": 103.816
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 0,
+          "description": "UNESCO-listed gardens with the National Orchid Garden."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 120,
+        "FOOD": 35,
+        "LOCAL_TRAVEL": 12,
+        "ACTIVITIES": 35,
+        "SHOPPING": 25
+      }
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "country": "United Arab Emirates",
+      "region": "Middle East",
+      "summary": "Record-breaking skyscrapers, desert dunes and old souks along the creek.",
+      "highlights": [
+        "Burj Khalifa observation deck",
+        "Desert safari",
+        "Gold and spice souks",
+        "Dubai Marina"
+      ],
+      "localFood": [
+        "Al machboos",
+        "Shawarma",
+        "Luqaimat",
+        "Camel-milk chocolate"
+      ],
+      "interests": [
+        "CITY",
+        "ADVENTURE"
+      ],
+      "location": {
+        "lat": 25.2,
+        "lng": 55.27
+      },
+      "rating": 4.5,
+      "ratingCount": 2980,
+      "bestTimeToVisit": "Nov – Mar",
+      "currency": "AED",
+      "languages": [
+        "Arabic",
+        "English"
+      ],
+      "featured": false,
+      "popularity": 2980,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "dubai-1",
+          "name": "Burj Khalifa At the Top",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 25.197,
+            "lng": 55.274
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 45,
+          "description": "Observation decks in the world's tallest building."
+        },
+        {
+          "id": "dubai-2",
+          "name": "Desert safari",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 25.0,
+            "lng": 55.65
+          },
+          "durationMinutes": 360,
+          "estimatedCostUsd": 60,
+          "description": "Dune drive, camel ride and dinner under the stars."
+        },
+        {
+          "id": "dubai-3",
+          "name": "Al Fahidi Historic District",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 25.263,
+            "lng": 55.3
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 0,
+          "description": "Wind-tower houses and museums of old Dubai."
+        },
+        {
+          "id": "dubai-4",
+          "name": "Gold and Spice Souks",
+          "category": "SHOPPING",
+          "location": {
+            "lat": 25.27,
+            "lng": 55.297
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 0,
+          "description": "Traditional markets across the creek by abra boat."
+        },
+        {
+          "id": "dubai-5",
+          "name": "The Dubai Mall",
+          "category": "SHOPPING",
+          "location": {
+            "lat": 25.198,
+            "lng": 55.279
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 0,
+          "description": "Aquarium, fountain shows and hundreds of shops."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 130,
+        "FOOD": 50,
+        "LOCAL_TRAVEL": 20,
+        "ACTIVITIES": 60,
+        "SHOPPING": 40
+      }
+    },
+    {
+      "id": "agra",
+      "name": "Agra",
+      "country": "India",
+      "region": "South Asia",
+      "summary": "Home of the Taj Mahal and a cluster of Mughal masterpieces on the banks of the Yamuna.",
+      "highlights": [
+        "Taj Mahal at sunrise",
+        "Agra Fort",
+        "Mehtab Bagh",
+        "Fatehpur Sikri"
+      ],
+      "localFood": [
+        "Petha",
+        "Bedai with aloo sabzi",
+        "Mughlai biryani",
+        "Dalmoth"
+      ],
+      "interests": [
+        "CULTURE"
+      ],
+      "location": {
+        "lat": 27.18,
+        "lng": 78.01
+      },
+      "rating": 4.6,
+      "ratingCount": 2210,
+      "bestTimeToVisit": "Oct – Mar",
+      "currency": "INR",
+      "languages": [
+        "Hindi"
+      ],
+      "featured": false,
+      "popularity": 2210,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "agra-1",
+          "name": "Taj Mahal",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 27.175,
+            "lng": 78.042
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 15,
+          "description": "Marble mausoleum, best at sunrise from the main gate."
+        },
+        {
+          "id": "agra-2",
+          "name": "Agra Fort",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 27.18,
+            "lng": 78.021
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 8,
+          "description": "Red sandstone Mughal fort with views of the Taj."
+        },
+        {
+          "id": "agra-3",
+          "name": "Mehtab Bagh",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 27.18,
+            "lng": 78.044
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 2,
+          "description": "Riverside garden facing the Taj Mahal."
+        },
+        {
+          "id": "agra-4",
+          "name": "Itimad-ud-Daulah",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 27.193,
+            "lng": 78.031
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 3,
+          "description": "Inlaid marble tomb nicknamed the 'Baby Taj'."
+        },
+        {
+          "id": "agra-5",
+          "name": "Fatehpur Sikri",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 27.094,
+            "lng": 77.661
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 8,
+          "description": "Abandoned Mughal capital 40 km from Agra."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 35,
+        "FOOD": 15,
+        "LOCAL_TRAVEL": 8,
+        "ACTIVITIES": 15,
+        "SHOPPING": 10
+      }
+    },
+    {
+      "id": "jaipur",
+      "name": "Jaipur",
+      "country": "India",
+      "region": "South Asia",
+      "summary": "The Pink City: hilltop forts, palace courtyards and bazaars full of block prints and gems.",
+      "highlights": [
+        "Amber Fort",
+        "Hawa Mahal",
+        "City Palace",
+        "Johari Bazaar"
+      ],
+      "localFood": [
+        "Dal baati churma",
+        "Laal maas",
+        "Pyaaz kachori",
+        "Ghevar"
+      ],
+      "interests": [
+        "CULTURE",
+        "FOOD"
+      ],
+      "location": {
+        "lat": 26.91,
+        "lng": 75.79
+      },
+      "rating": 4.5,
+      "ratingCount": 1890,
+      "bestTimeToVisit": "Oct – Mar",
+      "currency": "INR",
+      "languages": [
+        "Hindi",
+        "Rajasthani"
+      ],
+      "featured": false,
+      "popularity": 1890,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "jaipur-1",
+          "name": "Amber Fort",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 26.985,
+            "lng": 75.851
+          },
+          "durationMinutes": 150,
+          "estimatedCostUsd": 7,
+          "description": "Hilltop fort-palace with mirrored halls."
+        },
+        {
+          "id": "jaipur-2",
+          "name": "Hawa Mahal",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 26.924,
+            "lng": 75.827
+          },
+          "durationMinutes": 45,
+          "estimatedCostUsd": 3,
+          "description": "Honeycomb 'Palace of Winds' facade."
+        },
+        {
+          "id": "jaipur-3",
+          "name": "City Palace",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 26.926,
+            "lng": 75.824
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 8,
+          "description": "Royal residence, museums and courtyards."
+        },
+        {
+          "id": "jaipur-4",
+          "name": "Jantar Mantar",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 26.925,
+            "lng": 75.825
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 3,
+          "description": "18th-century astronomical instruments in stone."
+        },
+        {
+          "id": "jaipur-5",
+          "name": "Johari Bazaar",
+          "category": "SHOPPING",
+          "location": {
+            "lat": 26.92,
+            "lng": 75.826
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 0,
+          "description": "Gems, textiles and block-printed fabrics."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 35,
+        "FOOD": 15,
+        "LOCAL_TRAVEL": 8,
+        "ACTIVITIES": 12,
+        "SHOPPING": 15
+      }
+    },
+    {
+      "id": "kerala",
+      "name": "Kerala Backwaters",
+      "country": "India",
+      "region": "South Asia",
+      "summary": "A slow network of palm-lined lagoons and canals, best seen from a traditional houseboat.",
+      "highlights": [
+        "Overnight houseboat in Alleppey",
+        "Kumarakom bird sanctuary",
+        "Village canoe rides",
+        "Kathakali performance"
+      ],
+      "localFood": [
+        "Karimeen pollichathu",
+        "Appam with stew",
+        "Sadya",
+        "Puttu and kadala"
+      ],
+      "interests": [
+        "NATURE",
+        "FOOD"
+      ],
+      "location": {
+        "lat": 9.5,
+        "lng": 76.34
+      },
+      "rating": 4.6,
+      "ratingCount": 1540,
+      "bestTimeToVisit": "Sep – Mar",
+      "currency": "INR",
+      "languages": [
+        "Malayalam"
+      ],
+      "featured": false,
+      "popularity": 1540,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "kerala-1",
+          "name": "Alleppey houseboat cruise",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 9.498,
+            "lng": 76.339
+          },
+          "durationMinutes": 1200,
+          "estimatedCostUsd": 150,
+          "description": "Overnight on a kettuvallam through palm-lined canals."
+        },
+        {
+          "id": "kerala-2",
+          "name": "Kumarakom Bird Sanctuary",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 9.628,
+            "lng": 76.426
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 2,
+          "description": "Migratory birds on the banks of Vembanad Lake."
+        },
+        {
+          "id": "kerala-3",
+          "name": "Fort Kochi",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 9.965,
+            "lng": 76.242
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 0,
+          "description": "Chinese fishing nets, colonial streets and street art."
+        },
+        {
+          "id": "kerala-4",
+          "name": "Kathakali performance",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 9.966,
+            "lng": 76.243
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 6,
+          "description": "Classical dance-drama with elaborate make-up."
+        },
+        {
+          "id": "kerala-5",
+          "name": "Marari Beach",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 9.598,
+            "lng": 76.298
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 0,
+          "description": "Quiet fishing-village beach near Alleppey."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 50,
+        "FOOD": 15,
+        "LOCAL_TRAVEL": 10,
+        "ACTIVITIES": 25,
+        "SHOPPING": 10
+      }
+    },
+    {
+      "id": "halong",
+      "name": "Ha Long Bay",
+      "country": "Vietnam",
+      "region": "Southeast Asia",
+      "summary": "Thousands of limestone islands rising from emerald water, explored by junk boat and kayak.",
+      "highlights": [
+        "Overnight junk cruise",
+        "Kayaking through caves",
+        "Sung Sot cave",
+        "Ti Top island viewpoint"
+      ],
+      "localFood": [],
+      "interests": [
+        "NATURE",
+        "ADVENTURE"
+      ],
+      "location": {
+        "lat": 20.91,
+        "lng": 107.18
+      },
+      "rating": 4.6,
+      "ratingCount": 1760,
+      "bestTimeToVisit": "Mar – May, Sep – Nov",
+      "currency": "VND",
+      "languages": [
+        "Vietnamese"
+      ],
+      "featured": false,
+      "popularity": 1760,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "halong-1",
+          "name": "Overnight junk cruise",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 20.91,
+            "lng": 107.18
+          },
+          "durationMinutes": 1200,
+          "estimatedCostUsd": 120,
+          "description": "Sail among limestone karsts with meals on board."
+        },
+        {
+          "id": "halong-2",
+          "name": "Sung Sot Cave",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 20.856,
+            "lng": 107.087
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 10,
+          "description": "One of the bay's largest and most spectacular caves."
+        },
+        {
+          "id": "halong-3",
+          "name": "Kayaking the lagoons",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 20.88,
+            "lng": 107.07
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 10,
+          "description": "Paddle through hidden lagoons and karst arches."
+        },
+        {
+          "id": "halong-4",
+          "name": "Ti Top Island viewpoint",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 20.857,
+            "lng": 107.094
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 5,
+          "description": "Climb for a panorama over the bay."
+        },
+        {
+          "id": "halong-5",
+          "name": "Bai Tho Mountain",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 20.953,
+            "lng": 107.077
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 0,
+          "description": "Viewpoint above Ha Long city."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 60,
+        "FOOD": 25,
+        "LOCAL_TRAVEL": 15,
+        "ACTIVITIES": 40,
+        "SHOPPING": 10
+      }
+    },
+    {
+      "id": "maldives",
+      "name": "Maldives",
+      "country": "Maldives",
+      "region": "South Asia",
+      "summary": "Coral atolls with overwater villas, clear lagoons and some of the world's best snorkelling.",
+      "highlights": [
+        "House reef snorkelling",
+        "Sandbank picnics",
+        "Bioluminescent beaches",
+        "Manta ray dives"
+      ],
+      "localFood": [
+        "Mas huni",
+        "Garudhiya",
+        "Hedhikaa snacks",
+        "Bis keemiya"
+      ],
+      "interests": [
+        "BEACHES",
+        "NATURE"
+      ],
+      "location": {
+        "lat": 3.2,
+        "lng": 73.22
+      },
+      "rating": 4.8,
+      "ratingCount": 2650,
+      "bestTimeToVisit": "Nov – Apr",
+      "currency": "MVR",
+      "languages": [
+        "Dhivehi",
+        "English"
+      ],
+      "featured": true,
+      "popularity": 2650,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "maldives-1",
+          "name": "House reef snorkelling",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 4.175,
+            "lng": 73.51
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 0,
+          "description": "Coral, reef sharks and turtles steps from the shore."
+        },
+        {
+          "id": "maldives-2",
+          "name": "Banana Reef dive",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 4.235,
+            "lng": 73.538
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 90,
+          "description": "One of the Maldives' first and most famous dive sites."
+        },
+        {
+          "id": "maldives-3",
+          "name": "Sandbank picnic",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 4.2,
+            "lng": 73.45
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 80,
+          "description": "A private strip of sand in the middle of the lagoon."
+        },
+        {
+          "id": "maldives-4",
+          "name": "Malé Fish Market",
+          "category": "FOOD",
+          "location": {
+            "lat": 4.177,
+            "lng": 73.508
+          },
+          "durationMinutes": 45,
+          "estimatedCostUsd": 0,
+          "description": "Morning tuna catch in the capital."
+        },
+        {
+          "id": "maldives-5",
+          "name": "Old Friday Mosque, Malé",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 4.178,
+            "lng": 73.51
+          },
+          "durationMinutes": 45,
+          "estimatedCostUsd": 0,
+          "description": "17th-century mosque built from coral stone."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 250,
+        "FOOD": 70,
+        "LOCAL_TRAVEL": 40,
+        "ACTIVITIES": 90,
+        "SHOPPING": 20
+      }
+    },
+    {
+      "id": "santorini",
+      "name": "Santorini",
+      "country": "Greece",
+      "region": "Europe",
+      "summary": "White villages on volcanic cliffs above a flooded caldera, famous for its sunsets and wines.",
+      "highlights": [
+        "Sunset in Oia",
+        "Caldera boat trip",
+        "Red Beach",
+        "Akrotiri excavations"
+      ],
+      "localFood": [
+        "Tomatokeftedes",
+        "Fava",
+        "Fresh grilled fish",
+        "Assyrtiko wine"
+      ],
+      "interests": [
+        "BEACHES",
+        "CULTURE"
+      ],
+      "location": {
+        "lat": 36.39,
+        "lng": 25.46
+      },
+      "rating": 4.7,
+      "ratingCount": 3010,
+      "bestTimeToVisit": "Apr – Jun, Sep – Oct",
+      "currency": "EUR",
+      "languages": [
+        "Greek"
+      ],
+      "featured": true,
+      "popularity": 3010,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "santorini-1",
+          "name": "Oia sunset",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 36.461,
+            "lng": 25.376
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 0,
+          "description": "The island's famous sunset over the caldera."
+        },
+        {
+          "id": "santorini-2",
+          "name": "Caldera boat tour",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 36.4,
+            "lng": 25.4
+          },
+          "durationMinutes": 300,
+          "estimatedCostUsd": 80,
+          "description": "Volcano hike, hot springs and swimming stops."
+        },
+        {
+          "id": "santorini-3",
+          "name": "Red Beach",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 36.348,
+            "lng": 25.394
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 0,
+          "description": "Beach framed by red volcanic cliffs."
+        },
+        {
+          "id": "santorini-4",
+          "name": "Akrotiri archaeological site",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 36.351,
+            "lng": 25.403
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 14,
+          "description": "Bronze Age town preserved under volcanic ash."
+        },
+        {
+          "id": "santorini-5",
+          "name": "Fira to Oia hike",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 36.42,
+            "lng": 25.43
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 0,
+          "description": "10 km caldera-rim trail between villages."
+        },
+        {
+          "id": "santorini-6",
+          "name": "Santo Wines",
+          "category": "FOOD",
+          "location": {
+            "lat": 36.38,
+            "lng": 25.432
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 30,
+          "description": "Assyrtiko tasting on a terrace above the caldera."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 160,
+        "FOOD": 55,
+        "LOCAL_TRAVEL": 20,
+        "ACTIVITIES": 40,
+        "SHOPPING": 25
+      }
+    },
+    {
+      "id": "paris",
+      "name": "Paris",
+      "country": "France",
+      "region": "Europe",
+      "summary": "Grand boulevards, world-class museums and café terraces along the Seine.",
+      "highlights": [
+        "The Louvre",
+        "Eiffel Tower at night",
+        "Montmartre",
+        "Seine river cruise"
+      ],
+      "localFood": [
+        "Croissants",
+        "Steak frites",
+        "Macarons",
+        "Crêpes"
+      ],
+      "interests": [
+        "CITY",
+        "CULTURE",
+        "FOOD"
+      ],
+      "location": {
+        "lat": 48.86,
+        "lng": 2.35
+      },
+      "rating": 4.7,
+      "ratingCount": 6120,
+      "bestTimeToVisit": "Apr – Jun, Sep – Oct",
+      "currency": "EUR",
+      "languages": [
+        "French"
+      ],
+      "featured": false,
+      "popularity": 6120,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "paris-1",
+          "name": "The Louvre",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 48.861,
+            "lng": 2.336
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 25,
+          "description": "The world's most visited museum, home of the Mona Lisa."
+        },
+        {
+          "id": "paris-2",
+          "name": "Eiffel Tower",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 48.858,
+            "lng": 2.294
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 30,
+          "description": "Iconic iron tower; summit views at dusk."
+        },
+        {
+          "id": "paris-3",
+          "name": "Montmartre and Sacré-Cœur",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 48.887,
+            "lng": 2.343
+          },
+          "durationMinutes": 150,
+          "estimatedCostUsd": 0,
+          "description": "Artists' hill with a basilica overlooking the city."
+        },
+        {
+          "id": "paris-4",
+          "name": "Musée d'Orsay",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 48.86,
+            "lng": 2.327
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 18,
+          "description": "Impressionist masterpieces in a former railway station."
+        },
+        {
+          "id": "paris-5",
+          "name": "Seine river cruise",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 48.858,
+            "lng": 2.3
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 18,
+          "description": "See the landmarks from the water."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 160,
+        "FOOD": 60,
+        "LOCAL_TRAVEL": 15,
+        "ACTIVITIES": 40,
+        "SHOPPING": 30
+      }
+    },
+    {
+      "id": "swiss-alps",
+      "name": "Swiss Alps",
+      "country": "Switzerland",
+      "region": "Europe",
+      "summary": "Glaciers, alpine lakes and scenic railways, with hiking in summer and skiing in winter.",
+      "highlights": [
+        "Jungfraujoch",
+        "Matterhorn views from Zermatt",
+        "Glacier Express",
+        "Lake Brienz"
+      ],
+      "localFood": [
+        "Fondue",
+        "Raclette",
+        "Rösti",
+        "Swiss chocolate"
+      ],
+      "interests": [
+        "MOUNTAINS",
+        "NATURE",
+        "ADVENTURE"
+      ],
+      "location": {
+        "lat": 46.56,
+        "lng": 7.98
+      },
+      "rating": 4.9,
+      "ratingCount": 2390,
+      "bestTimeToVisit": "Jun – Sep, Dec – Mar",
+      "currency": "CHF",
+      "languages": [
+        "German",
+        "French",
+        "Italian"
+      ],
+      "featured": true,
+      "popularity": 2390,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "swiss-alps-1",
+          "name": "Jungfraujoch",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 46.547,
+            "lng": 7.985
+          },
+          "durationMinutes": 360,
+          "estimatedCostUsd": 230,
+          "description": "Train to 'the Top of Europe' at 3,454 m."
+        },
+        {
+          "id": "swiss-alps-2",
+          "name": "Gornergrat and the Matterhorn",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 45.983,
+            "lng": 7.785
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 140,
+          "description": "Cog railway to views of the Matterhorn."
+        },
+        {
+          "id": "swiss-alps-3",
+          "name": "Lake Brienz cruise",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 46.723,
+            "lng": 7.968
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 40,
+          "description": "Turquoise lake between Interlaken and Brienz."
+        },
+        {
+          "id": "swiss-alps-4",
+          "name": "Grindelwald First",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 46.659,
+            "lng": 8.054
+          },
+          "durationMinutes": 240,
+          "estimatedCostUsd": 70,
+          "description": "Cliff walk, zipline and alpine trails."
+        },
+        {
+          "id": "swiss-alps-5",
+          "name": "Lauterbrunnen Valley",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 46.593,
+            "lng": 7.909
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 0,
+          "description": "Valley of 72 waterfalls."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 200,
+        "FOOD": 70,
+        "LOCAL_TRAVEL": 50,
+        "ACTIVITIES": 80,
+        "SHOPPING": 30
+      }
+    },
+    {
+      "id": "cappadocia",
+      "name": "Cappadocia",
+      "country": "Türkiye",
+      "region": "Middle East",
+      "summary": "Fairy-chimney valleys and cave towns, best seen from a hot-air balloon at dawn.",
+      "highlights": [
+        "Sunrise balloon flight",
+        "Göreme Open-Air Museum",
+        "Derinkuyu underground city",
+        "Rose Valley hike"
+      ],
+      "localFood": [
+        "Testi kebab",
+        "Manti",
+        "Gözleme",
+        "Turkish delight"
+      ],
+      "interests": [
+        "ADVENTURE",
+        "CULTURE",
+        "NATURE"
+      ],
+      "location": {
+        "lat": 38.64,
+        "lng": 34.83
+      },
+      "rating": 4.8,
+      "ratingCount": 1980,
+      "bestTimeToVisit": "Apr – Jun, Sep – Nov",
+      "currency": "TRY",
+      "languages": [
+        "Turkish"
+      ],
+      "featured": false,
+      "popularity": 1980,
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1641128324972-af3212f0f6bd?auto=format&fit=crop&w=1200&q=75",
+          "author": "Unsplash contributor",
+          "sourceUrl": "https://unsplash.com",
+          "license": "Unsplash License"
+        }
+      ],
+      "attractions": [
+        {
+          "id": "cappadocia-1",
+          "name": "Sunrise hot-air balloon flight",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 38.643,
+            "lng": 34.828
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 250,
+          "description": "Float over fairy chimneys at dawn."
+        },
+        {
+          "id": "cappadocia-2",
+          "name": "Göreme Open-Air Museum",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 38.64,
+            "lng": 34.845
+          },
+          "durationMinutes": 120,
+          "estimatedCostUsd": 20,
+          "description": "Rock-cut churches with Byzantine frescoes."
+        },
+        {
+          "id": "cappadocia-3",
+          "name": "Derinkuyu Underground City",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 38.373,
+            "lng": 34.735
+          },
+          "durationMinutes": 90,
+          "estimatedCostUsd": 15,
+          "description": "Multi-level city carved deep underground."
+        },
+        {
+          "id": "cappadocia-4",
+          "name": "Rose Valley hike",
+          "category": "ACTIVITY",
+          "location": {
+            "lat": 38.656,
+            "lng": 34.853
+          },
+          "durationMinutes": 180,
+          "estimatedCostUsd": 0,
+          "description": "Pink rock formations, best at sunset."
+        },
+        {
+          "id": "cappadocia-5",
+          "name": "Uçhisar Castle",
+          "category": "SIGHTSEEING",
+          "location": {
+            "lat": 38.63,
+            "lng": 34.805
+          },
+          "durationMinutes": 60,
+          "estimatedCostUsd": 5,
+          "description": "Highest point in Cappadocia, carved from one rock."
+        }
+      ],
+      "dailyCostUsd": {
+        "ACCOMMODATION": 80,
+        "FOOD": 30,
+        "LOCAL_TRAVEL": 15,
+        "ACTIVITIES": 80,
+        "SHOPPING": 15
+      }
+    }
+  ]
+}

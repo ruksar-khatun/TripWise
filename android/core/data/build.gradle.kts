@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.tripwise.android.library)
     alias(libs.plugins.tripwise.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -15,6 +16,7 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(projects.core.testing)
     testImplementation(libs.kotlinx.coroutines.test)

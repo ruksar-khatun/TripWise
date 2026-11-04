@@ -13,6 +13,8 @@ import { toSecret, type TokenConfig } from './auth/tokens.js';
 import { randomBytes } from 'node:crypto';
 import { authRouter } from './routes/auth.js';
 import { meRouter } from './routes/me.js';
+import { CatalogService } from './catalog/service.js';
+import { destinationsRouter } from './routes/destinations.js';
 import { ErrorCode, type ApiErrorBody } from './http/errors.js';
 import { healthRouter } from './routes/health.js';
 import { errorHandler, notFound } from './middleware/errors.js';
@@ -66,6 +68,7 @@ export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   v1.use('/health', healthRouter);
   v1.use('/auth', authRouter(auth, { strictLimit: env.NODE_ENV !== 'test' }));
   v1.use('/me', meRouter(auth, requireAuth(tokenConfig)));
+  v1.use('/destinations', destinationsRouter(new CatalogService(deps.db)));
   // Next phases mount here (all behind requireAuth): /trips, /saved, /expenses, /sync, /ai, /destinations
 
   app.use('/api/v1', v1);

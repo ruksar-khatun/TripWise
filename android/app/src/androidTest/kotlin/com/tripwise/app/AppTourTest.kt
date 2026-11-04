@@ -54,7 +54,7 @@ class AppTourTest {
         // My Trips → create
         t.click("My Trips")
         t.shot("trips-empty", settleMs = 2_000)
-        t.click("New trip")
+        if (!t.click("New trip", required = false)) t.click("Plan a trip")
         t.type("Trip name", "Kyoto in Spring")
         t.type("Destination", "Kyoto")
         t.shot("create-trip")

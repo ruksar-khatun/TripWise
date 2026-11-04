@@ -10,6 +10,9 @@ interface DestinationRepository {
 
     fun observePopular(limit: Int = 8): Flow<List<Destination>>
 
+    /** Editor's picks for the Home dashboard. */
+    fun observeFeatured(): Flow<List<Destination>>
+
     /** Emits null when no destination has this id. */
     fun observeDestination(id: String): Flow<Destination?>
 }

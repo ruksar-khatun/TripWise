@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
-import { index, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { boolean, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import type { CatalogDestination } from '../catalog/types.js';
 
 /** Accounts. Emails are stored normalised (trimmed, lower-case). */
 export const users = pgTable(
@@ -41,5 +42,24 @@ export const refreshTokens = pgTable(
   ],
 );
 
-export const schema = { users, refreshTokens };
+/**
+ * Curated destination catalog. Searchable columns are denormalised; the full document
+ * (images, attractions, cost index...) lives in `data`. Seeded from catalog/destinations.json at start-up.
+ */
+export const destinations = pgTable(
+  'destinations',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    country: text('country').notNull(),
+    interests: text('interests').array().notNull(),
+    featured: boolean('featured').notNull().default(false),
+    popularity: integer('popularity').notNull().default(0),
+    data: jsonb('data').$type<CatalogDestination>().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('destinations_popularity_idx').on(t.popularity)],
+);
+
+export const schema = { users, refreshTokens, destinations };
 export type User = typeof users.$inferSelect;

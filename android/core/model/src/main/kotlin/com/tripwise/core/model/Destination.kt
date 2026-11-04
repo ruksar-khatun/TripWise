@@ -18,6 +18,11 @@ data class Destination(
     val bestTimeToVisit: String,
     val currency: CurrencyCode,
     val languages: List<String>,
+    val featured: Boolean = false,
+    /** Curated things to do, in editorial order. */
+    val attractions: List<Attraction> = emptyList(),
+    /** Typical mid-range spend per person per day (USD), by category. Basis for expense estimates. */
+    val dailyCostUsd: Map<ExpenseCategory, Money> = emptyMap(),
 ) {
     val coverImage: ImageRef? get() = images.firstOrNull()
 }
@@ -26,3 +31,15 @@ data class Destination(
 data class SaveableDestination(val destination: Destination, val isSaved: Boolean)
 
 data class SavedDestination(val destination: Destination, val savedAt: java.time.Instant)
+
+/** A curated attraction or activity at a destination. Coordinates are approximate (editorial). */
+data class Attraction(
+    val id: String,
+    val destinationId: String,
+    val name: String,
+    val category: ActivityCategory,
+    val location: GeoPoint,
+    val durationMinutes: Int,
+    val estimatedCost: Money,
+    val description: String,
+)

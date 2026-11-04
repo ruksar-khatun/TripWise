@@ -27,4 +27,4 @@ data class ImageRef(
     val attribution: ImageAttribution? = null,
 )
 
-data class ImageAttribution(val author: String, val sourceUrl: String)
+data class ImageAttribution(val author: String, val sourceUrl: String, val license: String? = null)

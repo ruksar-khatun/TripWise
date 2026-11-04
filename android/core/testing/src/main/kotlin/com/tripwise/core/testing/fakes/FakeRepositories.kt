@@ -37,6 +37,8 @@ class FakeDestinationRepository(initial: List<Destination>? = emptyList()) : Des
 
     override fun observePopular(limit: Int) = destinations.filterNotNull().map { it.take(limit) }
 
+    override fun observeFeatured() = destinations.filterNotNull().map { l -> l.filter { it.featured } }
+
     override fun observeDestination(id: String) = destinations.filterNotNull().map { l -> l.firstOrNull { it.id == id } }
 }
 
