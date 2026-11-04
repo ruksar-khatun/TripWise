@@ -11,6 +11,7 @@ fun AppError.messageRes(): Int = when (this) {
     AppError.Network -> R.string.core_ui_error_network
     AppError.Timeout -> R.string.core_ui_error_timeout
     AppError.Unauthorized -> R.string.core_ui_error_unauthorized
+    AppError.InvalidCredentials -> R.string.core_ui_error_invalid_credentials
     AppError.Forbidden -> R.string.core_ui_error_forbidden
     AppError.NotFound -> R.string.core_ui_error_not_found
     is AppError.Validation -> R.string.core_ui_error_validation

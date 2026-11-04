@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and lower (full backup). Session secrets never leave the device; they're bound
+     to this device's Keystore and would be undecryptable after restore anyway. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="tripwise_token_keyset_prefs.xml" />
+    <exclude domain="file" path="datastore/tripwise_session.preferences_pb" />
+    <exclude domain="database" path="tripwise.db" />
+</full-backup-content>

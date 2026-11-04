@@ -20,6 +20,7 @@ data class ApiErrorDto(
 object ApiErrorCode {
     const val VALIDATION_FAILED = "VALIDATION_FAILED"
     const val UNAUTHORIZED = "UNAUTHORIZED"
+    const val INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
     const val FORBIDDEN = "FORBIDDEN"
     const val NOT_FOUND = "NOT_FOUND"
     const val CONFLICT = "CONFLICT"

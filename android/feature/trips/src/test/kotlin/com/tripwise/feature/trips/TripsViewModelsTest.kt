@@ -3,6 +3,8 @@ package com.tripwise.feature.trips
 import androidx.lifecycle.SavedStateHandle
 import com.tripwise.core.common.result.LoadState
 import com.tripwise.core.model.ActivityCategory
+import com.tripwise.core.model.CurrencyCode
+import com.tripwise.core.model.Money
 import com.tripwise.core.model.ItineraryItem
 import com.tripwise.core.testing.data.TestData
 import com.tripwise.core.testing.fakes.FakeDestinationRepository
@@ -76,10 +78,12 @@ class TripsViewModelsTest {
 
     @Test fun `create form validates only after submit and prefills destination`() = runTest {
         val bali = TestData.destination("bali", name = "Bali")
+        val trips = FakeTripRepository()
         val vm = CreateTripViewModel(
             SavedStateHandle(mapOf("destinationId" to "bali")),
             FakeDestinationRepository(listOf(bali)),
             FakeUserRepository(TestData.profile),
+            trips,
         )
         assertEquals("Bali", vm.uiState.value.destination)
         assertEquals("INR", vm.uiState.value.currency.code)
@@ -96,5 +100,26 @@ class TripsViewModelsTest {
         vm.onAction(CreateTripAction.TravellersChanged(99))
         assertEquals(CreateTripUiState.MAX_TRAVELLERS, vm.uiState.value.travellers)
         assertTrue(vm.uiState.value.isValid)
+        assertTrue(trips.created.isEmpty()) // invalid submit above didn't save
+
+        vm.onAction(CreateTripAction.Submit)
+        assertEquals("trip-1", vm.uiState.value.savedTripId)
+        val saved = trips.created.single()
+        assertEquals("bali", saved.destinationId)
+        // ₹123 → 12,300 paise
+        assertEquals(Money(12_300, CurrencyCode("INR")), saved.budget)
+    }
+
+    @Test fun `whole units convert by currency fraction digits`() {
+        assertEquals(Money(5_000, CurrencyCode("JPY")), CreateTripViewModel.toMoney(5_000, CurrencyCode("JPY")))
+        assertEquals(Money(5_000, CurrencyCode("USD")), CreateTripViewModel.toMoney(50, CurrencyCode("USD")))
+    }
+
+    @Test fun `deleting from detail removes the trip`() = runTest {
+        val repo = FakeTripRepository(listOf(future))
+        val vm = TripDetailViewModel(SavedStateHandle(mapOf("tripId" to "future")), repo, clock)
+        collectInBackground(vm.uiState)
+        vm.onAction(TripDetailAction.Delete)
+        assertEquals(TripDetailUiState.NotFound, vm.uiState.value)
     }
 }

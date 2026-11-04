@@ -9,8 +9,11 @@ import { HttpError } from '../src/http/errors.js';
 import { validate } from '../src/http/validate.js';
 import { errorHandler } from '../src/middleware/errors.js';
 
+import { openDatabase } from '../src/db/client.js';
+
 const env = loadEnv({ NODE_ENV: 'test' });
-const app = createApp(env, createLogger(env));
+const database = await openDatabase({ production: false });
+const app = createApp(env, createLogger(env), { db: database.db });
 
 describe('GET /api/v1/health', () => {
   it('returns service status and a request id', async () => {
@@ -87,5 +90,11 @@ describe('loadEnv', () => {
 
   it('rejects an invalid port', () => {
     expect(() => loadEnv({ PORT: 'abc' })).toThrow(/Invalid environment/);
+  });
+
+  it('requires JWT_SECRET and DATABASE_URL in production', () => {
+    expect(() => loadEnv({ NODE_ENV: 'production' })).toThrow(/JWT_SECRET/);
+    expect(() => loadEnv({ NODE_ENV: 'production', JWT_SECRET: 'x'.repeat(32) })).toThrow(/DATABASE_URL/);
+    expect(() => loadEnv({ JWT_SECRET: 'short' })).toThrow(/at least 32/);
   });
 });

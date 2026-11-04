@@ -56,5 +56,5 @@ object PreviewData {
         ItineraryItem("2", "trip-kyoto", trip.startDate, LocalTime.of(12, 30), "Nishiki Market", ActivityCategory.FOOD, Money(3_000, jpy), false),
     )
 
-    val profile = UserProfile("Alex Traveller", "alex@example.com", null, CurrencyCode("INR"))
+    val profile = UserProfile("u1", "Alex Traveller", "alex@example.com", null, CurrencyCode("INR"))
 }

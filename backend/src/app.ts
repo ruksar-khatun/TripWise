@@ -6,12 +6,33 @@ import { pinoHttp } from 'pino-http';
 import { randomUUID } from 'node:crypto';
 import type { Logger } from 'pino';
 import type { Env } from './config/env.js';
+import type { Database } from './db/client.js';
+import { AuthService } from './auth/service.js';
+import { requireAuth } from './auth/middleware.js';
+import { toSecret, type TokenConfig } from './auth/tokens.js';
+import { randomBytes } from 'node:crypto';
+import { authRouter } from './routes/auth.js';
+import { meRouter } from './routes/me.js';
 import { ErrorCode, type ApiErrorBody } from './http/errors.js';
 import { healthRouter } from './routes/health.js';
 import { errorHandler, notFound } from './middleware/errors.js';
 
-export function createApp(env: Env, logger: Logger) {
+export interface AppDeps {
+  db: Database;
+  /** Injectable clock for tests. */
+  now?: () => Date;
+}
+
+export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   const app = express();
+
+  // Dev/test without JWT_SECRET: a random per-process key (tokens stop working on restart).
+  const tokenConfig: TokenConfig = {
+    secret: toSecret(env.JWT_SECRET ?? randomBytes(32).toString('hex')),
+    accessTtlSeconds: env.ACCESS_TOKEN_TTL_SECONDS,
+    refreshTtlDays: env.REFRESH_TOKEN_TTL_DAYS,
+  };
+  const auth = new AuthService(deps.db, tokenConfig, deps.now);
 
   app.disable('x-powered-by');
   app.set('trust proxy', 1); // behind one proxy hop (e.g. Cloud Run) so rate limiting sees the client IP
@@ -43,8 +64,9 @@ export function createApp(env: Env, logger: Logger) {
     }),
   );
   v1.use('/health', healthRouter);
-  // Feature routers are mounted on v1 as their phases are approved:
-  //   auth middleware → /me, /destinations, /trips, /expenses, /sync, /ai, /currency
+  v1.use('/auth', authRouter(auth, { strictLimit: env.NODE_ENV !== 'test' }));
+  v1.use('/me', meRouter(auth, requireAuth(tokenConfig)));
+  // Next phases mount here (all behind requireAuth): /trips, /saved, /expenses, /sync, /ai, /destinations
 
   app.use('/api/v1', v1);
   app.use(notFound);

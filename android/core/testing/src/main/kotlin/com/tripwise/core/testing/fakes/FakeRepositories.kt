@@ -6,7 +6,9 @@ import com.tripwise.core.domain.repository.TripRepository
 import com.tripwise.core.domain.repository.UserRepository
 import com.tripwise.core.model.BudgetSummary
 import com.tripwise.core.model.Destination
+import com.tripwise.core.common.result.Outcome
 import com.tripwise.core.model.ItineraryItem
+import com.tripwise.core.model.NewTrip
 import com.tripwise.core.model.SavedDestination
 import com.tripwise.core.model.TravelInterest
 import com.tripwise.core.model.Trip
@@ -71,6 +73,22 @@ class FakeTripRepository(
     override fun observeBudget(tripId: String) = budgets.map { l -> l.firstOrNull { it.tripId == tripId } }
     override suspend fun setItineraryItemDone(itemId: String, done: Boolean) {
         items.update { l -> l.map { if (it.id == itemId) it.copy(isDone = done) else it } }
+    }
+
+    val created = mutableListOf<NewTrip>()
+    var createResult: Outcome<String>? = null
+
+    override suspend fun createTrip(trip: NewTrip): Outcome<String> {
+        created += trip
+        createResult?.let { return it }
+        val id = "trip-${created.size}"
+        trips.update { (it ?: emptyList()) + Trip(id, trip.title, trip.destinationId, trip.destinationName, null,
+            trip.startDate, trip.endDate, trip.travellers, trip.budget, trip.notes) }
+        return Outcome.Success(id)
+    }
+
+    override suspend fun deleteTrip(id: String) {
+        trips.update { l -> l?.filterNot { it.id == id } }
     }
 }
 

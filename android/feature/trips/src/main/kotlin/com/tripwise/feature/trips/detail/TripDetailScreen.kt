@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,8 +29,11 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -89,13 +93,33 @@ internal fun TripDetailScreen(
     onBack: () -> Unit,
     onPlanWithAi: (tripId: String) -> Unit,
 ) {
+    var deleteRequested by rememberSaveable { mutableStateOf(false) }
+    var confirmDelete by rememberSaveable { mutableStateOf(false) }
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text(stringResource(R.string.feature_trips_delete_title)) },
+            text = { Text(stringResource(R.string.feature_trips_delete_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDelete = false
+                    deleteRequested = true
+                    onAction(TripDetailAction.Delete)
+                }) { Text(stringResource(R.string.feature_trips_delete), color = TripWiseTheme.colors.error) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.feature_trips_cancel)) } },
+        )
+    }
     Surface(Modifier.fillMaxSize()) {
         when (state) {
             TripDetailUiState.Loading -> Column {
                 TwSkeleton(Modifier.fillMaxWidth(), height = 220.dp, shape = androidx.compose.ui.graphics.RectangleShape)
                 TwSkeleton(Modifier.padding(TripWiseTheme.spacing.lg).fillMaxWidth(), height = 48.dp)
             }
-            TripDetailUiState.NotFound -> Column(Modifier.statusBarsPadding()) {
+            // Also reached right after deleting: leave the screen instead of showing "not found".
+            TripDetailUiState.NotFound -> if (deleteRequested) {
+                LaunchedEffect(Unit) { onBack() }
+            } else Column(Modifier.statusBarsPadding()) {
                 BackButton(onBack)
                 EmptyState(stringResource(R.string.feature_trips_not_found_title), stringResource(R.string.feature_trips_not_found_body), icon = TwIcons.Trips)
             }
@@ -103,7 +127,7 @@ internal fun TripDetailScreen(
                 BackButton(onBack)
                 ErrorState(state.error, onRetry = { onAction(TripDetailAction.Retry) })
             }
-            is TripDetailUiState.Ready -> Ready(state, onAction, onBack, onPlanWithAi)
+            is TripDetailUiState.Ready -> Ready(state, onAction, onBack, onPlanWithAi, onDelete = { confirmDelete = true })
         }
     }
 }
@@ -120,6 +144,7 @@ private fun Ready(
     onAction: (TripDetailAction) -> Unit,
     onBack: () -> Unit,
     onPlanWithAi: (String) -> Unit,
+    onDelete: () -> Unit,
 ) {
     val trip = state.trip
     val locale = currentLocale
@@ -135,7 +160,12 @@ private fun Ready(
         Box(Modifier.fillMaxWidth().height(220.dp)) {
             RemoteImage(trip.coverImage, contentDescription = null, modifier = Modifier.fillMaxSize())
             Box(Modifier.fillMaxSize().background(TripWiseTheme.extendedColors.imageScrim))
-            BackButton(onBack, Modifier.statusBarsPadding())
+            Row(Modifier.fillMaxWidth().statusBarsPadding(), verticalAlignment = Alignment.CenterVertically) {
+                BackButton(onBack)
+                Box(Modifier.weight(1f))
+                TwOverlayIconButton(TwIcons.Delete, stringResource(R.string.feature_trips_delete), onDelete,
+                    Modifier.padding(TripWiseTheme.spacing.sm))
+            }
             Column(Modifier.align(Alignment.BottomStart).padding(TripWiseTheme.spacing.lg)) {
                 TripStatusPill(trip, state.today)
                 Text(

@@ -97,6 +97,7 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
             onNewTrip = { nav.navigateToCreateTrip() },
             onBack = back,
             onPlanWithAi = { nav.navigateToAssistant(tripId = it) },
+            onTripCreated = { nav.navigateToTripDetail(it, replaceCreate = true) },
         )
         profileSection(appVersion = BuildConfig.VERSION_NAME)
         destinationScreen(destinationNavigation)

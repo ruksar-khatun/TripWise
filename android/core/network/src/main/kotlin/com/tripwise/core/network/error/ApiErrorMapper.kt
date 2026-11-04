@@ -37,6 +37,7 @@ class ApiErrorMapper @Inject constructor(private val json: Json) {
     private fun fromCode(dto: ApiErrorDto): AppError? = when (dto.code) {
         ApiErrorCode.VALIDATION_FAILED -> AppError.Validation(dto.details.orEmpty())
         ApiErrorCode.UNAUTHORIZED -> AppError.Unauthorized
+        ApiErrorCode.INVALID_CREDENTIALS -> AppError.InvalidCredentials
         ApiErrorCode.FORBIDDEN -> AppError.Forbidden
         ApiErrorCode.NOT_FOUND -> AppError.NotFound
         ApiErrorCode.CONFLICT -> AppError.Conflict(dto.serverVersion)

@@ -46,7 +46,9 @@
     <string name="feature_trips_error_travellers">Between 1 and 20</string>
     <string name="feature_trips_error_budget">Enter a whole amount</string>
     <string name="feature_trips_save">Save trip</string>
-    <string name="feature_trips_save_later">Saving trips arrives with the Trips phase.</string>
+    <string name="feature_trips_delete">Delete trip</string>
+    <string name="feature_trips_delete_title">Delete this trip?</string>
+    <string name="feature_trips_delete_body">Its itinerary and budget will be removed from this device.</string>
     <string name="feature_trips_ok">OK</string>
     <string name="feature_trips_cancel">Cancel</string>
     <string name="feature_trips_decrease">Fewer travellers</string>

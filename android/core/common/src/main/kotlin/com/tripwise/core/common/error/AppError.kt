@@ -14,6 +14,9 @@ sealed interface AppError {
     /** Missing/expired credentials. The session layer will route to sign-in once auth exists. */
     data object Unauthorized : AppError
 
+    /** Sign-in or password confirmation failed (wrong email or password). */
+    data object InvalidCredentials : AppError
+
     /** Authenticated but not allowed to access the resource. */
     data object Forbidden : AppError
 

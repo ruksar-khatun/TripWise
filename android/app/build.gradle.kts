@@ -52,7 +52,9 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.data)
     implementation(projects.core.network)
+    implementation(projects.core.domain)
 
+    implementation(projects.feature.auth)
     implementation(projects.feature.home)
     implementation(projects.feature.explore)
     implementation(projects.feature.saved)

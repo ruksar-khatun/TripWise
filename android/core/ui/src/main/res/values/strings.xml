@@ -9,6 +9,7 @@
     <string name="core_ui_error_network">No internet connection. Check your connection and try again.</string>
     <string name="core_ui_error_timeout">That took too long. Please try again.</string>
     <string name="core_ui_error_unauthorized">Your session has expired. Please sign in again.</string>
+    <string name="core_ui_error_invalid_credentials">Email or password is incorrect.</string>
     <string name="core_ui_error_forbidden">You don\'t have access to this.</string>
     <string name="core_ui_error_not_found">We couldn\'t find what you were looking for.</string>
     <string name="core_ui_error_validation">Some details need fixing.</string>

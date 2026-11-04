@@ -38,6 +38,7 @@ include(":core:designsystem")
 include(":core:ui")
 include(":core:testing")
 
+include(":feature:auth")
 include(":feature:home")
 include(":feature:explore")
 include(":feature:saved")

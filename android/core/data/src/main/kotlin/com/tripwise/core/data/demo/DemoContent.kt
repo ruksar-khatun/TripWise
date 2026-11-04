@@ -1,16 +1,10 @@
 package com.tripwise.core.data.demo
 
-import com.tripwise.core.model.ActivityCategory
-import com.tripwise.core.model.BudgetSummary
-import com.tripwise.core.model.CategoryBudget
 import com.tripwise.core.model.CurrencyCode
 import com.tripwise.core.model.Destination
-import com.tripwise.core.model.ExpenseCategory
 import com.tripwise.core.model.GeoPoint
 import com.tripwise.core.model.ImageAttribution
 import com.tripwise.core.model.ImageRef
-import com.tripwise.core.model.ItineraryItem
-import com.tripwise.core.model.Money
 import com.tripwise.core.model.TravelInterest
 import com.tripwise.core.model.TravelInterest.ADVENTURE
 import com.tripwise.core.model.TravelInterest.BEACHES
@@ -19,13 +13,9 @@ import com.tripwise.core.model.TravelInterest.CULTURE
 import com.tripwise.core.model.TravelInterest.FOOD
 import com.tripwise.core.model.TravelInterest.MOUNTAINS
 import com.tripwise.core.model.TravelInterest.NATURE
-import com.tripwise.core.model.Trip
-import com.tripwise.core.model.UserProfile
-import java.time.LocalDate
-import java.time.LocalTime
 
 /**
- * DEMO DATA for the UI phase only. Replaced by the backend catalog + Room in later phases.
+ * DEMO CATALOG: curated destinations until the backend catalog phase replaces this.
  * Photos are Unsplash (free Unsplash License); see scripts/check-demo-images.sh, run in CI.
  */
 internal object DemoContent {
@@ -34,10 +24,6 @@ internal object DemoContent {
         url = "https://images.unsplash.com/photo-$id?auto=format&fit=crop&w=1200&q=75",
         attribution = ImageAttribution(author = "Unsplash", sourceUrl = "https://unsplash.com"),
     )
-
-    private val INR = CurrencyCode("INR")
-    private val JPY = CurrencyCode("JPY")
-    private val USD = CurrencyCode("USD")
 
     @Suppress("LongParameterList")
     private fun d(
@@ -133,75 +119,5 @@ internal object DemoContent {
             "Fairy-chimney valleys and cave towns, best seen from a hot-air balloon at dawn.",
             listOf("Sunrise balloon flight", "Göreme Open-Air Museum", "Derinkuyu underground city", "Rose Valley hike"),
             listOf("Testi kebab", "Manti", "Gözleme", "Turkish delight")),
-    )
-
-    /** Ids saved by default, newest first. */
-    val initiallySaved: List<String> = listOf("santorini", "kyoto", "maldives")
-
-    val profile = UserProfile(
-        displayName = "Alex Traveller",
-        email = "alex@example.com",
-        photo = null,
-        homeCurrency = INR,
-    )
-
-    private fun dest(id: String) = destinations.first { it.id == id }
-
-    /** Trips are built relative to [today] so the demo always has upcoming and past trips. */
-    fun trips(today: LocalDate): List<Trip> = listOf(
-        Trip("trip-kyoto", "Kyoto in Spring", "kyoto", "Kyoto", dest("kyoto").coverImage,
-            today.plusDays(12), today.plusDays(18), 2, Money(130_000, JPY), "Book a tea ceremony in Gion."),
-        Trip("trip-bali", "Bali Getaway", "bali", "Bali", dest("bali").coverImage,
-            today.plusDays(64), today.plusDays(71), 2, Money(180_000, USD), null),
-        Trip("trip-jaipur", "Jaipur Weekend", "jaipur", "Jaipur", dest("jaipur").coverImage,
-            today.minusDays(40), today.minusDays(37), 3, Money(4_500_000, INR), "Loved the Amber Fort light show."),
-    )
-
-    fun itinerary(today: LocalDate): List<ItineraryItem> {
-        val day1 = today.plusDays(12)
-        fun i(id: String, d: Int, h: Int, m: Int, title: String, cat: ActivityCategory, yen: Long?, done: Boolean = false) =
-            ItineraryItem(id, "trip-kyoto", day1.plusDays(d.toLong()), LocalTime.of(h, m), title, cat, yen?.let { Money(it, JPY) }, done)
-        return listOf(
-            i("k1", 0, 15, 0, "Check in at Gion ryokan", ActivityCategory.LODGING, null),
-            i("k2", 0, 17, 30, "Evening walk through Gion", ActivityCategory.SIGHTSEEING, 0),
-            i("k3", 0, 19, 30, "Kaiseki dinner", ActivityCategory.FOOD, 18_000),
-            i("k4", 1, 7, 30, "Fushimi Inari before the crowds", ActivityCategory.SIGHTSEEING, 0),
-            i("k5", 1, 12, 0, "Nishiki Market lunch", ActivityCategory.FOOD, 3_000),
-            i("k6", 1, 15, 0, "Tea ceremony", ActivityCategory.ACTIVITY, 6_000),
-            i("k7", 2, 8, 0, "Arashiyama bamboo grove", ActivityCategory.SIGHTSEEING, 0),
-            i("k8", 2, 11, 0, "Sagano scenic railway", ActivityCategory.TRANSPORT, 1_760),
-            i("k9", 2, 16, 0, "Kiyomizu-dera at golden hour", ActivityCategory.SIGHTSEEING, 500),
-        )
-    }
-
-    val budgets: List<BudgetSummary> = listOf(
-        BudgetSummary(
-            "trip-kyoto", Money(130_000, JPY),
-            listOf(
-                CategoryBudget(ExpenseCategory.ACCOMMODATION, Money(50_000, JPY), Money(40_000, JPY)),
-                CategoryBudget(ExpenseCategory.FOOD, Money(25_000, JPY), Money(18_000, JPY)),
-                CategoryBudget(ExpenseCategory.TRANSPORT, Money(20_000, JPY), Money(14_000, JPY)),
-                CategoryBudget(ExpenseCategory.ACTIVITIES, Money(20_000, JPY), Money(8_000, JPY)),
-                CategoryBudget(ExpenseCategory.SHOPPING, Money(15_000, JPY), Money(2_000, JPY)),
-            ),
-        ),
-        BudgetSummary(
-            "trip-bali", Money(180_000, USD),
-            listOf(
-                CategoryBudget(ExpenseCategory.ACCOMMODATION, Money(80_000, USD), Money(0, USD)),
-                CategoryBudget(ExpenseCategory.FOOD, Money(40_000, USD), Money(0, USD)),
-                CategoryBudget(ExpenseCategory.ACTIVITIES, Money(40_000, USD), Money(0, USD)),
-                CategoryBudget(ExpenseCategory.LOCAL_TRAVEL, Money(20_000, USD), Money(0, USD)),
-            ),
-        ),
-        BudgetSummary(
-            "trip-jaipur", Money(4_500_000, INR),
-            listOf(
-                CategoryBudget(ExpenseCategory.ACCOMMODATION, Money(1_800_000, INR), Money(1_950_000, INR)),
-                CategoryBudget(ExpenseCategory.FOOD, Money(1_000_000, INR), Money(870_000, INR)),
-                CategoryBudget(ExpenseCategory.LOCAL_TRAVEL, Money(700_000, INR), Money(640_000, INR)),
-                CategoryBudget(ExpenseCategory.SHOPPING, Money(1_000_000, INR), Money(1_210_000, INR)),
-            ),
-        ),
     )
 }

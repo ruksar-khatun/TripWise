@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+. Same exclusions for cloud backup and device-to-device transfer. User data
+     is restored from the server by sync instead of from device backups. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="tripwise_token_keyset_prefs.xml" />
+        <exclude domain="file" path="datastore/tripwise_session.preferences_pb" />
+        <exclude domain="database" path="tripwise.db" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="tripwise_token_keyset_prefs.xml" />
+        <exclude domain="file" path="datastore/tripwise_session.preferences_pb" />
+        <exclude domain="database" path="tripwise.db" />
+    </device-transfer>
+</data-extraction-rules>

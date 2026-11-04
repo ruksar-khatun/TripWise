@@ -21,7 +21,10 @@ data class CreateTripRoute(val destinationId: String? = null)
 
 fun NavController.navigateToTrips(navOptions: NavOptions? = null) = navigate(TripsRoute, navOptions)
 
-fun NavController.navigateToTripDetail(tripId: String) = navigate(TripDetailRoute(tripId)) { launchSingleTop = true }
+fun NavController.navigateToTripDetail(tripId: String, replaceCreate: Boolean = false) = navigate(TripDetailRoute(tripId)) {
+    launchSingleTop = true
+    if (replaceCreate) popUpTo<CreateTripRoute> { inclusive = true }
+}
 
 fun NavController.navigateToCreateTrip(destinationId: String? = null) = navigate(CreateTripRoute(destinationId)) {
     launchSingleTop = true
@@ -32,8 +35,12 @@ fun NavGraphBuilder.tripsSection(
     onNewTrip: () -> Unit,
     onBack: () -> Unit,
     onPlanWithAi: (tripId: String) -> Unit,
+    /** Called with the new trip id; should replace the create screen with the trip detail. */
+    onTripCreated: (tripId: String) -> Unit,
 ) {
     composable<TripsRoute> { TripsScreen(onTripClick, onNewTrip) }
     composable<TripDetailRoute> { TripDetailScreen(onBack, onPlanWithAi) }
-    composable<CreateTripRoute> { CreateTripScreen(onClose = onBack) }
+    composable<CreateTripRoute> {
+        CreateTripScreen(onClose = onBack, onSaved = onTripCreated)
+    }
 }

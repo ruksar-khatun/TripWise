@@ -6,7 +6,14 @@ plugins {
 
 android {
     namespace = "com.tripwise.core.database"
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
-// The @Database class, entities and DAOs are introduced with the first persisted feature
-// (Room requires at least one entity). Schemas are exported to ./schemas for migration tests.
+dependencies {
+    implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+}

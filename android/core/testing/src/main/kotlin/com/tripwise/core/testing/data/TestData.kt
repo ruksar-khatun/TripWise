@@ -30,5 +30,5 @@ object TestData {
         budget = Money(100_000, CurrencyCode("USD")), notes = null,
     )
 
-    val profile = UserProfile("Test User", "test@example.com", null, CurrencyCode("INR"))
+    val profile = UserProfile("user-1", "Test User", "test@example.com", null, CurrencyCode("INR"))
 }

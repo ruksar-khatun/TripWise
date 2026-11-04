@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import com.tripwise.core.designsystem.component.TwTopAppBar
 import com.tripwise.core.designsystem.icon.TwIcons
 import com.tripwise.core.designsystem.theme.TripWiseTheme
 import com.tripwise.core.ui.format.Formatters
+import com.tripwise.core.ui.error.messageRes
 import com.tripwise.core.ui.format.currentLocale
 import com.tripwise.feature.trips.R
 import com.tripwise.feature.trips.create.CreateTripUiState.Companion.FIELD_BUDGET
@@ -59,8 +61,9 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 @Composable
-internal fun CreateTripScreen(onClose: () -> Unit, viewModel: CreateTripViewModel = hiltViewModel()) {
+internal fun CreateTripScreen(onClose: () -> Unit, onSaved: (String) -> Unit, viewModel: CreateTripViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(state.savedTripId) { state.savedTripId?.let(onSaved) }
     CreateTripScreen(state, viewModel::onAction, onClose)
 }
 
@@ -140,12 +143,15 @@ internal fun CreateTripScreen(state: CreateTripUiState, onAction: (CreateTripAct
                 state.notes, { onAction(CreateTripAction.NotesChanged(it)) }, stringResource(R.string.feature_trips_field_notes),
                 fieldModifier, singleLine = false, leadingIcon = TwIcons.Notes,
             )
-            TwButton(stringResource(R.string.feature_trips_save), { onAction(CreateTripAction.Submit) }, fieldModifier.padding(top = TripWiseTheme.spacing.sm))
-            if (state.showErrors && state.isValid) {
+            TwButton(
+                stringResource(R.string.feature_trips_save), { onAction(CreateTripAction.Submit) },
+                fieldModifier.padding(top = TripWiseTheme.spacing.sm), loading = state.saving,
+            )
+            state.saveError?.let { error ->
                 Text(
-                    stringResource(R.string.feature_trips_save_later),
+                    stringResource(error.messageRes()),
                     style = TripWiseTheme.typography.bodyMedium,
-                    color = TripWiseTheme.colors.onSurfaceVariant,
+                    color = TripWiseTheme.colors.error,
                     textAlign = TextAlign.Center,
                     modifier = fieldModifier.semantics { liveRegion = LiveRegionMode.Polite },
                 )

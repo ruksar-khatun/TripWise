@@ -1,0 +1,24 @@
+<resources>
+    <string name="feature_auth_brand" translatable="false">TripWise</string>
+    <string name="feature_auth_tagline">Plan smarter trips, together with AI.</string>
+    <string name="feature_auth_sign_in_title">Welcome back</string>
+    <string name="feature_auth_sign_up_title">Create your account</string>
+    <string name="feature_auth_name">Your name</string>
+    <string name="feature_auth_email">Email</string>
+    <string name="feature_auth_password">Password</string>
+    <string name="feature_auth_password_hint">At least 8 characters</string>
+    <string name="feature_auth_show_password">Show password</string>
+    <string name="feature_auth_hide_password">Hide password</string>
+    <string name="feature_auth_sign_in">Sign in</string>
+    <string name="feature_auth_sign_up">Create account</string>
+    <string name="feature_auth_no_account">New to TripWise?</string>
+    <string name="feature_auth_create_one">Create an account</string>
+    <string name="feature_auth_have_account">Already have an account?</string>
+    <string name="feature_auth_back_to_sign_in">Sign in</string>
+    <string name="feature_auth_error_email">Enter a valid email address</string>
+    <string name="feature_auth_error_password_required">Enter your password</string>
+    <string name="feature_auth_error_password_short">Use at least 8 characters</string>
+    <string name="feature_auth_error_name">Enter your name</string>
+    <string name="feature_auth_session_expired">Your session expired. Please sign in again.</string>
+    <string name="feature_auth_terms">By continuing you agree to TripWise\'s Terms and Privacy Policy.</string>
+</resources>

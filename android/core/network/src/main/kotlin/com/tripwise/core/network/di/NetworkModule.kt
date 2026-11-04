@@ -1,7 +1,13 @@
 package com.tripwise.core.network.di
 
 import com.tripwise.core.network.NetworkConfig
+import com.tripwise.core.network.api.AuthApi
+import com.tripwise.core.network.api.MeApi
 import com.tripwise.core.network.api.TripWiseApi
+import com.tripwise.core.network.auth.AuthInterceptor
+import com.tripwise.core.network.auth.TokenAuthenticator
+import com.tripwise.core.network.datasource.AuthNetworkDataSource
+import com.tripwise.core.network.datasource.RetrofitAuthNetworkDataSource
 import com.tripwise.core.network.datasource.RetrofitTripWiseNetworkDataSource
 import com.tripwise.core.network.datasource.TripWiseNetworkDataSource
 import dagger.Binds
@@ -17,7 +23,14 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+/** Client/Retrofit that attaches the user's access token and refreshes it on 401. */
+@Qualifier @Retention(AnnotationRetention.BINARY) annotation class Authenticated
+
+/** Client/Retrofit without credentials (sign-in, refresh, health). */
+@Qualifier @Retention(AnnotationRetention.BINARY) annotation class Public
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,18 +44,32 @@ object NetworkModule {
         coerceInputValues = true
     }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(config: NetworkConfig): OkHttpClient = buildOkHttpClient(config)
+    @Provides @Singleton @Public
+    fun providePublicClient(config: NetworkConfig): OkHttpClient = buildOkHttpClient(config)
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(config: NetworkConfig, json: Json, client: OkHttpClient): Retrofit =
+    @Provides @Singleton @Authenticated
+    fun provideAuthenticatedClient(
+        @Public base: OkHttpClient,
+        authInterceptor: AuthInterceptor,
+        authenticator: TokenAuthenticator,
+    ): OkHttpClient = base.newBuilder().addInterceptor(authInterceptor).authenticator(authenticator).build()
+
+    @Provides @Singleton @Public
+    fun providePublicRetrofit(config: NetworkConfig, json: Json, @Public client: OkHttpClient): Retrofit =
         buildRetrofit(config.baseUrl, json, client)
 
-    @Provides
-    @Singleton
-    fun provideTripWiseApi(retrofit: Retrofit): TripWiseApi = retrofit.create(TripWiseApi::class.java)
+    @Provides @Singleton @Authenticated
+    fun provideAuthenticatedRetrofit(config: NetworkConfig, json: Json, @Authenticated client: OkHttpClient): Retrofit =
+        buildRetrofit(config.baseUrl, json, client)
+
+    @Provides @Singleton
+    fun provideTripWiseApi(@Public retrofit: Retrofit): TripWiseApi = retrofit.create(TripWiseApi::class.java)
+
+    @Provides @Singleton
+    fun provideAuthApi(@Public retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+
+    @Provides @Singleton
+    fun provideMeApi(@Authenticated retrofit: Retrofit): MeApi = retrofit.create(MeApi::class.java)
 }
 
 @Module
@@ -50,6 +77,9 @@ object NetworkModule {
 internal abstract class NetworkBindingsModule {
     @Binds
     abstract fun bindNetworkDataSource(impl: RetrofitTripWiseNetworkDataSource): TripWiseNetworkDataSource
+
+    @Binds
+    abstract fun bindAuthNetworkDataSource(impl: RetrofitAuthNetworkDataSource): AuthNetworkDataSource
 }
 
 internal fun buildOkHttpClient(config: NetworkConfig): OkHttpClient = OkHttpClient.Builder()
@@ -57,9 +87,9 @@ internal fun buildOkHttpClient(config: NetworkConfig): OkHttpClient = OkHttpClie
     .readTimeout(30, TimeUnit.SECONDS)
     .writeTimeout(30, TimeUnit.SECONDS)
     .addInterceptor(userAgentInterceptor(config.userAgent))
-    // Auth (ID token) and App Check interceptors are added with the authentication phase.
     .apply {
         if (config.enableHttpLogging) {
+            // BASIC never logs headers or bodies, so tokens and passwords stay out of logcat.
             addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
         }
     }

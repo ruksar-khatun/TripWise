@@ -12,18 +12,26 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,17 +43,18 @@ import com.tripwise.core.designsystem.component.TwStatTile
 import com.tripwise.core.designsystem.icon.TwIcons
 import com.tripwise.core.designsystem.theme.TripWiseTheme
 import com.tripwise.core.model.TravelStats
+import com.tripwise.core.ui.error.messageRes
 import com.tripwise.core.ui.preview.PreviewData
 import com.tripwise.core.ui.state.ErrorState
 
 @Composable
 internal fun ProfileScreen(appVersion: String, viewModel: ProfileViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    ProfileScreen(state, appVersion)
+    ProfileScreen(state, viewModel::onAction, appVersion)
 }
 
 @Composable
-internal fun ProfileScreen(state: LoadState<ProfileContent>, appVersion: String, modifier: Modifier = Modifier) {
+internal fun ProfileScreen(state: ProfileUiState, onAction: (ProfileAction) -> Unit, appVersion: String, modifier: Modifier = Modifier) {
     Column(
         modifier.fillMaxSize().statusBarsPadding().verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,20 +66,75 @@ internal fun ProfileScreen(state: LoadState<ProfileContent>, appVersion: String,
                 color = TripWiseTheme.colors.primary,
                 modifier = Modifier.padding(TripWiseTheme.spacing.lg).semantics { heading() },
             )
-            when (state) {
-                LoadState.Loading -> Column(Modifier.padding(TripWiseTheme.spacing.lg), horizontalAlignment = Alignment.CenterHorizontally) {
+            when (val content = state.content) {
+                LoadState.Loading -> Column(Modifier.fillMaxWidth().padding(TripWiseTheme.spacing.lg), horizontalAlignment = Alignment.CenterHorizontally) {
                     TwSkeleton(Modifier.size(96.dp), height = 96.dp, shape = CircleShape)
                     TwSkeleton(Modifier.padding(top = 16.dp).fillMaxWidth(0.5f), height = 24.dp)
                 }
-                is LoadState.Failed -> ErrorState(state.error, onRetry = {})
-                is LoadState.Ready -> Header(state.data)
+                is LoadState.Failed -> ErrorState(content.error, onRetry = {})
+                is LoadState.Ready -> Header(content.data)
             }
-            Settings(appVersion, state.dataOrNullCurrency())
+            Settings(appVersion, (state.content as? LoadState.Ready)?.data?.profile?.homeCurrency?.code, onAction)
         }
+    }
+
+    when (state.dialog) {
+        ProfileDialog.SIGN_OUT -> AlertDialog(
+            onDismissRequest = { onAction(ProfileAction.DismissDialog) },
+            title = { Text(stringResource(R.string.feature_profile_sign_out_title)) },
+            text = { Text(stringResource(R.string.feature_profile_sign_out_body)) },
+            confirmButton = {
+                TextButton(onClick = { onAction(ProfileAction.ConfirmSignOut) }, enabled = !state.busy) {
+                    Text(stringResource(R.string.feature_profile_sign_out))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onAction(ProfileAction.DismissDialog) }, enabled = !state.busy) {
+                    Text(stringResource(R.string.feature_profile_cancel))
+                }
+            },
+        )
+        ProfileDialog.DELETE_ACCOUNT -> DeleteAccountDialog(state, onAction)
+        null -> Unit
     }
 }
 
-private fun LoadState<ProfileContent>.dataOrNullCurrency(): String? = (this as? LoadState.Ready)?.data?.profile?.homeCurrency?.code
+@Composable
+private fun DeleteAccountDialog(state: ProfileUiState, onAction: (ProfileAction) -> Unit) {
+    var password by rememberSaveable { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = { onAction(ProfileAction.DismissDialog) },
+        icon = { androidx.compose.material3.Icon(TwIcons.Delete, contentDescription = null, tint = TripWiseTheme.colors.error) },
+        title = { Text(stringResource(R.string.feature_profile_delete_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
+                Text(stringResource(R.string.feature_profile_delete_body))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text(stringResource(R.string.feature_profile_password)) },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    isError = state.deleteError != null,
+                    supportingText = state.deleteError?.let { { Text(stringResource(it.messageRes())) } },
+                    enabled = !state.busy,
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onAction(ProfileAction.ConfirmDelete(password)) },
+                enabled = password.isNotEmpty() && !state.busy,
+            ) { Text(stringResource(R.string.feature_profile_delete_confirm), color = TripWiseTheme.colors.error) }
+        },
+        dismissButton = {
+            TextButton(onClick = { onAction(ProfileAction.DismissDialog) }, enabled = !state.busy) {
+                Text(stringResource(R.string.feature_profile_cancel))
+            }
+        },
+    )
+}
 
 @Composable
 private fun Header(content: ProfileContent) {
@@ -78,22 +142,11 @@ private fun Header(content: ProfileContent) {
     Column(Modifier.fillMaxWidth().padding(horizontal = TripWiseTheme.spacing.lg), horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(Modifier.size(96.dp), shape = CircleShape, color = TripWiseTheme.colors.primaryContainer) {
             Box(contentAlignment = Alignment.Center) {
-                Text(
-                    initials(p.displayName),
-                    style = TripWiseTheme.typography.headlineMedium,
-                    color = TripWiseTheme.colors.onPrimaryContainer,
-                )
+                Text(initials(p.displayName), style = TripWiseTheme.typography.headlineMedium, color = TripWiseTheme.colors.onPrimaryContainer)
             }
         }
         Text(p.displayName, style = TripWiseTheme.typography.titleLarge, modifier = Modifier.padding(top = TripWiseTheme.spacing.md))
         Text(p.email, style = TripWiseTheme.typography.bodyMedium, color = TripWiseTheme.colors.onSurfaceVariant)
-        Text(
-            stringResource(R.string.feature_profile_demo_notice),
-            style = TripWiseTheme.typography.bodySmall,
-            color = TripWiseTheme.colors.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = TripWiseTheme.spacing.sm),
-        )
         Stats(content.stats, Modifier.padding(vertical = TripWiseTheme.spacing.lg))
     }
 }
@@ -108,7 +161,7 @@ private fun Stats(stats: TravelStats, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Settings(appVersion: String, currency: String?) {
+private fun Settings(appVersion: String, currency: String?, onAction: (ProfileAction) -> Unit) {
     val later = stringResource(R.string.feature_profile_later_phase)
     SectionTitle(stringResource(R.string.feature_profile_preferences))
     TwListRow(stringResource(R.string.feature_profile_theme), icon = TwIcons.Theme,
@@ -117,10 +170,13 @@ private fun Settings(appVersion: String, currency: String?) {
         trailing = currency, subtitle = later, enabled = false, onClick = {})
     HorizontalDivider(Modifier.padding(vertical = TripWiseTheme.spacing.sm))
     SectionTitle(stringResource(R.string.feature_profile_account))
-    TwListRow(stringResource(R.string.feature_profile_sign_out), icon = TwIcons.SignOut, subtitle = later, enabled = false, onClick = {})
+    TwListRow(stringResource(R.string.feature_profile_sign_out), icon = TwIcons.SignOut,
+        onClick = { onAction(ProfileAction.OpenDialog(ProfileDialog.SIGN_OUT)) })
     TwListRow(
-        stringResource(R.string.feature_profile_delete_account), icon = TwIcons.Delete, subtitle = later,
-        contentColor = TripWiseTheme.colors.error, enabled = false, onClick = {},
+        stringResource(R.string.feature_profile_delete_account), icon = TwIcons.Delete,
+        subtitle = stringResource(R.string.feature_profile_delete_subtitle),
+        contentColor = TripWiseTheme.colors.error,
+        onClick = { onAction(ProfileAction.OpenDialog(ProfileDialog.DELETE_ACCOUNT)) },
     )
     HorizontalDivider(Modifier.padding(vertical = TripWiseTheme.spacing.sm))
     SectionTitle(stringResource(R.string.feature_profile_about))
@@ -144,5 +200,5 @@ internal fun initials(name: String): String =
 @PreviewLightDark
 @Composable
 private fun ProfilePreview() = TripWiseTheme {
-    Surface { ProfileScreen(LoadState.Ready(ProfileContent(PreviewData.profile, TravelStats(3, 12, 5))), "0.1.0") }
+    Surface { ProfileScreen(ProfileUiState(LoadState.Ready(ProfileContent(PreviewData.profile, TravelStats(3, 12, 5)))), {}, "0.1.0") }
 }

@@ -10,6 +10,13 @@ const EnvSchema = z.object({
     .default('')
     .transform((s) => s.split(',').map((o) => o.trim()).filter(Boolean)),
   // Optional at boot so the service can start without AI; AI routes will check for it.
+  DATABASE_URL: z.string().url().optional(),
+  /** Dev only: directory for the embedded PGlite database (omit for in-memory). */
+  PGLITE_DIR: z.string().optional(),
+  /** HS256 signing key for access tokens. Required in production; at least 32 characters. */
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters').optional(),
+  ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().min(60).max(3600).default(900),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(180).default(30),
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
 });
@@ -20,6 +27,10 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   const parsed = EnvSchema.safeParse(source);
   if (!parsed.success) {
     throw new Error(`Invalid environment configuration:\n${z.prettifyError(parsed.error)}`);
+  }
+  if (parsed.data.NODE_ENV === 'production') {
+    if (!parsed.data.JWT_SECRET) throw new Error('Invalid environment configuration: JWT_SECRET is required in production');
+    if (!parsed.data.DATABASE_URL) throw new Error('Invalid environment configuration: DATABASE_URL is required in production');
   }
   return parsed.data;
 }

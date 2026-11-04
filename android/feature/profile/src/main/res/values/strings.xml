@@ -13,5 +13,12 @@
     <string name="feature_profile_about">About</string>
     <string name="feature_profile_version">Version %1$s</string>
     <string name="feature_profile_later_phase">Available in a later phase</string>
-    <string name="feature_profile_demo_notice">Demo profile. Sign-in arrives with the authentication phase.</string>
+    <string name="feature_profile_sign_out_title">Sign out?</string>
+    <string name="feature_profile_sign_out_body">Trips and saved places on this device will be removed. Sync to keep them across devices arrives in a later phase.</string>
+    <string name="feature_profile_cancel">Cancel</string>
+    <string name="feature_profile_delete_subtitle">Permanently delete your account and data</string>
+    <string name="feature_profile_delete_title">Delete account?</string>
+    <string name="feature_profile_delete_body">This permanently deletes your TripWise account and signs you out. Enter your password to confirm.</string>
+    <string name="feature_profile_password">Password</string>
+    <string name="feature_profile_delete_confirm">Delete account</string>
 </resources>

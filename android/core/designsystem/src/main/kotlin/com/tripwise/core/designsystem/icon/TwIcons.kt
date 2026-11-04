@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.CurrencyExchange
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DirectionsBus
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Forest
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Landscape
 import androidx.compose.material.icons.outlined.LocalActivity
 import androidx.compose.material.icons.outlined.LocationCity
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Luggage
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Museum
@@ -51,6 +53,8 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.TravelExplore
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -100,6 +104,10 @@ object TwIcons {
     val Notes: ImageVector = Icons.AutoMirrored.Outlined.Notes
     val Theme: ImageVector = Icons.Outlined.Palette
     val Info: ImageVector = Icons.Outlined.Info
+    val Email: ImageVector = Icons.Outlined.Email
+    val Lock: ImageVector = Icons.Outlined.Lock
+    val Visibility: ImageVector = Icons.Outlined.Visibility
+    val VisibilityOff: ImageVector = Icons.Outlined.VisibilityOff
 
     // Interests / categories
     val Beach: ImageVector = Icons.Outlined.BeachAccess

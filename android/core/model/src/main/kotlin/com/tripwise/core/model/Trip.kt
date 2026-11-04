@@ -55,3 +55,15 @@ data class BudgetSummary(val tripId: String, val total: Money, val categories: L
     val spentFraction: Float
         get() = if (total.amountMinor <= 0) 0f else spent.amountMinor.toFloat() / total.amountMinor
 }
+
+/** Input for creating a trip; ids and timestamps are assigned by the repository. */
+data class NewTrip(
+    val title: String,
+    val destinationName: String,
+    val destinationId: String?,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
+    val travellers: Int,
+    val budget: Money?,
+    val notes: String?,
+)

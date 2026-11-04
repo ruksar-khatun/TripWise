@@ -44,6 +44,7 @@ sealed interface TripDetailUiState {
 sealed interface TripDetailAction {
     data class SetItemDone(val itemId: String, val done: Boolean) : TripDetailAction
     data object Retry : TripDetailAction
+    data object Delete : TripDetailAction
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -92,6 +93,7 @@ class TripDetailViewModel @Inject constructor(
         when (action) {
             is TripDetailAction.SetItemDone -> viewModelScope.launch { tripRepository.setItineraryItemDone(action.itemId, action.done) }
             TripDetailAction.Retry -> refresh.value++
+            TripDetailAction.Delete -> viewModelScope.launch { tripRepository.deleteTrip(tripId) }
         }
     }
 }
