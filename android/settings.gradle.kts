@@ -40,6 +40,8 @@ include(":core:testing")
 
 include(":feature:home")
 include(":feature:explore")
+include(":feature:saved")
+include(":feature:destination")
 include(":feature:trips")
 include(":feature:assistant")
 include(":feature:profile")

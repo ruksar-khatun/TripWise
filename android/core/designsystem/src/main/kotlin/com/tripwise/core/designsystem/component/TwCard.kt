@@ -29,7 +29,7 @@ fun TwCard(
     }
     when (style) {
         TwCardStyle.Filled -> {
-            val colors = CardDefaults.cardColors(containerColor = TripWiseTheme.colors.surfaceContainerLow)
+            val colors = CardDefaults.cardColors(containerColor = TripWiseTheme.colors.surfaceContainerLowest)
             if (onClick != null) Card(onClick, modifier, shape = shape, colors = colors, content = inner)
             else Card(modifier, shape = shape, colors = colors, content = inner)
         }

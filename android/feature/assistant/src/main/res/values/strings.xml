@@ -1,5 +1,14 @@
 <resources>
-    <string name="feature_assistant_title">Assistant</string>
-    <string name="feature_assistant_placeholder_title">Your AI travel assistant</string>
-    <string name="feature_assistant_placeholder_body">Ask questions and plan trips with AI here.</string>
+    <string name="feature_assistant_title">TripWise Assistant</string>
+    <string name="feature_assistant_back">Back</string>
+    <string name="feature_assistant_context">About: %1$s</string>
+    <string name="feature_assistant_intro_title">How can I help you travel?</string>
+    <string name="feature_assistant_intro_body">Ask about destinations, budgets or day plans. I\'ll use your trips for context.</string>
+    <string name="feature_assistant_suggestion_1">Plan 5 relaxed days here</string>
+    <string name="feature_assistant_suggestion_2">What should I budget per day?</string>
+    <string name="feature_assistant_suggestion_3">Best local food to try</string>
+    <string name="feature_assistant_suggestion_4">What to pack for this season</string>
+    <string name="feature_assistant_input">Ask TripWise…</string>
+    <string name="feature_assistant_send">Send</string>
+    <string name="feature_assistant_later_phase">AI chat arrives with the AI phase. This is a preview of the layout.</string>
 </resources>

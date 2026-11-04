@@ -1,0 +1,80 @@
+package com.tripwise.core.testing.fakes
+
+import com.tripwise.core.domain.repository.DestinationRepository
+import com.tripwise.core.domain.repository.SavedDestinationRepository
+import com.tripwise.core.domain.repository.TripRepository
+import com.tripwise.core.domain.repository.UserRepository
+import com.tripwise.core.model.BudgetSummary
+import com.tripwise.core.model.Destination
+import com.tripwise.core.model.ItineraryItem
+import com.tripwise.core.model.SavedDestination
+import com.tripwise.core.model.TravelInterest
+import com.tripwise.core.model.Trip
+import com.tripwise.core.model.UserProfile
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import java.time.Instant
+
+/** Fakes hold state in MutableStateFlows; a null value means "still loading" (nothing emitted). */
+class FakeDestinationRepository(initial: List<Destination>? = emptyList()) : DestinationRepository {
+    val destinations = MutableStateFlow(initial)
+    val queries = mutableListOf<Pair<String, TravelInterest?>>()
+
+    override fun observeDestinations(query: String, interest: TravelInterest?): Flow<List<Destination>> {
+        queries += query to interest
+        return destinations.filterNotNull().map { all ->
+            all.filter {
+                (query.isBlank() || it.name.contains(query.trim(), true) || it.country.contains(query.trim(), true)) &&
+                    (interest == null || interest in it.interests)
+            }
+        }
+    }
+
+    override fun observePopular(limit: Int) = destinations.filterNotNull().map { it.take(limit) }
+
+    override fun observeDestination(id: String) = destinations.filterNotNull().map { l -> l.firstOrNull { it.id == id } }
+}
+
+class FakeSavedDestinationRepository(
+    private val catalog: List<Destination> = emptyList(),
+    initiallySaved: Map<String, Instant> = emptyMap(),
+) : SavedDestinationRepository {
+    val saved = MutableStateFlow(initiallySaved)
+
+    override fun observeSavedIds(): Flow<Set<String>> = saved.map { it.keys }
+
+    override fun observeSaved(): Flow<List<SavedDestination>> = saved.map { m ->
+        m.mapNotNull { (id, at) -> catalog.firstOrNull { it.id == id }?.let { SavedDestination(it, at) } }
+            .sortedByDescending { it.savedAt }
+    }
+
+    override suspend fun setSaved(destinationId: String, saved: Boolean) {
+        this.saved.update { if (saved) it + (destinationId to Instant.now()) else it - destinationId }
+    }
+}
+
+class FakeTripRepository(
+    trips: List<Trip>? = emptyList(),
+    items: List<ItineraryItem> = emptyList(),
+    budgets: List<BudgetSummary> = emptyList(),
+) : TripRepository {
+    val trips = MutableStateFlow(trips)
+    val items = MutableStateFlow(items)
+    val budgets = MutableStateFlow(budgets)
+
+    override fun observeTrips() = trips.filterNotNull().map { l -> l.sortedBy { it.startDate } }
+    override fun observeTrip(id: String) = trips.filterNotNull().map { l -> l.firstOrNull { it.id == id } }
+    override fun observeItinerary(tripId: String) = items.map { l -> l.filter { it.tripId == tripId } }
+    override fun observeBudget(tripId: String) = budgets.map { l -> l.firstOrNull { it.tripId == tripId } }
+    override suspend fun setItineraryItemDone(itemId: String, done: Boolean) {
+        items.update { l -> l.map { if (it.id == itemId) it.copy(isDone = done) else it } }
+    }
+}
+
+class FakeUserRepository(profile: UserProfile? = null) : UserRepository {
+    val profile = MutableStateFlow(profile)
+    override fun observeProfile(): Flow<UserProfile> = profile.filterNotNull()
+}

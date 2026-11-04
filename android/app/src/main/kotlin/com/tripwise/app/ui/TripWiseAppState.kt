@@ -45,23 +45,24 @@ class TripWiseAppState(
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
-    /** The bar is shown only on top-level screens; detail screens are full-screen. */
-    val showBottomBar: Boolean
-        @Composable get() = currentDestination.let { dest ->
-            dest == null || topLevelDestinations.any { dest.hasRoute(it.routeClass) }
-        }
+    /** Navigation bar/rail shows only on top-level screens; detail screens are full-screen. */
+    val showNavigation: Boolean
+        @Composable get() = currentDestination.let { dest -> dest == null || isTopLevel(dest) }
+
+    fun isTopLevel(destination: NavDestination): Boolean =
+        topLevelDestinations.any { destination.hasRoute(it.routeClass) }
 
     fun isSelected(destination: NavDestination?, tab: TopLevelDestination): Boolean =
         destination?.hierarchy?.any { it.hasRoute(tab.routeClass) } == true
 
     /** Single-top, per-tab back stack saved and restored when switching tabs. */
-    fun navigateToTopLevel(tab: TopLevelDestination) {
+    fun navigateToTopLevel(tab: TopLevelDestination, route: Any = tab.route, restore: Boolean = true) {
         navController.navigate(
-            tab.route,
+            route,
             navOptions {
                 popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                 launchSingleTop = true
-                restoreState = true
+                restoreState = restore
             },
         )
     }

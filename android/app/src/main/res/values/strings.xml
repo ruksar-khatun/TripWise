@@ -2,7 +2,7 @@
     <string name="app_name">TripWise</string>
     <string name="nav_home">Home</string>
     <string name="nav_explore">Explore</string>
-    <string name="nav_trips">Trips</string>
-    <string name="nav_assistant">Assistant</string>
+    <string name="nav_saved">Saved</string>
+    <string name="nav_trips">My Trips</string>
     <string name="nav_profile">Profile</string>
 </resources>

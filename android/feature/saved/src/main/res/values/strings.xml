@@ -1,0 +1,13 @@
+<resources>
+    <string name="feature_saved_title">Saved</string>
+    <string name="feature_saved_sort">Sort</string>
+    <string name="feature_saved_sort_recent">Recently saved</string>
+    <string name="feature_saved_sort_name">Name (A–Z)</string>
+    <string name="feature_saved_empty_title">Nothing saved yet</string>
+    <string name="feature_saved_empty_body">Tap the heart on any destination to keep it here.</string>
+    <string name="feature_saved_explore">Explore destinations</string>
+    <string name="feature_saved_removed">Removed %1$s</string>
+    <string name="feature_saved_undo">Undo</string>
+    <string name="feature_saved_select_title">Pick a saved place</string>
+    <string name="feature_saved_select_body">Details appear here.</string>
+</resources>

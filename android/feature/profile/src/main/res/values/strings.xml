@@ -1,5 +1,17 @@
 <resources>
     <string name="feature_profile_title">Profile</string>
-    <string name="feature_profile_placeholder_title">Your profile</string>
-    <string name="feature_profile_placeholder_body">Account and settings will appear here.</string>
+    <string name="feature_profile_trips">trips</string>
+    <string name="feature_profile_saved">saved</string>
+    <string name="feature_profile_countries">countries</string>
+    <string name="feature_profile_preferences">Preferences</string>
+    <string name="feature_profile_theme">Theme</string>
+    <string name="feature_profile_theme_system">System default</string>
+    <string name="feature_profile_currency">Home currency</string>
+    <string name="feature_profile_account">Account</string>
+    <string name="feature_profile_sign_out">Sign out</string>
+    <string name="feature_profile_delete_account">Delete account</string>
+    <string name="feature_profile_about">About</string>
+    <string name="feature_profile_version">Version %1$s</string>
+    <string name="feature_profile_later_phase">Available in a later phase</string>
+    <string name="feature_profile_demo_notice">Demo profile. Sign-in arrives with the authentication phase.</string>
 </resources>

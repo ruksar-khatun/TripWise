@@ -1,5 +1,54 @@
 <resources>
     <string name="feature_trips_title">My Trips</string>
-    <string name="feature_trips_placeholder_title">Your trips</string>
-    <string name="feature_trips_placeholder_body">Trips you plan will appear here.</string>
+    <string name="feature_trips_upcoming">Upcoming</string>
+    <string name="feature_trips_past">Past</string>
+    <string name="feature_trips_new">New trip</string>
+    <string name="feature_trips_empty_title">No trips yet</string>
+    <string name="feature_trips_empty_body">Plan your first adventure and keep dates, plans and budget together.</string>
+    <string name="feature_trips_empty_past_title">No past trips</string>
+    <string name="feature_trips_empty_past_body">Trips you\'ve completed will appear here.</string>
+    <string name="feature_trips_plan">Plan a trip</string>
+
+    <!-- Detail -->
+    <string name="feature_trips_back">Back</string>
+    <string name="feature_trips_tab_overview">Overview</string>
+    <string name="feature_trips_tab_itinerary">Itinerary</string>
+    <string name="feature_trips_tab_budget">Budget</string>
+    <string name="feature_trips_days_label">days</string>
+    <string name="feature_trips_travellers_label">travellers</string>
+    <string name="feature_trips_budget_label">budget</string>
+    <string name="feature_trips_next_up">Next up</string>
+    <string name="feature_trips_notes">Notes</string>
+    <string name="feature_trips_generate_ai">Generate itinerary with AI</string>
+    <string name="feature_trips_day">Day %1$d</string>
+    <string name="feature_trips_day_empty">Nothing planned for this day yet.</string>
+    <string name="feature_trips_add_activity">Add activity</string>
+    <string name="feature_trips_add_expense">Add expense</string>
+    <string name="feature_trips_later_phase">Available in a later phase</string>
+    <string name="feature_trips_mark_done">Mark %1$s as done</string>
+    <string name="feature_trips_free">Free</string>
+    <string name="feature_trips_no_budget">No budget set for this trip.</string>
+    <string name="feature_trips_planned_spent">%1$s of %2$s</string>
+    <string name="feature_trips_not_found_title">Trip not found</string>
+    <string name="feature_trips_not_found_body">It may have been deleted.</string>
+
+    <!-- Create -->
+    <string name="feature_trips_create_title">New trip</string>
+    <string name="feature_trips_close">Close</string>
+    <string name="feature_trips_field_title">Trip name</string>
+    <string name="feature_trips_field_destination">Destination</string>
+    <string name="feature_trips_field_dates">Dates</string>
+    <string name="feature_trips_field_dates_placeholder">Select dates</string>
+    <string name="feature_trips_field_travellers">Travellers</string>
+    <string name="feature_trips_field_budget">Total budget (%1$s)</string>
+    <string name="feature_trips_field_notes">Notes (optional)</string>
+    <string name="feature_trips_error_required">Required</string>
+    <string name="feature_trips_error_travellers">Between 1 and 20</string>
+    <string name="feature_trips_error_budget">Enter a whole amount</string>
+    <string name="feature_trips_save">Save trip</string>
+    <string name="feature_trips_save_later">Saving trips arrives with the Trips phase.</string>
+    <string name="feature_trips_ok">OK</string>
+    <string name="feature_trips_cancel">Cancel</string>
+    <string name="feature_trips_decrease">Fewer travellers</string>
+    <string name="feature_trips_increase">More travellers</string>
 </resources>

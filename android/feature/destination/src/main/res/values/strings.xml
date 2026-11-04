@@ -1,0 +1,23 @@
+<resources>
+    <string name="feature_destination_back">Back</string>
+    <string name="feature_destination_close">Close details</string>
+    <string name="feature_destination_share">Share</string>
+    <string name="feature_destination_share_text">%1$s, %2$s, found on TripWise</string>
+    <string name="feature_destination_best_time">Best time: %1$s</string>
+    <string name="feature_destination_currency">Currency: %1$s</string>
+    <string name="feature_destination_languages">Languages: %1$s</string>
+    <string name="feature_destination_about">About</string>
+    <string name="feature_destination_read_more">Read more</string>
+    <string name="feature_destination_read_less">Show less</string>
+    <string name="feature_destination_why_visit">Why visit</string>
+    <string name="feature_destination_food">Must-try food</string>
+    <string name="feature_destination_map">On the map</string>
+    <string name="feature_destination_map_placeholder">Interactive map arrives with the Maps phase</string>
+    <string name="feature_destination_plan_ai">Plan with AI</string>
+    <string name="feature_destination_plan_trip">Plan a trip</string>
+    <string name="feature_destination_not_found_title">Destination not found</string>
+    <string name="feature_destination_not_found_body">It may have been removed from the catalog.</string>
+    <string name="feature_destination_photo_credit">Photo: %1$s</string>
+    <string name="feature_destination_photo">Photo of %1$s</string>
+    <string name="feature_destination_photo_page">Photo %1$d of %2$d</string>
+</resources>

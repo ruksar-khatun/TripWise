@@ -1,5 +1,16 @@
 <resources>
     <string name="feature_explore_title">Explore</string>
-    <string name="feature_explore_placeholder_title">Discover destinations</string>
-    <string name="feature_explore_placeholder_body">Search and saved destinations will appear here.</string>
+    <string name="feature_explore_search_placeholder">Search destinations</string>
+    <string name="feature_explore_clear_search">Clear search</string>
+    <string name="feature_explore_all">All</string>
+    <string name="feature_explore_no_results_title">No destinations found</string>
+    <string name="feature_explore_no_results_body">Nothing matches \"%1$s\". Try another name or clear the filters.</string>
+    <string name="feature_explore_no_results_filter_body">No destinations match this filter yet.</string>
+    <string name="feature_explore_clear_filters">Clear filters</string>
+    <string name="feature_explore_select_title">Pick a destination</string>
+    <string name="feature_explore_select_body">Details appear here.</string>
+    <plurals name="feature_explore_results">
+        <item quantity="one">%d destination</item>
+        <item quantity="other">%d destinations</item>
+    </plurals>
 </resources>

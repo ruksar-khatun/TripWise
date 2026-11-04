@@ -21,6 +21,7 @@ internal val TripWiseMaterialShapes = Shapes(
 @Immutable
 data class TripWiseShapes(
     val card: Shape = RoundedCornerShape(20.dp),
+    val imageCard: Shape = RoundedCornerShape(16.dp),
     val field: Shape = RoundedCornerShape(14.dp),
     val chip: Shape = RoundedCornerShape(10.dp),
     val sheet: Shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),

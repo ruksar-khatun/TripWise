@@ -21,6 +21,16 @@ jobs:
       - name: Build, unit tests, lint
         run: ./gradlew build --continue
 
+  demo-images:
+    # Checks every demo Unsplash photo URL from GitHub's network (the dev sandbox can't reach Unsplash).
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/check-demo-images.sh
+
   backend:
     runs-on: ubuntu-latest
     defaults:

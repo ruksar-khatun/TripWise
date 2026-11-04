@@ -20,4 +20,51 @@
     <string name="core_ui_error_server">Something went wrong on our side. Please try again.</string>
     <string name="core_ui_error_unknown">Something went wrong. Please try again.</string>
     <string name="core_ui_error_title">Something went wrong</string>
+
+    <!-- Interests -->
+    <string name="core_ui_interest_beaches">Beaches</string>
+    <string name="core_ui_interest_culture">Culture</string>
+    <string name="core_ui_interest_food">Food</string>
+    <string name="core_ui_interest_nature">Nature</string>
+    <string name="core_ui_interest_mountains">Mountains</string>
+    <string name="core_ui_interest_city">City</string>
+    <string name="core_ui_interest_adventure">Adventure</string>
+
+    <!-- Activity categories -->
+    <string name="core_ui_activity_sightseeing">Sightseeing</string>
+    <string name="core_ui_activity_food">Food &amp; drink</string>
+    <string name="core_ui_activity_activity">Activity</string>
+    <string name="core_ui_activity_transport">Transport</string>
+    <string name="core_ui_activity_lodging">Stay</string>
+    <string name="core_ui_activity_shopping">Shopping</string>
+    <string name="core_ui_activity_other">Other</string>
+
+    <!-- Expense categories -->
+    <string name="core_ui_expense_transport">Transport</string>
+    <string name="core_ui_expense_accommodation">Accommodation</string>
+    <string name="core_ui_expense_food">Food</string>
+    <string name="core_ui_expense_activities">Activities</string>
+    <string name="core_ui_expense_local_travel">Local travel</string>
+    <string name="core_ui_expense_shopping">Shopping</string>
+    <string name="core_ui_expense_other">Other</string>
+
+    <!-- Cards -->
+    <string name="core_ui_save_destination">Save %1$s</string>
+    <string name="core_ui_unsave_destination">Remove %1$s from saved</string>
+    <string name="core_ui_rating_description">Rated %1$s out of 5 from %2$d reviews</string>
+    <plurals name="core_ui_days_until">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <string name="core_ui_trip_today">Today</string>
+    <string name="core_ui_trip_ongoing">Happening now</string>
+    <string name="core_ui_trip_completed">Completed</string>
+    <plurals name="core_ui_travellers">
+        <item quantity="one">%d traveller</item>
+        <item quantity="other">%d travellers</item>
+    </plurals>
+    <string name="core_ui_budget_progress">%1$s of %2$s</string>
+    <string name="core_ui_budget_progress_description">%1$s spent of %2$s budget</string>
+    <string name="core_ui_selected">Selected</string>
+    <string name="core_ui_section_retry_title">Couldn\'t load this section</string>
 </resources>

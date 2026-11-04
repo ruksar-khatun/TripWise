@@ -147,3 +147,29 @@ private fun ErrorStatePreview() = TripWiseTheme {
 @PreviewLightDark
 @Composable
 private fun OfflineBannerPreview() = TripWiseTheme { OfflineBanner() }
+
+/** Inline error for one section of a multi-section screen, so the rest stays usable. */
+@Composable
+fun SectionErrorCard(error: AppError, onRetry: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        modifier.fillMaxWidth(),
+        shape = TripWiseTheme.shapes.card,
+        color = TripWiseTheme.colors.errorContainer,
+        contentColor = TripWiseTheme.colors.onErrorContainer,
+    ) {
+        Row(
+            Modifier.padding(TripWiseTheme.spacing.lg),
+            horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(TwIcons.Error, contentDescription = null)
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.core_ui_section_retry_title), style = TripWiseTheme.typography.titleSmall)
+                Text(stringResource(error.messageRes()), style = TripWiseTheme.typography.bodySmall)
+            }
+            if (error.isRetryable) {
+                com.tripwise.core.designsystem.component.TwTextButton(stringResource(R.string.core_ui_retry), onRetry)
+            }
+        }
+    }
+}

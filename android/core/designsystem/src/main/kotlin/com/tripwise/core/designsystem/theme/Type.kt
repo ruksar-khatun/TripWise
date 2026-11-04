@@ -1,29 +1,53 @@
+@file:OptIn(ExperimentalTextApi::class)
+
 package com.tripwise.core.designsystem.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.tripwise.core.designsystem.R
 
-// System font for now; a brand typeface can be dropped in here later without touching screens.
-private val Display = FontFamily.Default
-private val Body = FontFamily.Default
+// Plus Jakarta Sans (SIL OFL 1.1, see FONT_LICENSE_OFL.txt), bundled as one variable font.
+private fun jakarta(weight: FontWeight) = Font(
+    resId = R.font.plus_jakarta_sans,
+    weight = weight,
+    variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight)),
+)
+
+internal val PlusJakartaSans = FontFamily(
+    jakarta(FontWeight.Normal),
+    jakarta(FontWeight.Medium),
+    jakarta(FontWeight.SemiBold),
+    jakarta(FontWeight.Bold),
+)
+
+private fun style(size: Int, line: Int, weight: FontWeight, tracking: Double = 0.0) = TextStyle(
+    fontFamily = PlusJakartaSans,
+    fontWeight = weight,
+    fontSize = size.sp,
+    lineHeight = line.sp,
+    letterSpacing = tracking.sp,
+)
 
 internal val TripWiseTypography = Typography(
-    displayLarge = TextStyle(fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp),
-    displayMedium = TextStyle(fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 45.sp, lineHeight = 52.sp),
-    displaySmall = TextStyle(fontFamily = Display, fontWeight = FontWeight.Bold, fontSize = 36.sp, lineHeight = 44.sp),
-    headlineLarge = TextStyle(fontFamily = Display, fontWeight = FontWeight.SemiBold, fontSize = 32.sp, lineHeight = 40.sp),
-    headlineMedium = TextStyle(fontFamily = Display, fontWeight = FontWeight.SemiBold, fontSize = 28.sp, lineHeight = 36.sp),
-    headlineSmall = TextStyle(fontFamily = Display, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = 32.sp),
-    titleLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 22.sp, lineHeight = 28.sp),
-    titleMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.15.sp),
-    titleSmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp),
-    bodyLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp),
-    bodyMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.25.sp),
-    bodySmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.4.sp),
-    labelLarge = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp),
-    labelMedium = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp),
-    labelSmall = TextStyle(fontFamily = Body, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp),
+    displayLarge = style(57, 64, FontWeight.Bold, -0.25),
+    displayMedium = style(45, 52, FontWeight.Bold),
+    displaySmall = style(36, 44, FontWeight.Bold),
+    headlineLarge = style(32, 40, FontWeight.Bold),
+    headlineMedium = style(28, 36, FontWeight.SemiBold),
+    headlineSmall = style(24, 32, FontWeight.SemiBold),
+    titleLarge = style(22, 28, FontWeight.SemiBold),
+    titleMedium = style(16, 24, FontWeight.SemiBold, 0.15),
+    titleSmall = style(14, 20, FontWeight.SemiBold, 0.1),
+    bodyLarge = style(16, 24, FontWeight.Normal, 0.3),
+    bodyMedium = style(14, 20, FontWeight.Normal, 0.2),
+    bodySmall = style(12, 16, FontWeight.Normal, 0.3),
+    labelLarge = style(14, 20, FontWeight.SemiBold, 0.1),
+    labelMedium = style(12, 16, FontWeight.Medium, 0.4),
+    labelSmall = style(11, 16, FontWeight.Medium, 0.4),
 )

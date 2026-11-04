@@ -1,54 +1,71 @@
 package com.tripwise.app.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tripwise.app.navigation.TripWiseNavHost
-import com.tripwise.core.designsystem.component.TwNavigationBar
-import com.tripwise.core.designsystem.component.TwNavigationBarItem
+import com.tripwise.core.designsystem.theme.TripWiseTheme
 import com.tripwise.core.ui.state.OfflineBanner
 
 /**
- * App shell: bottom navigation, offline banner, and the NavHost.
- * Feature screens own their own Scaffold/top bar, so the shell consumes no top insets.
+ * App shell. NavigationSuiteScaffold picks a bottom bar (phones) or navigation rail
+ * (medium/expanded widths: foldables, tablets) from the window size; hidden on detail screens.
  */
 @Composable
 fun TripWiseApp(appState: TripWiseAppState, modifier: Modifier = Modifier) {
     val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
     val currentDestination = appState.currentDestination
-
-    Scaffold(
+    val layoutType = if (appState.showNavigation) {
+        NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
+    } else {
+        NavigationSuiteType.None
+    }
+    val selectedColors = TripWiseTheme.colors
+    NavigationSuiteScaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            if (appState.showBottomBar) {
-                TwNavigationBar {
-                    appState.topLevelDestinations.forEach { tab ->
-                        TwNavigationBarItem(
-                            selected = appState.isSelected(currentDestination, tab),
-                            onClick = { appState.navigateToTopLevel(tab) },
-                            icon = tab.icon,
-                            selectedIcon = tab.selectedIcon,
-                            label = stringResource(tab.labelRes),
-                        )
-                    }
-                }
+        layoutType = layoutType,
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = TripWiseTheme.colors.surfaceContainerLowest,
+            navigationRailContainerColor = TripWiseTheme.colors.surfaceContainerLowest,
+        ),
+        navigationSuiteItems = {
+            appState.topLevelDestinations.forEach { tab ->
+                val selected = appState.isSelected(currentDestination, tab)
+                item(
+                    selected = selected,
+                    onClick = { appState.navigateToTopLevel(tab) },
+                    icon = { Icon(if (selected) tab.selectedIcon else tab.icon, contentDescription = null) },
+                    label = { Text(stringResource(tab.labelRes)) },
+                    colors = NavigationSuiteDefaults.itemColors(
+                        navigationBarItemColors = NavigationBarItemDefaults.colors(
+                            indicatorColor = selectedColors.secondaryContainer,
+                            selectedIconColor = selectedColors.onSecondaryContainer,
+                            selectedTextColor = selectedColors.primary,
+                        ),
+                        navigationRailItemColors = NavigationRailItemDefaults.colors(
+                            indicatorColor = selectedColors.secondaryContainer,
+                            selectedIconColor = selectedColors.onSecondaryContainer,
+                            selectedTextColor = selectedColors.primary,
+                        ),
+                    ),
+                )
             }
         },
-    ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
+    ) {
+        Column(Modifier.fillMaxSize()) {
             if (isOffline) OfflineBanner()
             TripWiseNavHost(appState = appState, modifier = Modifier.weight(1f))
         }

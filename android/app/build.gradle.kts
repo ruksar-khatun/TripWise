@@ -55,6 +55,8 @@ dependencies {
 
     implementation(projects.feature.home)
     implementation(projects.feature.explore)
+    implementation(projects.feature.saved)
+    implementation(projects.feature.destination)
     implementation(projects.feature.trips)
     implementation(projects.feature.assistant)
     implementation(projects.feature.profile)
@@ -65,6 +67,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.adaptive)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(projects.core.testing)

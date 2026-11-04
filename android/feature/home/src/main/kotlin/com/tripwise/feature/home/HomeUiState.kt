@@ -1,23 +1,28 @@
 package com.tripwise.feature.home
 
-import com.tripwise.core.common.error.AppError
-import com.tripwise.core.model.BackendStatus
+import com.tripwise.core.common.result.LoadState
+import com.tripwise.core.model.BudgetSummary
+import com.tripwise.core.model.SaveableDestination
+import com.tripwise.core.model.Trip
+import java.time.LocalDate
+
+enum class Greeting { MORNING, AFTERNOON, EVENING }
+
+data class UpcomingTrip(val trip: Trip, val budget: BudgetSummary?)
 
 /**
- * Screen state: one immutable object, exposed as StateFlow by [HomeViewModel].
- * Dashboard sections (upcoming trip, saved, suggestions) become fields here in the Home phase.
+ * Each dashboard section loads independently, so one failure never blanks the screen.
+ * `LoadState.Ready(null)` for [upcoming] means "no upcoming trip" (empty state).
  */
 data class HomeUiState(
-    val backend: BackendCheck = BackendCheck.Checking,
+    val today: LocalDate,
+    val greeting: Greeting,
+    val upcoming: LoadState<UpcomingTrip?> = LoadState.Loading,
+    val popular: LoadState<List<SaveableDestination>> = LoadState.Loading,
+    val recentlySaved: LoadState<List<SaveableDestination>> = LoadState.Loading,
 )
 
-sealed interface BackendCheck {
-    data object Checking : BackendCheck
-    data class Connected(val status: BackendStatus) : BackendCheck
-    data class Failed(val error: AppError) : BackendCheck
-}
-
-/** All user intents for the screen go through a single `onAction` entry point. */
 sealed interface HomeAction {
-    data object RetryBackendCheck : HomeAction
+    data class ToggleSave(val destinationId: String, val save: Boolean) : HomeAction
+    data object Retry : HomeAction
 }

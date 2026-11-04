@@ -1,10 +1,19 @@
 <resources>
-    <string name="feature_home_title">TripWise</string>
-    <string name="feature_home_welcome_title">Welcome to TripWise</string>
-    <string name="feature_home_welcome_body">Your dashboard will show upcoming trips, saved places and ideas here.</string>
-    <string name="feature_home_backend_title">Backend connection</string>
-    <string name="feature_home_backend_checking">Checking…</string>
-    <string name="feature_home_backend_connected">Connected to %1$s v%2$s</string>
-    <string name="feature_home_backend_unhealthy">Backend responded but reported a problem.</string>
-    <string name="feature_home_backend_check_again">Check again</string>
+    <string name="feature_home_greeting_morning">Good morning</string>
+    <string name="feature_home_greeting_afternoon">Good afternoon</string>
+    <string name="feature_home_greeting_evening">Good evening</string>
+    <string name="feature_home_headline">Where to next?</string>
+    <string name="feature_home_search">Search destinations</string>
+    <string name="feature_home_open_assistant">Open TripWise assistant</string>
+    <string name="feature_home_open_profile">Open profile</string>
+    <string name="feature_home_upcoming">Upcoming trip</string>
+    <string name="feature_home_no_trip_title">Plan your next adventure</string>
+    <string name="feature_home_no_trip_body">Create a trip to keep dates, plans and budget in one place.</string>
+    <string name="feature_home_plan_trip">Plan a trip</string>
+    <string name="feature_home_popular">Popular destinations</string>
+    <string name="feature_home_see_all">See all</string>
+    <string name="feature_home_interests">Browse by interest</string>
+    <string name="feature_home_assistant_title">Ask TripWise</string>
+    <string name="feature_home_assistant_body">"Plan 5 relaxed days in Bali under ₹80,000"</string>
+    <string name="feature_home_recently_saved">Recently saved</string>
 </resources>
