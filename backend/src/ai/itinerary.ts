@@ -156,6 +156,7 @@ export function templateItinerary(d: CatalogDestination, r: ItineraryRequest): I
     for (let slot = 0; slot < perDay - 1 && pool.length > 0; slot++) {
       const a = pool[(i * (perDay - 1) + slot) % pool.length]!;
       if (slot === 1) {
+        clock = Math.max(clock, 12 * 60); // lunch at noon or later
         const dish = d.localFood[(i + slot) % Math.max(1, d.localFood.length)] ?? 'local specialities';
         items.push({ startTime: toTime(clock), title: `Lunch: ${dish}`, category: 'FOOD', durationMinutes: 75, estimatedCostUsd: lunchCost, notes: null, attractionId: null });
         clock += 90;

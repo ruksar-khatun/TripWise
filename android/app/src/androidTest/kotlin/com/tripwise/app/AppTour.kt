@@ -34,8 +34,12 @@ class Tour(private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainAct
     fun click(text: String, substring: Boolean = false, required: Boolean = true): Boolean {
         val ok = runCatching {
             waitFor(text, timeoutMs = if (required) 20_000 else 5_000, substring = substring)
-            clickNode(rule.onAllNodesWithText(text, substring = substring).onFirst())
-        }.onFailure { if (required) throw it else Log.w(TAG, "optional click '$text' skipped") }.isSuccess
+            runCatching { clickNode(rule.onAllNodesWithText(text, substring = substring).onFirst()) }
+                .recoverCatching {
+                    Log.w(TAG, "click '$text' via merged tree failed: ${it.message}; retrying with a touch on the unmerged node")
+                    rule.onAllNodesWithText(text, substring = substring, useUnmergedTree = true).onFirst().performClick()
+                }.getOrThrow()
+        }.onFailure { if (required) throw it else Log.w(TAG, "optional click '$text' skipped: ${it.message?.take(300)}") }.isSuccess
         rule.waitForIdle()
         return ok
     }
@@ -58,9 +62,11 @@ class Tour(private val rule: AndroidComposeTestRule<ActivityScenarioRule<MainAct
         if (hasAction) node.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick) else node.performClick()
     }
 
-    fun type(label: String, value: String) {
-        waitFor(label)
-        rule.onAllNodesWithText(label).onFirst().performTextInput(value)
+    fun type(label: String, value: String, required: Boolean = true) {
+        runCatching {
+            waitFor(label, timeoutMs = if (required) 20_000 else 5_000)
+            rule.onAllNodesWithText(label).onFirst().performTextInput(value)
+        }.onFailure { if (required) throw it else Log.w(TAG, "optional type into '$label' skipped: ${it.message?.take(200)}") }
     }
 
     fun scrollTo(text: String) {
