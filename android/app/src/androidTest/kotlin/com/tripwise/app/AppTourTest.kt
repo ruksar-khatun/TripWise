@@ -41,7 +41,7 @@ class AppTourTest {
         t.shot("tripmate-intro", settleMs = 1_000)
         if (t.click("Set budget, days and interests", required = false)) {
             runCatching { t.waitFor("Trip preferences") }
-            t.click("Mid-range", required = false)
+            t.click("Mid", required = false)
             t.click("Food", required = false)
             t.shot("tripmate-preferences", settleMs = 1_000)
             t.click("Apply", required = false)
