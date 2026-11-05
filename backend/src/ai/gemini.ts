@@ -19,11 +19,21 @@ const SAFETY = [
   HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
 ].map((category) => ({ category, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE }));
 
+/** Errors worth trying the next model for: model retired/unknown, overloaded, rate-limited, server error. */
+export function isFallbackWorthy(err: unknown): boolean {
+  const status = (err as { status?: number })?.status;
+  return status === 404 || status === 429 || status === 500 || status === 503 || status === 504;
+}
+
+/**
+ * Gemini with an ordered model list: if a model is retired, overloaded or rate-limited *before*
+ * any output is produced, the next model is tried. Output is never mixed across models.
+ */
 export class GeminiClient implements AiClient {
   private readonly ai: GoogleGenAI | null;
 
-  constructor(apiKey: string | undefined, private readonly model: string) {
-    this.ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+  constructor(apiKey: string | undefined, private readonly models: string[]) {
+    this.ai = apiKey ? new GoogleGenAI({ apiKey, httpOptions: { timeout: 45_000 } }) : null;
   }
 
   get configured() {
@@ -32,21 +42,49 @@ export class GeminiClient implements AiClient {
 
   async *streamChat(system: string, turns: ChatTurn[], signal?: AbortSignal): AsyncIterable<string> {
     if (!this.ai) throw new Error('not configured');
-    const stream = await this.ai.models.generateContentStream({
-      model: this.model,
-      contents: turns.map((t) => ({ role: t.role, parts: [{ text: t.text }] })),
-      config: { systemInstruction: system, temperature: 0.7, maxOutputTokens: 1_024, safetySettings: SAFETY, abortSignal: signal },
-    });
-    for await (const chunk of stream) {
-      const text = chunk.text;
-      if (text) yield text;
+    let lastError: unknown;
+    for (const model of this.models) {
+      let produced = false;
+      try {
+        const stream = await this.ai.models.generateContentStream({
+          model,
+          contents: turns.map((t) => ({ role: t.role, parts: [{ text: t.text }] })),
+          config: { systemInstruction: system, temperature: 0.7, maxOutputTokens: 1_024, safetySettings: SAFETY, abortSignal: signal },
+        });
+        for await (const chunk of stream) {
+          const text = chunk.text;
+          if (text) {
+            produced = true;
+            yield text;
+          }
+        }
+        return;
+      } catch (err) {
+        if (produced || signal?.aborted || !isFallbackWorthy(err)) throw err;
+        lastError = err;
+      }
     }
+    throw lastError;
   }
 
   async generateJson(system: string, prompt: string, jsonSchema: object): Promise<unknown> {
     if (!this.ai) throw new Error('not configured');
-    const res = await this.ai.models.generateContent({
-      model: this.model,
+    let lastError: unknown;
+    for (const model of this.models) {
+      try {
+        return await this.generateJsonWith(model, system, prompt, jsonSchema);
+      } catch (err) {
+        if (!isFallbackWorthy(err)) throw err;
+        lastError = err;
+      }
+    }
+    throw lastError;
+  }
+
+  private async generateJsonWith(model: string, system: string, prompt: string, jsonSchema: object): Promise<unknown> {
+    const ai = this.ai!;
+    const res = await ai.models.generateContent({
+      model,
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         systemInstruction: system,

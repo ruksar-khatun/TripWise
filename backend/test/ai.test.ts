@@ -161,3 +161,12 @@ describe('DailyQuota', () => {
     expect(q.take('u')).toBe(true);
   });
 });
+
+describe('isFallbackWorthy', () => {
+  it('falls back on retired/overloaded/rate-limited models only', async () => {
+    const { isFallbackWorthy } = await import('../src/ai/gemini.js');
+    for (const status of [404, 429, 500, 503, 504]) expect(isFallbackWorthy({ status })).toBe(true);
+    for (const status of [400, 401, 403]) expect(isFallbackWorthy({ status })).toBe(false);
+    expect(isFallbackWorthy(new Error('x'))).toBe(false);
+  });
+});

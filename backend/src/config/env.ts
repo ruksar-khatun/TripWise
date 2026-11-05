@@ -20,7 +20,11 @@ const EnvSchema = z.object({
   /** Google Places API (New) server key. Optional: nearby places return NOT_CONFIGURED without it. */
   PLACES_API_KEY: z.string().optional(),
   GEMINI_API_KEY: z.string().optional(),
-  GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+  /** Primary Gemini model. gemini-2.5-flash is no longer offered to new API keys. */
+  GEMINI_MODEL: z.string().default('gemini-3.5-flash'),
+  /** Comma-separated models tried in order when the primary is unavailable/overloaded. */
+  GEMINI_FALLBACK_MODELS: z.string().default('gemini-3.8-flash,gemini-3.1-flash-lite')
+    .transform((s) => s.split(',').map((m) => m.trim()).filter(Boolean)),
   /** Max AI requests (chat messages + itineraries) per user per day. */
   AI_DAILY_LIMIT: z.coerce.number().int().min(1).default(100),
 });

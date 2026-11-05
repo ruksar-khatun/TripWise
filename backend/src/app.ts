@@ -81,7 +81,7 @@ export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   const catalog = new CatalogService(deps.db);
   v1.use('/destinations', destinationsRouter(catalog));
   v1.use('/currency', currencyRouter(deps.currency ?? new CurrencyService()));
-  const ai = deps.ai ?? new GeminiClient(env.GEMINI_API_KEY, env.GEMINI_MODEL);
+  const ai = deps.ai ?? new GeminiClient(env.GEMINI_API_KEY, [...new Set([env.GEMINI_MODEL, ...env.GEMINI_FALLBACK_MODELS])]);
   v1.use('/ai', aiRouter(
     { ai, quota: new DailyQuota(env.AI_DAILY_LIMIT), catalog, itineraries: new ItineraryService(ai, logger) },
     requireAuth(tokenConfig),
