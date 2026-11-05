@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -32,7 +33,7 @@ import javax.inject.Singleton
 
 /**
  * Curated catalog from the backend. The catalog is small, so it's fetched whole and searched on-device:
- *  - first subscriber: show the on-disk copy (if any) immediately, then refresh from the network
+ *  - every subscriber gets the on-disk copy (if any) immediately; one background refresh per session updates it
  *  - offline with a cached copy: keep showing it
  *  - no cached copy yet (first launch, or no server reachable): the catalog bundled in the APK
  *    (assets/catalog/destinations.json, a copy of backend/catalog/destinations.json), so the app works standalone
@@ -42,6 +43,7 @@ internal class CatalogDestinationRepository @Inject constructor(
     private val network: CatalogNetworkDataSource,
     @ApplicationContext private val context: Context,
     @Dispatcher(TripWiseDispatcher.IO) private val io: CoroutineDispatcher,
+    @com.tripwise.core.common.coroutines.ApplicationScope private val scope: kotlinx.coroutines.CoroutineScope,
 ) : DestinationRepository {
 
     private sealed interface State {
@@ -57,9 +59,12 @@ internal class CatalogDestinationRepository @Inject constructor(
     private val json = Json { ignoreUnknownKeys = true }
     private val serializer = ListSerializer(DestinationDto.serializer())
     @Volatile private var refreshedThisSession = false
+    private var refreshJob: kotlinx.coroutines.Job? = null
 
+    /** Emits the local copy (cache or bundled) right away; the network refresh never blocks it. */
     private fun catalog(): Flow<List<Destination>> = flow {
-        ensureLoaded()
+        ensureLocal()
+        refreshInBackground()
         emitAll(
             state.filter { it is State.Ready || it is State.Failed }.map {
                 when (it) {
@@ -71,19 +76,28 @@ internal class CatalogDestinationRepository @Inject constructor(
         )
     }
 
-    private suspend fun ensureLoaded() = loadMutex.withLock {
-        val current = state.value
-        if (current is State.Ready && refreshedThisSession) return@withLock
-        if (current !is State.Ready) {
-            (readCache() ?: readBundled())?.let { state.value = State.Ready(it) } ?: run { state.value = State.Loading }
-        }
-        when (val result = network.fetchAll()) {
-            is Outcome.Success -> {
-                refreshedThisSession = true
-                state.value = State.Ready(result.value.map { it.toModel() })
-                writeCache(result.value)
+    private suspend fun ensureLocal() = loadMutex.withLock {
+        if (state.value is State.Ready) return@withLock
+        (readCache() ?: readBundled())?.let { state.value = State.Ready(it) }
+    }
+
+    /** At most one refresh at a time and one success per app session; screens never wait for it. */
+    private fun refreshInBackground() {
+        synchronized(this) { startRefreshLocked() }
+    }
+
+    private fun startRefreshLocked() {
+        if (refreshedThisSession || refreshJob?.isActive == true) return
+        if (state.value !is State.Ready) state.value = State.Loading // e.g. retry after a failure
+        refreshJob = scope.launch {
+            when (val result = network.fetchAll()) {
+                is Outcome.Success -> {
+                    refreshedThisSession = true
+                    state.value = State.Ready(result.value.map { it.toModel() })
+                    writeCache(result.value)
+                }
+                is Outcome.Failure -> if (state.value !is State.Ready) state.value = State.Failed(result.error)
             }
-            is Outcome.Failure -> if (state.value !is State.Ready) state.value = State.Failed(result.error)
         }
     }
 
