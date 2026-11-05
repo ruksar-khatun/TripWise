@@ -4,12 +4,50 @@ name: Promo recording
 # the screen (one MP4 per feature) and publishes the clips to the `ci-promo-recordings` branch.
 on:
   workflow_dispatch:
+    inputs:
+      photos_only:
+        description: Only fetch full-size catalog photos (for the promo's travel visuals) and skip recording
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
+  photos:
+    if: inputs.photos_only
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download full-size catalog photos with credits
+        run: |
+          mkdir -p out
+          python3 - <<'PY'
+          import json, subprocess
+          d = json.load(open('backend/catalog/destinations.json'))
+          items = d if isinstance(d, list) else d.get('destinations', d)
+          credits = {}
+          for x in items:
+              im = x['images'][0]
+              url = im['url'].replace('1280px-', '1920px-').replace('w=1200', 'w=1920')
+              path = f"out/{x['id']}.jpg"
+              ok = subprocess.run(['curl', '-fsSL', '-A', 'TripWiseCI/1.0 (github actions)', '-o', path, url]).returncode == 0
+              if not ok:
+                  subprocess.run(['curl', '-fsSL', '-A', 'TripWiseCI/1.0 (github actions)', '-o', path, im['url']])
+              credits[x['id']] = {'name': x['name'], 'author': im.get('author'), 'license': im.get('license'), 'source': im.get('sourceUrl')}
+          json.dump(credits, open('out/credits.json', 'w'), indent=1)
+          PY
+          ls -la out
+      - name: Publish to ci-promo-assets branch
+        run: |
+          cd out
+          git init -q -b ci-promo-assets
+          git add -A
+          git -c user.name=tripwise-ci -c user.email=ci@users.noreply.github.com commit -qm "Promo photos for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-promo-assets
+
   tour:
+    if: ${{ !inputs.photos_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
