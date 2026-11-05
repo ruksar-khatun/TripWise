@@ -79,4 +79,5 @@
     <string name="feature_trips_activity_time">Start time (optional)</string>
     <string name="feature_trips_time_hint">09:30</string>
     <string name="feature_trips_error_time">Use 24-hour time, e.g. 14:30</string>
+    <string name="feature_trips_ask_tripmate">Ask TripMate AI about this trip</string>
 </resources>

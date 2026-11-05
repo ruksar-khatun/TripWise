@@ -16,7 +16,10 @@ import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AddComment
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.BeachAccess
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Check
@@ -76,6 +79,9 @@ object TwIcons {
 
     // Actions
     val Assistant: ImageVector = Icons.Outlined.AutoAwesome
+    val History: ImageVector = Icons.Outlined.History
+    val NewChat: ImageVector = Icons.Outlined.AddComment
+    val Tune: ImageVector = Icons.Outlined.Tune
     val Search: ImageVector = Icons.Outlined.Search
     val Clear: ImageVector = Icons.Outlined.Close
     val Add: ImageVector = Icons.Outlined.Add

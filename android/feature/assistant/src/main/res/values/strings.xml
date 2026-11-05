@@ -1,19 +1,89 @@
 <resources>
-    <string name="feature_assistant_title">TripWise Assistant</string>
+    <string name="feature_assistant_title" translatable="false">TripMate AI</string>
     <string name="feature_assistant_back">Back</string>
     <string name="feature_assistant_context">About: %1$s</string>
-    <string name="feature_assistant_intro_title">How can I help you travel?</string>
-    <string name="feature_assistant_intro_body">Ask about destinations, budgets or day plans. I\'ll use your trips for context.</string>
-    <string name="feature_assistant_suggestion_1">Plan 5 relaxed days here</string>
-    <string name="feature_assistant_suggestion_2">What should I budget per day?</string>
-    <string name="feature_assistant_suggestion_3">Best local food to try</string>
-    <string name="feature_assistant_suggestion_4">What to pack for this season</string>
-    <string name="feature_assistant_input">Ask TripWise…</string>
+    <string name="feature_assistant_history">Chat history</string>
+    <string name="feature_assistant_new_chat">New chat</string>
+    <string name="feature_assistant_intro_title">Hi, I\'m TripMate AI</string>
+    <string name="feature_assistant_intro_body">I can plan itineraries, suggest destinations and activities, and find stays and restaurants around your budget, trip length and interests.</string>
+    <string name="feature_assistant_intro_context">Ask me anything about %1$s.</string>
+    <string name="feature_assistant_input">Ask TripMate AI…</string>
     <string name="feature_assistant_send">Send</string>
+    <string name="feature_assistant_thinking">Thinking…</string>
+    <string name="feature_assistant_finding_stays">Finding places to stay…</string>
+    <string name="feature_assistant_finding_food">Finding places to eat…</string>
+    <string name="feature_assistant_retry">Retry</string>
+    <string name="feature_assistant_stop">Stop</string>
+    <string name="feature_assistant_suggested">Suggested</string>
+
+    <!-- Quick actions -->
+    <string name="feature_assistant_action_itinerary">Itinerary</string>
+    <string name="feature_assistant_action_destinations">Destinations</string>
+    <string name="feature_assistant_action_activities">Activities</string>
+    <string name="feature_assistant_action_stays">Stays</string>
+    <string name="feature_assistant_action_food">Restaurants</string>
+    <string name="feature_assistant_prompt_destinations">Suggest 3 destinations in India that suit my budget, trip length and interests, with the best time to go.</string>
+    <string name="feature_assistant_prompt_itinerary_general">Plan a personalised day-by-day itinerary for my trip in India.</string>
+    <string name="feature_assistant_prompt_activities">Recommend activities and experiences in %1$s that match my interests.</string>
+    <string name="feature_assistant_prompt_activities_general">Recommend activities and experiences in India that match my interests.</string>
+
+    <!-- Suggested prompts: destination -->
+    <string name="feature_assistant_suggest_dest_plan">Plan %1$d days in %2$s for me</string>
+    <string name="feature_assistant_suggest_dest_budget">What should I budget per day in %1$s?</string>
+    <string name="feature_assistant_suggest_dest_food">Which local dishes must I try in %1$s?</string>
+    <string name="feature_assistant_suggest_dest_when">When is the best time to visit %1$s?</string>
+    <!-- Suggested prompts: trip -->
+    <string name="feature_assistant_suggest_trip_review">Review my itinerary and suggest improvements</string>
+    <string name="feature_assistant_suggest_trip_gaps">Fill the free time in my trip with activities</string>
+    <string name="feature_assistant_suggest_trip_budget">Is my budget realistic for this trip?</string>
+    <string name="feature_assistant_suggest_trip_pack">What should I pack for this trip?</string>
+    <!-- Suggested prompts: general -->
     <string name="feature_assistant_suggestion_general_1">Where in India should I go in December?</string>
     <string name="feature_assistant_suggestion_general_2">Plan 5 days in Rajasthan on a mid budget</string>
     <string name="feature_assistant_suggestion_general_3">Best hill stations for summer</string>
-    <string name="feature_assistant_thinking">Thinking…</string>
-    <string name="feature_assistant_retry">Retry</string>
-    <string name="feature_assistant_stop">Stop</string>
+    <string name="feature_assistant_suggestion_general_4">Cheap beach trips for 4 days</string>
+
+    <!-- Preferences -->
+    <string name="feature_assistant_preferences">Trip preferences</string>
+    <string name="feature_assistant_preferences_hint">Set budget, days and interests</string>
+    <string name="feature_assistant_preferences_body">TripMate AI uses these to personalise every answer.</string>
+    <string name="feature_assistant_budget">Budget</string>
+    <string name="feature_assistant_budget_any">Any</string>
+    <string name="feature_assistant_budget_low">Budget</string>
+    <string name="feature_assistant_budget_mid">Mid-range</string>
+    <string name="feature_assistant_budget_luxury">Luxury</string>
+    <string name="feature_assistant_days">Days</string>
+    <string name="feature_assistant_travellers">Travellers</string>
+    <string name="feature_assistant_interests">Interests</string>
+    <string name="feature_assistant_not_set">Not set</string>
+    <string name="feature_assistant_decrease">Decrease %1$s</string>
+    <string name="feature_assistant_increase">Increase %1$s</string>
+    <string name="feature_assistant_apply">Apply</string>
+    <string name="feature_assistant_clear">Clear</string>
+    <plurals name="feature_assistant_days_count">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="feature_assistant_travellers_count">
+        <item quantity="one">%d traveller</item>
+        <item quantity="other">%d travellers</item>
+    </plurals>
+
+    <!-- Place cards -->
+    <string name="feature_assistant_open_maps">Open in Google Maps</string>
+    <string name="feature_assistant_open_maps_for">Open %1$s in Google Maps</string>
+    <string name="feature_assistant_place_disclaimer">AI suggestions. Check prices, reviews and opening hours on Google Maps before you book.</string>
+    <string name="feature_assistant_plan_in_planner">Open itinerary planner</string>
+
+    <!-- History -->
+    <string name="feature_assistant_history_empty_title">No chats yet</string>
+    <string name="feature_assistant_history_empty_body">Your TripMate AI conversations are saved here on this device.</string>
+    <string name="feature_assistant_history_start">Start a chat</string>
+    <string name="feature_assistant_delete_chat">Delete chat</string>
+    <string name="feature_assistant_delete_chat_title">Delete this chat?</string>
+    <string name="feature_assistant_delete_all">Delete all chats</string>
+    <string name="feature_assistant_delete_all_title">Delete all chats?</string>
+    <string name="feature_assistant_delete_body">This can\'t be undone.</string>
+    <string name="feature_assistant_delete">Delete</string>
+    <string name="feature_assistant_cancel">Cancel</string>
 </resources>

@@ -28,8 +28,22 @@ import javax.inject.Singleton
 import kotlin.coroutines.cancellation.CancellationException
 
 @Serializable data class ChatMessageDto(val role: String, val text: String)
-@Serializable data class ChatTripDto(val title: String, val destinationName: String, val startDate: String, val endDate: String, val travellers: Int)
-@Serializable data class ChatContextDto(val destinationId: String? = null, val trip: ChatTripDto? = null)
+@Serializable data class ChatTripDto(
+    val title: String,
+    val destinationName: String,
+    val startDate: String,
+    val endDate: String,
+    val travellers: Int,
+    val budgetInr: Long? = null,
+    val itinerary: List<String>? = null,
+)
+@Serializable data class ChatPreferencesDto(
+    val budgetLevel: String? = null,
+    val days: Int? = null,
+    val travellers: Int? = null,
+    val interests: List<String>? = null,
+)
+@Serializable data class ChatContextDto(val destinationId: String? = null, val trip: ChatTripDto? = null, val preferences: ChatPreferencesDto? = null)
 @Serializable data class ChatRequestDto(val messages: List<ChatMessageDto>, val context: ChatContextDto? = null)
 
 sealed interface ChatStreamEvent {

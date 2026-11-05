@@ -19,6 +19,7 @@ import { PlacesService } from './places/service.js';
 import { placesRouter } from './routes/places.js';
 import { DailyQuota, GeminiClient, type AiClient } from './ai/gemini.js';
 import { ItineraryService } from './ai/itinerary.js';
+import { RecommendationService } from './ai/recommendations.js';
 import { aiRouter } from './routes/ai.js';
 import { CurrencyService } from './currency/service.js';
 import { currencyRouter } from './routes/currency.js';
@@ -83,7 +84,7 @@ export function createApp(env: Env, logger: Logger, deps: AppDeps) {
   v1.use('/currency', currencyRouter(deps.currency ?? new CurrencyService()));
   const ai = deps.ai ?? new GeminiClient(env.GEMINI_API_KEY, [...new Set([env.GEMINI_MODEL, ...env.GEMINI_FALLBACK_MODELS])]);
   v1.use('/ai', aiRouter(
-    { ai, quota: new DailyQuota(env.AI_DAILY_LIMIT), catalog, itineraries: new ItineraryService(ai, logger) },
+    { ai, quota: new DailyQuota(env.AI_DAILY_LIMIT), catalog, itineraries: new ItineraryService(ai, logger), recommendations: new RecommendationService(ai, logger) },
     requireAuth(tokenConfig),
   ));
   v1.use('/places', placesRouter(deps.places ?? new PlacesService(env.PLACES_API_KEY), requireAuth(tokenConfig)));

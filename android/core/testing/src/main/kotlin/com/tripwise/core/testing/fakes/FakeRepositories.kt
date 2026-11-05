@@ -117,6 +117,47 @@ class FakeAssistantRepository : com.tripwise.core.domain.repository.AssistantRep
     val requests = mutableListOf<Pair<List<com.tripwise.core.model.ChatMessage>, com.tripwise.core.model.AssistantContext>>()
     override fun reply(history: List<com.tripwise.core.model.ChatMessage>, context: com.tripwise.core.model.AssistantContext) =
         kotlinx.coroutines.flow.flow { requests += history to context; events.forEach { emit(it) } }
+
+    var recommendation: com.tripwise.core.common.result.Outcome<List<com.tripwise.core.model.PlaceSuggestion>> =
+        com.tripwise.core.common.result.Outcome.Success(emptyList())
+    val recommendRequests = mutableListOf<Triple<String, com.tripwise.core.model.PlaceKind, com.tripwise.core.model.TripPreferences>>()
+    override suspend fun recommend(
+        destinationId: String,
+        kind: com.tripwise.core.model.PlaceKind,
+        preferences: com.tripwise.core.model.TripPreferences,
+        notes: String?,
+    ) = recommendation.also { recommendRequests += Triple(destinationId, kind, preferences) }
+}
+
+/** In-memory chat history with the same ordering rules as the Room implementation. */
+class FakeChatHistoryRepository : com.tripwise.core.domain.repository.ChatHistoryRepository {
+    private var clock = 0L
+    private val conversations = MutableStateFlow<Map<String, com.tripwise.core.model.ChatConversation>>(emptyMap())
+    val messages = mutableMapOf<String, MutableList<com.tripwise.core.model.ChatMessage>>()
+
+    private fun tick() = java.time.Instant.ofEpochSecond(1_000 + ++clock)
+
+    override fun observeConversations() = conversations.map { map ->
+        map.values.sortedByDescending { it.updatedAt }.map { c -> c.copy(preview = messages[c.id]?.lastOrNull { it.text.isNotBlank() }?.text) }
+    }
+    override suspend fun conversation(id: String) = conversations.value[id]
+    override suspend fun messages(conversationId: String) = messages[conversationId].orEmpty().toList()
+    override suspend fun create(title: String, destinationId: String?, tripId: String?, preferences: com.tripwise.core.model.TripPreferences): String {
+        val id = "conv-${conversations.value.size + 1}"
+        conversations.value += id to com.tripwise.core.model.ChatConversation(id, title, destinationId, tripId, preferences, tick(), null)
+        return id
+    }
+    override suspend fun save(conversationId: String, message: com.tripwise.core.model.ChatMessage) {
+        val list = messages.getOrPut(conversationId) { mutableListOf() }
+        val i = list.indexOfFirst { it.id == message.id }
+        if (i >= 0) list[i] = message else list += message
+        conversations.value[conversationId]?.let { conversations.value += conversationId to it.copy(updatedAt = tick()) }
+    }
+    override suspend fun updatePreferences(conversationId: String, preferences: com.tripwise.core.model.TripPreferences) {
+        conversations.value[conversationId]?.let { conversations.value += conversationId to it.copy(preferences = preferences) }
+    }
+    override suspend fun delete(conversationId: String) { conversations.value -= conversationId; messages.remove(conversationId) }
+    override suspend fun deleteAll() { conversations.value = emptyMap(); messages.clear() }
 }
 
 class FakeItineraryPlanRepository(var result: com.tripwise.core.common.result.Outcome<com.tripwise.core.model.ItineraryPlan>? = null) :

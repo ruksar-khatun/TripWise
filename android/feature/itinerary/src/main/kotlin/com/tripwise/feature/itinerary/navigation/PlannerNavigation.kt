@@ -12,6 +12,10 @@ import kotlinx.serialization.Serializable
 fun NavController.navigateToPlanner(destinationId: String? = null, tripId: String? = null) =
     navigate(PlannerRoute(destinationId, tripId)) { launchSingleTop = true }
 
-fun NavGraphBuilder.plannerScreen(onBack: () -> Unit, onSaved: (tripId: String) -> Unit) {
-    composable<PlannerRoute> { PlannerScreen(onBack, onSaved) }
+fun NavGraphBuilder.plannerScreen(
+    onBack: () -> Unit,
+    onSaved: (tripId: String) -> Unit,
+    onAskTripMate: (destinationId: String?, tripId: String?, prompt: String) -> Unit,
+) {
+    composable<PlannerRoute> { PlannerScreen(onBack, onSaved, onAskTripMate) }
 }

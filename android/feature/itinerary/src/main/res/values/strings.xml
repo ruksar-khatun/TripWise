@@ -31,4 +31,5 @@
     <string name="feature_itinerary_increase">Increase %1$s</string>
     <string name="feature_itinerary_change">Change</string>
     <string name="feature_itinerary_ok">OK</string>
+    <string name="feature_itinerary_refine_tripmate">Refine with TripMate AI</string>
 </resources>

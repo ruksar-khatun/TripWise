@@ -61,9 +61,10 @@ describe('POST /api/v1/ai/chat', () => {
     expect(res.headers['content-type']).toContain('text/event-stream');
     expect(res.text).toBe('data: {"delta":"Hello"}\n\ndata: {"delta":" traveller!"}\n\ndata: {"done":true}\n\n');
     // Destination context comes from the curated catalog.
-    expect(ai.lastSystem).toContain('Varanasi, India');
+    expect(ai.lastSystem).toContain('Varanasi, Uttar Pradesh, India');
     expect(ai.lastSystem).toContain('Sarnath');
     expect(ai.lastSystem).toContain('travel within India');
+    expect(ai.lastSystem).toContain('TripMate AI');
     expect(ai.lastTurns).toEqual([{ role: 'user', text: 'What should I eat in Varanasi?' }]);
   });
 
@@ -73,6 +74,22 @@ describe('POST /api/v1/ai/chat', () => {
     expect((await chat({ messages: [{ role: 'assistant', text: 'x' }] })).status).toBe(400);
     expect((await chat({ messages: [] })).status).toBe(400);
     expect((await chat(userSays('x'.repeat(4_001)))).status).toBe(400);
+  });
+
+  it('adds trip budget, planned items and traveller preferences to the prompt', async () => {
+    await chat({
+      ...userSays('Where should we eat?'),
+      context: {
+        trip: { title: 'Goa break', destinationName: 'Goa', startDate: '2026-12-01', endDate: '2026-12-04', travellers: 2, budgetInr: 40000, itinerary: ['2026-12-01 10:00 Baga Beach'] },
+        preferences: { budgetLevel: 'BUDGET', days: 4, travellers: 2, interests: ['FOOD', 'BEACHES'] },
+      },
+    });
+    expect(ai.lastSystem).toContain('Total trip budget: about ₹40000');
+    expect(ai.lastSystem).toContain('- 2026-12-01 10:00 Baga Beach');
+    expect(ai.lastSystem).toContain('budget style budget');
+    expect(ai.lastSystem).toContain('interests: food, beaches');
+    const bad = await chat({ ...userSays('x'), context: { preferences: { interests: ['SPACE'] } } });
+    expect(bad.status).toBe(400);
   });
 
   it('requires sign-in and reports missing configuration', async () => {
@@ -148,6 +165,35 @@ describe('POST /api/v1/ai/itineraries', () => {
     expect(res.body.days[0].items).toHaveLength(5);
     expect((await generate({ destinationId: 'goa', days: 0 })).status).toBe(400);
     expect((await generate({ destinationId: 'atlantis', days: 2 })).status).toBe(404);
+  });
+});
+
+describe('POST /api/v1/ai/recommendations', () => {
+  beforeEach(() => setup());
+  const recommend = (body: object) => request(app).post('/api/v1/ai/recommendations').set(auth).send(body);
+  const place = (name: string) => ({ name, area: 'Old City', type: 'Heritage hotel', priceRangeInr: '₹3,000-5,000 per night', description: 'Central' });
+
+  it('returns validated, de-duplicated places', async () => {
+    ai.json = [{ places: [place('Hotel A'), place('hotel a'), place('B'), place('C'), place('D'), place('E'), place('F')] }];
+    const res = await recommend({ destinationId: 'jaipur', kind: 'STAY', budgetLevel: 'LUXURY' });
+    expect(res.status).toBe(200);
+    expect(res.body.kind).toBe('STAY');
+    expect(res.body.places.map((p: { name: string }) => p.name)).toEqual(['Hotel A', 'B', 'C', 'D', 'E']);
+  });
+
+  it('retries invalid output once, then reports AI_UNAVAILABLE', async () => {
+    ai.json = [{ places: [] }, new Error('boom')];
+    const res = await recommend({ destinationId: 'jaipur', kind: 'FOOD' });
+    expect(ai.jsonCalls).toBe(2);
+    expect(res.status).toBe(502);
+    expect(res.body.error.code).toBe('AI_UNAVAILABLE');
+  });
+
+  it('validates input and configuration', async () => {
+    expect((await recommend({ destinationId: 'jaipur', kind: 'SPA' })).status).toBe(400);
+    expect((await recommend({ destinationId: 'atlantis', kind: 'FOOD' })).status).toBe(404);
+    ai.configured = false;
+    expect((await recommend({ destinationId: 'jaipur', kind: 'FOOD' })).body.error.code).toBe('NOT_CONFIGURED');
   });
 });
 

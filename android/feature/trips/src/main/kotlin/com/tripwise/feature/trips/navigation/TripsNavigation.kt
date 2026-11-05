@@ -35,11 +35,12 @@ fun NavGraphBuilder.tripsSection(
     onNewTrip: () -> Unit,
     onBack: () -> Unit,
     onPlanWithAi: (tripId: String) -> Unit,
+    onAskTripMate: (tripId: String) -> Unit,
     /** Called with the new trip id; should replace the create screen with the trip detail. */
     onTripCreated: (tripId: String) -> Unit,
 ) {
     composable<TripsRoute> { TripsScreen(onTripClick, onNewTrip) }
-    composable<TripDetailRoute> { TripDetailScreen(onBack, onPlanWithAi) }
+    composable<TripDetailRoute> { TripDetailScreen(onBack, onPlanWithAi, onAskTripMate) }
     composable<CreateTripRoute> {
         CreateTripScreen(onClose = onBack, onSaved = onTripCreated)
     }

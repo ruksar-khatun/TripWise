@@ -76,14 +76,24 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 @Composable
-internal fun PlannerScreen(onBack: () -> Unit, onSaved: (tripId: String) -> Unit, viewModel: PlannerViewModel = hiltViewModel()) {
+internal fun PlannerScreen(
+    onBack: () -> Unit,
+    onSaved: (tripId: String) -> Unit,
+    onAskTripMate: (destinationId: String?, tripId: String?, prompt: String) -> Unit = { _, _, _ -> },
+    viewModel: PlannerViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(state.savedTripId) { state.savedTripId?.let(onSaved) }
-    PlannerScreen(state, viewModel::onAction, onBack)
+    PlannerScreen(state, viewModel::onAction, onBack, onAskTripMate)
 }
 
 @Composable
-internal fun PlannerScreen(state: PlannerUiState, onAction: (PlannerAction) -> Unit, onBack: () -> Unit) {
+internal fun PlannerScreen(
+    state: PlannerUiState,
+    onAction: (PlannerAction) -> Unit,
+    onBack: () -> Unit,
+    onAskTripMate: (destinationId: String?, tripId: String?, prompt: String) -> Unit = { _, _, _ -> },
+) {
     Scaffold(
         topBar = {
             TwTopAppBar(
@@ -101,7 +111,7 @@ internal fun PlannerScreen(state: PlannerUiState, onAction: (PlannerAction) -> U
                     is LoadState.Failed -> Column {
                         ErrorState(plan.error, onRetry = { onAction(PlannerAction.Generate) })
                     }
-                    is LoadState.Ready -> PlanView(plan.data, state, onAction)
+                    is LoadState.Ready -> PlanView(plan.data, state, onAction, onAskTripMate)
                 }
             }
         }
@@ -239,7 +249,7 @@ private fun Generating() {
 }
 
 @Composable
-private fun PlanView(plan: ItineraryPlan, state: PlannerUiState, onAction: (PlannerAction) -> Unit) {
+private fun PlanView(plan: ItineraryPlan, state: PlannerUiState, onAction: (PlannerAction) -> Unit, onAskTripMate: (String?, String?, String) -> Unit) {
     LazyColumn(contentPadding = PaddingValues(TripWiseTheme.spacing.lg), verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
         item {
             Surface(
@@ -278,6 +288,11 @@ private fun PlanView(plan: ItineraryPlan, state: PlannerUiState, onAction: (Plan
                     stringResource(if (state.trip != null) R.string.feature_itinerary_save_to_trip else R.string.feature_itinerary_save_new_trip),
                     { onAction(PlannerAction.Save) }, Modifier.fillMaxWidth(), loading = state.saving, leadingIcon = TwIcons.Check,
                 )
+                TwOutlinedButton(
+                    stringResource(R.string.feature_itinerary_refine_tripmate),
+                    { onAskTripMate(plan.destinationId, state.trip?.id, refinePrompt(plan, state)) },
+                    Modifier.fillMaxWidth(), leadingIcon = TwIcons.Assistant,
+                )
                 Row(horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
                     TwOutlinedButton(stringResource(R.string.feature_itinerary_regenerate), { onAction(PlannerAction.Generate) }, Modifier.weight(1f), leadingIcon = TwIcons.Refresh)
                     TwOutlinedButton(stringResource(R.string.feature_itinerary_edit_preferences), { onAction(PlannerAction.EditPreferences) }, Modifier.weight(1f))
@@ -306,3 +321,11 @@ private fun PlanItemRow(item: PlanItem) {
 private fun PlannerPreview() = TripWiseTheme {
     PlannerScreen(PlannerUiState(startDate = LocalDate.of(2026, 4, 1)), {}, {})
 }
+
+/** A compact text version of the draft so TripMate AI can refine it in chat. */
+internal fun refinePrompt(plan: ItineraryPlan, state: PlannerUiState): String = buildString {
+    append("I generated this ${plan.days.size}-day plan for ${state.destination?.name ?: plan.destinationId} ")
+    append("(${state.pace.name.lowercase()} pace, ${state.budgetLevel.name.lowercase()} budget, ${state.travellers} traveller(s)). ")
+    append("Please review it and suggest improvements, better timings and food stops.\n")
+    plan.days.forEach { d -> append("Day ${d.day} (${d.theme}): ${d.items.joinToString("; ") { "${it.startTime} ${it.title}" }}\n") }
+}.take(1_900)

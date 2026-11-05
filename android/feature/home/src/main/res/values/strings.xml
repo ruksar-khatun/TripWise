@@ -4,7 +4,7 @@
     <string name="feature_home_greeting_evening">Good evening</string>
     <string name="feature_home_headline">Where to next?</string>
     <string name="feature_home_search">Search destinations</string>
-    <string name="feature_home_open_assistant">Open TripWise assistant</string>
+    <string name="feature_home_open_assistant">Open TripMate AI</string>
     <string name="feature_home_open_profile">Open profile</string>
     <string name="feature_home_upcoming">Upcoming trip</string>
     <string name="feature_home_no_trip_title">Plan your next adventure</string>
@@ -14,7 +14,7 @@
     <string name="feature_home_popular">Popular destinations</string>
     <string name="feature_home_see_all">See all</string>
     <string name="feature_home_interests">Browse by interest</string>
-    <string name="feature_home_assistant_title">Ask TripWise</string>
+    <string name="feature_home_assistant_title">Ask TripMate AI</string>
     <string name="feature_home_assistant_body">"Plan 4 relaxed days in Goa under ₹40,000"</string>
     <string name="feature_home_recently_saved">Recently saved</string>
 </resources>

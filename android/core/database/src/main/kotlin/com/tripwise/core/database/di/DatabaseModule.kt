@@ -16,11 +16,14 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): TripWiseDatabase =
-        Room.databaseBuilder(context, TripWiseDatabase::class.java, "tripwise.db").build()
+        Room.databaseBuilder(context, TripWiseDatabase::class.java, "tripwise.db")
+            .addMigrations(*com.tripwise.core.database.ALL_MIGRATIONS)
+            .build()
 
     @Provides fun provideTripDao(db: TripWiseDatabase) = db.tripDao()
     @Provides fun provideItineraryDao(db: TripWiseDatabase) = db.itineraryDao()
     @Provides fun provideBudgetDao(db: TripWiseDatabase) = db.budgetDao()
     @Provides fun provideSavedDestinationDao(db: TripWiseDatabase) = db.savedDestinationDao()
     @Provides fun provideExpenseDao(db: TripWiseDatabase) = db.expenseDao()
+    @Provides fun provideChatDao(db: TripWiseDatabase) = db.chatDao()
 }

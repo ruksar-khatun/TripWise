@@ -12,7 +12,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import com.tripwise.app.BuildConfig
 import com.tripwise.app.ui.TripWiseAppState
-import com.tripwise.feature.assistant.navigation.assistantScreen
+import com.tripwise.feature.assistant.navigation.AssistantNavigation
+import com.tripwise.feature.assistant.navigation.assistantScreens
+import com.tripwise.feature.assistant.navigation.navigateToChatHistory
 import com.tripwise.feature.assistant.navigation.navigateToAssistant
 import com.tripwise.feature.destination.DestinationDetailNavigation
 import com.tripwise.feature.destination.DestinationDetailScreen
@@ -51,6 +53,7 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
         onPlanTrip = { nav.navigateToCreateTrip(it) },
         onPlanWithAi = { nav.navigateToPlanner(destinationId = it) },
         onOpenActivities = { nav.navigateToActivities(it) },
+        onAskTripMate = { id, prompt, starter -> nav.navigateToAssistant(destinationId = id, prompt = prompt, starter = starter) },
     )
     // Tablet two-pane: detail rendered next to the list, "back" closes the pane.
     val detailPane: DetailPane = { id, onClose ->
@@ -101,15 +104,27 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
             onNewTrip = { nav.navigateToCreateTrip() },
             onBack = back,
             onPlanWithAi = { nav.navigateToPlanner(tripId = it) },
+            onAskTripMate = { nav.navigateToAssistant(tripId = it) },
             onTripCreated = { nav.navigateToTripDetail(it, replaceCreate = true) },
         )
         profileSection(appVersion = BuildConfig.VERSION_NAME)
         destinationScreen(destinationNavigation)
-        assistantScreen(onBack = back)
-        plannerScreen(onBack = back, onSaved = { tripId ->
-            nav.popBackStack()
-            nav.navigateToTripDetail(tripId)
-        })
+        assistantScreens(
+            AssistantNavigation(
+                onBack = back,
+                onOpenHistory = { nav.navigateToChatHistory() },
+                onOpenPlanner = { destinationId, tripId -> nav.navigateToPlanner(destinationId = destinationId, tripId = tripId) },
+            ),
+            nav,
+        )
+        plannerScreen(
+            onBack = back,
+            onSaved = { tripId ->
+                nav.popBackStack()
+                nav.navigateToTripDetail(tripId)
+            },
+            onAskTripMate = { destinationId, tripId, prompt -> nav.navigateToAssistant(tripId, destinationId, prompt) },
+        )
     }
 }
 

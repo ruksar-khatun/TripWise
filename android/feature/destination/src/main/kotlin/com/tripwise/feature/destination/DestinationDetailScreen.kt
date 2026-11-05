@@ -74,6 +74,8 @@ data class DestinationDetailNavigation(
     val onPlanTrip: (destinationId: String) -> Unit,
     val onPlanWithAi: (destinationId: String) -> Unit,
     val onOpenActivities: (destinationId: String) -> Unit = {},
+    /** TripMate AI about this destination; [starter] opens straight into stay/restaurant cards. */
+    val onAskTripMate: (destinationId: String, prompt: String?, starter: com.tripwise.core.model.PlaceKind?) -> Unit = { _, _, _ -> },
 )
 
 /**
@@ -193,6 +195,34 @@ private fun ReadyLayout(
                             d.attractions.take(3).forEach { a ->
                                 AttractionCard(a, onShowOnMap = { openSearch(context, placeLabel(a.name, d.name, d.region)) })
                             }
+                        }
+                    }
+                }
+            }
+            item(key = "tripmate") {
+                Section(stringResource(R.string.feature_destination_tripmate_title)) {
+                    Text(
+                        stringResource(R.string.feature_destination_tripmate_body, d.name),
+                        style = TripWiseTheme.typography.bodyMedium,
+                        color = TripWiseTheme.colors.onSurfaceVariant,
+                    )
+                    val planPrompt = stringResource(R.string.feature_destination_tripmate_plan_prompt, d.name)
+                    FlowRow(
+                        Modifier.padding(top = TripWiseTheme.spacing.sm),
+                        horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm),
+                        verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm),
+                    ) {
+                        TripMateChip(stringResource(R.string.feature_destination_tripmate_stay), TwIcons.Lodging) {
+                            navigation.onAskTripMate(d.id, null, com.tripwise.core.model.PlaceKind.STAY)
+                        }
+                        TripMateChip(stringResource(R.string.feature_destination_tripmate_food), TwIcons.Food) {
+                            navigation.onAskTripMate(d.id, null, com.tripwise.core.model.PlaceKind.FOOD)
+                        }
+                        TripMateChip(stringResource(R.string.feature_destination_tripmate_plan), TwIcons.Calendar) {
+                            navigation.onAskTripMate(d.id, planPrompt, null)
+                        }
+                        TripMateChip(stringResource(R.string.feature_destination_tripmate_ask), TwIcons.Assistant) {
+                            navigation.onAskTripMate(d.id, null, null)
                         }
                     }
                 }
@@ -365,4 +395,15 @@ private fun DestinationDetailPreview() = TripWiseTheme {
 @Composable
 private fun DestinationLoadingPreview() = TripWiseTheme {
     DestinationDetailScreen(DestinationDetailUiState.Loading, {}, DestinationDetailNavigation({}, {}, {}))
+}
+
+@Composable
+private fun TripMateChip(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
+    androidx.compose.material3.AssistChip(
+        onClick = onClick,
+        label = { Text(label) },
+        leadingIcon = {
+            Icon(icon, contentDescription = null, Modifier.size(androidx.compose.material3.AssistChipDefaults.IconSize), tint = TripWiseTheme.colors.secondary)
+        },
+    )
 }

@@ -34,15 +34,27 @@ class AppTourTest {
         t.swipeUp()
         t.shot("home-scrolled", settleMs = 2_500)
 
-        // AI assistant (Gemini via backend; shows "not set up" if the server has no key)
-        t.scrollTo("Ask TripWise")
-        t.click("Ask TripWise")
-        t.waitFor("How can I help you travel?")
-        t.shot("assistant-empty", settleMs = 1_000)
+        // TripMate AI (Gemini via backend; shows "not set up" if the server has no key)
+        t.scrollTo("Ask TripMate AI")
+        t.click("Ask TripMate AI")
+        t.waitFor("Hi, I'm TripMate AI")
+        t.shot("tripmate-intro", settleMs = 1_000)
+        if (t.click("Set budget, days and interests", required = false)) {
+            runCatching { t.waitFor("Trip preferences") }
+            t.click("Mid-range", required = false)
+            t.click("Food", required = false)
+            t.shot("tripmate-preferences", settleMs = 1_000)
+            t.click("Apply", required = false)
+        }
         t.click("Where in India should I go in December?", required = false)
         runCatching { t.waitFor("Thinking…", timeoutMs = 5_000) }
         Thread.sleep(12_000) // let the streamed reply arrive
-        t.shot("assistant-reply", settleMs = 1_000)
+        t.shot("tripmate-reply", settleMs = 1_000)
+        if (t.clickDescription("Chat history")) {
+            runCatching { t.waitFor("Where in India should I go in December?", timeoutMs = 5_000) }
+            t.shot("tripmate-history", settleMs = 1_000)
+            t.back()
+        }
         t.back()
 
         // Explore → destination detail
@@ -69,6 +81,15 @@ class AppTourTest {
         }
         t.scrollTo("Explore Jaipur on Google Maps")
         t.shot("destination-google-maps-card", settleMs = 1_000)
+        // TripMate AI from the destination: restaurant cards linked to Google Maps
+        t.scrollTo("Where to eat")
+        t.shot("destination-tripmate", settleMs = 1_000)
+        if (t.click("Where to eat", required = false)) {
+            runCatching { t.waitFor("Where should I eat in Jaipur?", timeoutMs = 10_000) }
+            runCatching { t.waitFor("Open in Google Maps", timeoutMs = 45_000) }
+            t.shot("tripmate-restaurants", settleMs = 1_500)
+            t.back()
+        }
         // AI itinerary planner → save as a new trip
         t.scrollTo("Plan with AI")
         if (t.click("Plan with AI", required = false)) {
@@ -83,6 +104,12 @@ class AppTourTest {
             if (t.click("Save as new trip", required = false)) {
                 runCatching { t.waitFor("Overview", timeoutMs = 10_000) }
                 t.shot("trip-from-plan-overview", settleMs = 2_500)
+                t.scrollTo("Ask TripMate AI about this trip")
+                if (t.click("Ask TripMate AI about this trip", required = false)) {
+                    runCatching { t.waitFor("Review my itinerary and suggest improvements") }
+                    t.shot("tripmate-trip", settleMs = 1_500)
+                    t.back()
+                }
                 t.click("Itinerary", required = false)
                 t.shot("trip-from-plan-itinerary", settleMs = 1_500)
                 t.click("Budget", required = false)
@@ -96,12 +123,6 @@ class AppTourTest {
             } else {
                 t.back()
             }
-        }
-        t.scrollTo("On the map")
-        t.shot("destination-map-preview", settleMs = 4_000)
-        if (t.clickDescription("Open map")) {
-            t.shot("destination-map", settleMs = 7_000)
-            t.back()
         }
         t.back()
 

@@ -26,8 +26,10 @@ import com.tripwise.core.database.entity.TripEntity
         BudgetAllocationEntity::class,
         ExpenseEntity::class,
         SavedDestinationEntity::class,
+        com.tripwise.core.database.entity.ChatConversationEntity::class,
+        com.tripwise.core.database.entity.ChatMessageEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 @TypeConverters(TimeConverters::class)
@@ -37,4 +39,5 @@ abstract class TripWiseDatabase : RoomDatabase() {
     abstract fun budgetDao(): BudgetDao
     abstract fun savedDestinationDao(): SavedDestinationDao
     abstract fun expenseDao(): com.tripwise.core.database.dao.ExpenseDao
+    abstract fun chatDao(): com.tripwise.core.database.dao.ChatDao
 }

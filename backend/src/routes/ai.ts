@@ -7,6 +7,8 @@ import { ErrorCode, HttpError } from '../http/errors.js';
 import { validate } from '../http/validate.js';
 import type { ItineraryService } from '../ai/itinerary.js';
 import { ItineraryRequest } from '../ai/itinerary.js';
+import { RecommendationRequest, type RecommendationService } from '../ai/recommendations.js';
+import { Interest } from '../catalog/types.js';
 
 const ChatBody = z.object({
   messages: z
@@ -24,6 +26,17 @@ const ChatBody = z.object({
           startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
           endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
           travellers: z.number().int().min(1).max(20),
+          budgetInr: z.number().int().min(0).max(100_000_000).optional(),
+          itinerary: z.array(z.string().trim().min(1).max(120)).max(40).optional(),
+        })
+        .optional(),
+      preferences: z
+        .object({
+          budgetLevel: z.enum(['BUDGET', 'MID', 'LUXURY']).optional(),
+          days: z.number().int().min(1).max(30).optional(),
+          travellers: z.number().int().min(1).max(20).optional(),
+          interests: z.array(Interest).max(7).optional(),
+          budgetInr: z.number().int().min(0).max(100_000_000).optional(),
         })
         .optional(),
     })
@@ -35,6 +48,7 @@ export interface AiDeps {
   quota: DailyQuota;
   catalog: CatalogService;
   itineraries: ItineraryService;
+  recommendations: RecommendationService;
 }
 
 const quotaExceeded = () => new HttpError(429, ErrorCode.AI_QUOTA_EXCEEDED, "You've reached today's AI limit");
@@ -57,7 +71,7 @@ export function aiRouter(deps: AiDeps, requireAuth: RequestHandler) {
     const destination = body.context?.destinationId
       ? await deps.catalog.get(body.context.destinationId).catch(() => undefined)
       : undefined;
-    const system = chatSystemPrompt({ destination, trip: body.context?.trip });
+    const system = chatSystemPrompt({ destination, trip: body.context?.trip, preferences: body.context?.preferences });
     const turns = body.messages.map((m) => ({ role: m.role === 'user' ? ('user' as const) : ('model' as const), text: m.text }));
 
     const abort = new AbortController();
@@ -90,6 +104,15 @@ export function aiRouter(deps: AiDeps, requireAuth: RequestHandler) {
     // Template fallback doesn't use AI, so only count quota when AI is used.
     if (deps.ai.configured && !deps.quota.take(res.locals.userId)) throw quotaExceeded();
     res.json(await deps.itineraries.generate(destination, body));
+  });
+
+  /** Structured stays / restaurants for a destination (cards the app links to Google Maps). */
+  router.post('/recommendations', validate({ body: RecommendationRequest }), async (_req, res) => {
+    const body = res.locals.valid.body as z.infer<typeof RecommendationRequest>;
+    const destination = await deps.catalog.get(body.destinationId);
+    if (!deps.ai.configured) throw HttpError.notConfigured('TripMate AI');
+    if (!deps.quota.take(res.locals.userId)) throw quotaExceeded();
+    res.json(await deps.recommendations.recommend(destination, body));
   });
 
   return router;

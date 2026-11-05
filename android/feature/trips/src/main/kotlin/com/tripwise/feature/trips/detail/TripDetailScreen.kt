@@ -78,11 +78,12 @@ import kotlinx.coroutines.launch
 internal fun TripDetailScreen(
     onBack: () -> Unit,
     onPlanWithAi: (tripId: String) -> Unit,
+    onAskTripMate: (tripId: String) -> Unit = {},
     viewModel: TripDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val editor by viewModel.editor.collectAsStateWithLifecycle()
-    TripDetailScreen(state, viewModel::onAction, onBack, onPlanWithAi)
+    TripDetailScreen(state, viewModel::onAction, onBack, onPlanWithAi, onAskTripMate)
     editor?.let { ItemEditorDialog(it, viewModel::onAction) }
 }
 
@@ -92,6 +93,7 @@ internal fun TripDetailScreen(
     onAction: (TripDetailAction) -> Unit,
     onBack: () -> Unit,
     onPlanWithAi: (tripId: String) -> Unit,
+    onAskTripMate: (tripId: String) -> Unit = {},
 ) {
     var deleteRequested by rememberSaveable { mutableStateOf(false) }
     var confirmDelete by rememberSaveable { mutableStateOf(false) }
@@ -127,7 +129,7 @@ internal fun TripDetailScreen(
                 BackButton(onBack)
                 ErrorState(state.error, onRetry = { onAction(TripDetailAction.Retry) })
             }
-            is TripDetailUiState.Ready -> Ready(state, onAction, onBack, onPlanWithAi, onDelete = { confirmDelete = true })
+            is TripDetailUiState.Ready -> Ready(state, onAction, onBack, onPlanWithAi, onAskTripMate, onDelete = { confirmDelete = true })
         }
     }
 }
@@ -144,6 +146,7 @@ private fun Ready(
     onAction: (TripDetailAction) -> Unit,
     onBack: () -> Unit,
     onPlanWithAi: (String) -> Unit,
+    onAskTripMate: (String) -> Unit,
     onDelete: () -> Unit,
 ) {
     val trip = state.trip
@@ -163,6 +166,8 @@ private fun Ready(
             Row(Modifier.fillMaxWidth().statusBarsPadding(), verticalAlignment = Alignment.CenterVertically) {
                 BackButton(onBack)
                 Box(Modifier.weight(1f))
+                TwOverlayIconButton(TwIcons.Assistant, stringResource(R.string.feature_trips_ask_tripmate), { onAskTripMate(trip.id) },
+                    Modifier.padding(TripWiseTheme.spacing.sm))
                 TwOverlayIconButton(TwIcons.Delete, stringResource(R.string.feature_trips_delete), onDelete,
                     Modifier.padding(TripWiseTheme.spacing.sm))
             }
@@ -192,7 +197,7 @@ private fun Ready(
         }
         HorizontalPager(pager, Modifier.weight(1f)) { page ->
             when (page) {
-                0 -> OverviewTab(state) { onPlanWithAi(trip.id) }
+                0 -> OverviewTab(state, onAskTripMate = { onAskTripMate(trip.id) }) { onPlanWithAi(trip.id) }
                 1 -> ItineraryTab(state, onAction) { onPlanWithAi(trip.id) }
                 else -> com.tripwise.feature.trips.budget.BudgetTab()
             }
@@ -201,7 +206,7 @@ private fun Ready(
 }
 
 @Composable
-private fun OverviewTab(state: TripDetailUiState.Ready, onPlanWithAi: () -> Unit) {
+private fun OverviewTab(state: TripDetailUiState.Ready, onAskTripMate: () -> Unit, onPlanWithAi: () -> Unit) {
     val trip = state.trip
     val locale = currentLocale
     LazyColumn(
@@ -241,10 +246,16 @@ private fun OverviewTab(state: TripDetailUiState.Ready, onPlanWithAi: () -> Unit
             }
         }
         item {
-            TwOutlinedButton(
-                stringResource(R.string.feature_trips_generate_ai), onPlanWithAi,
-                Modifier.fillMaxWidth(), leadingIcon = TwIcons.Assistant,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
+                TwButton(
+                    stringResource(R.string.feature_trips_ask_tripmate), onAskTripMate,
+                    Modifier.fillMaxWidth(), leadingIcon = TwIcons.Assistant,
+                )
+                TwOutlinedButton(
+                    stringResource(R.string.feature_trips_generate_ai), onPlanWithAi,
+                    Modifier.fillMaxWidth(), leadingIcon = TwIcons.Calendar,
+                )
+            }
         }
     }
 }
