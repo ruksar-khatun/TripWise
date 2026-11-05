@@ -1,0 +1,98 @@
+{
+ "agra": {
+  "name": "Agra",
+  "author": "Unsplash contributor",
+  "license": "Unsplash License",
+  "source": "https://unsplash.com"
+ },
+ "jaipur": {
+  "name": "Jaipur",
+  "author": "Unsplash contributor",
+  "license": "Unsplash License",
+  "source": "https://unsplash.com"
+ },
+ "kerala": {
+  "name": "Kerala Backwaters",
+  "author": "Unsplash contributor",
+  "license": "Unsplash License",
+  "source": "https://unsplash.com"
+ },
+ "goa": {
+  "name": "Goa",
+  "author": "iMahesh",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Palolem_Beach,_South_Goa.jpg"
+ },
+ "varanasi": {
+  "name": "Varanasi",
+  "author": "travelwayoflife",
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Scindia_Ghat_in_morning,_Varanasi,_Uttar_Pradesh,_India_(2012).jpg"
+ },
+ "udaipur": {
+  "name": "Udaipur",
+  "author": "Kshitiz Sikka",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Backside_view_of_City_palace_(Lake_Pichola,_Udaipur).jpg"
+ },
+ "ladakh": {
+  "name": "Leh-Ladakh",
+  "author": "Vimal Chaunkaria",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Pangong_Tso,_Ladakh_2016_June.jpg"
+ },
+ "rishikesh": {
+  "name": "Rishikesh",
+  "author": "Vinayaraj",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ram_Jhula_bridge,_Rishikesh_and_nearby_views_-_during_LGFC_-_VOF_2019_(15).jpg"
+ },
+ "mumbai": {
+  "name": "Mumbai",
+  "author": "SriSriChinmaya",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Gateway_of_India_in_the_evening,_Mumbai,_India.jpg"
+ },
+ "delhi": {
+  "name": "Delhi",
+  "author": "Nikhilb239",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:India_Gate,_New_Delhi_from_West.jpg"
+ },
+ "hampi": {
+  "name": "Hampi",
+  "author": "iMahesh",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Complex_of_Virupaksha_Temple,_Hampi_(01).jpg"
+ },
+ "darjeeling": {
+  "name": "Darjeeling",
+  "author": "DaLoetz",
+  "license": "CC BY 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Kanchenjunga_above_roofs_of_Darjeeling_1.jpg"
+ },
+ "munnar": {
+  "name": "Munnar",
+  "author": "Ingo Mehling",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Munnar_-_Tea_Plantations.jpg"
+ },
+ "andaman": {
+  "name": "Andaman Islands",
+  "author": "Vyacheslav Argenberg",
+  "license": "CC BY 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Havelock_Island,_Radhanagar_Beach,_tropical_bliss,_Andaman_Islands.jpg"
+ },
+ "jaisalmer": {
+  "name": "Jaisalmer",
+  "author": "Cl\u00e9ment Bardot",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jaisalmer_Fort,_India.jpg"
+ },
+ "amritsar": {
+  "name": "Amritsar",
+  "author": "Bernard Gagnon",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Golden_Temple,_Amritsar_02.jpg"
+ }
+}
