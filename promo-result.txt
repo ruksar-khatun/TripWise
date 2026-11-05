@@ -1,0 +1,8 @@
+
+com.tripwise.app.PromoTourTest:.
+
+Time: 160.63
+
+OK (1 test)
+
+

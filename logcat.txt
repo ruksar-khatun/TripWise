@@ -1,0 +1,33 @@
+--------- beginning of crash
+11-05 05:13:25.151   844   844 E AndroidRuntime: FATAL EXCEPTION: main
+11-05 05:13:25.151   844   844 E AndroidRuntime: Process: com.android.systemui, PID: 844
+11-05 05:13:25.151   844   844 E AndroidRuntime: java.lang.RuntimeException: Error receiving broadcast Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 (has extras) } in com.android.systemui.recents.OverviewProxyService$2@88c44a7
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1810)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$gDuJqgxY6Zb-ifyeubKeivTLAwk(Unknown Source:0)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(Unknown Source:2)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:958)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:205)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:294)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+11-05 05:13:25.151   844   844 E AndroidRuntime: Caused by: java.lang.NullPointerException: Attempt to read from field 'android.content.pm.ServiceInfo android.content.pm.ResolveInfo.serviceInfo' on a null object reference in method 'void com.android.systemui.recents.OverviewProxyService$2.onReceive(android.content.Context, android.content.Intent)'
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at com.android.systemui.recents.OverviewProxyService$2.onReceive(go/retraceme 19693c2b0a8439b7183751b64d60893829dbf56dc1e08e0669fc0cfc55754948:44)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1802)
+11-05 05:13:25.151   844   844 E AndroidRuntime: 	... 10 more
+--------- beginning of main
+11-05 05:13:39.742  2843  3470 I TestRunner: run started: 1 tests
+11-05 05:13:39.747  2843  3470 I TestRunner: started: promo(com.tripwise.app.PromoTourTest)
+11-05 05:13:47.683  2843  3470 I PromoTour: recording /sdcard/Download/promo/01-auth.mp4
+11-05 05:14:11.125  2843  3470 I PromoTour: recording /sdcard/Download/promo/02-home.mp4
+11-05 05:14:23.234  2843  3470 I PromoTour: recording /sdcard/Download/promo/03-tripmate.mp4
+11-05 05:14:41.378  2843  3470 I PromoTour: recording /sdcard/Download/promo/04-explore.mp4
+11-05 05:14:59.097  2843  3470 I PromoTour: recording /sdcard/Download/promo/05-destination.mp4
+11-05 05:15:10.404  2843  3470 I PromoTour: recording /sdcard/Download/promo/06-activities.mp4
+11-05 05:15:28.874  2843  3470 I PromoTour: recording /sdcard/Download/promo/07-planner.mp4
+11-05 05:15:47.086  2843  3470 I PromoTour: recording /sdcard/Download/promo/08-trip.mp4
+11-05 05:16:08.480  2843  3470 I PromoTour: recording /sdcard/Download/promo/09-tabs.mp4
+11-05 05:16:20.331  2843  3470 I TestRunner: finished: promo(com.tripwise.app.PromoTourTest)
+11-05 05:16:20.373  2843  3470 I TestRunner: run finished: 1 tests, 0 failed, 0 ignored
