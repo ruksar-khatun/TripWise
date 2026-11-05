@@ -24,8 +24,8 @@ for id in $(jq -r '.queries | keys[]' scripts/image-queries.json); do
   thumbs=()
   while IFS=$'\t' read -r n turl; do
     f="out/cand/${id}-${n}.jpg"
-    if curl -sSfL -A "$UA" -o "$f" "${turl/1280px-/480px-}"; then
-      convert "$f" -resize 480x320^ -gravity center -extent 480x320 -fill white -undercolor '#000000AA' \
+    if curl -sSfL -A "$UA" -o "$f" "${turl/1280px-/500px-}"; then
+      convert "$f" -resize 500x330^ -gravity center -extent 500x330 -fill white -undercolor '#000000AA' \
         -pointsize 28 -gravity south -annotate +0+8 " ${id} #${n} " "$f" && thumbs+=("$f")
     fi
   done < <(jq -r '.[] | [.n, .url] | @tsv' "out/cand/$id.json")
