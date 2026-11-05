@@ -20,6 +20,7 @@ class StandaloneTourTest {
         t.scrollTo("Continue as guest")
         t.shot("standalone-sign-in")
         t.click("Continue as guest")
+        android.util.Log.i("Session", "test: activity is ${rule.activity.lifecycle.currentState}")
         t.shot("standalone-after-guest", settleMs = 3_000)
 
         t.waitFor("Where to next?", timeoutMs = 30_000)
