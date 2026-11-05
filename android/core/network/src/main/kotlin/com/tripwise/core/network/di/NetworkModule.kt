@@ -75,10 +75,6 @@ object NetworkModule {
     fun provideDestinationApi(@Public retrofit: Retrofit): DestinationApi = retrofit.create(DestinationApi::class.java)
 
     @Provides @Singleton
-    fun providePlacesApi(@Authenticated retrofit: Retrofit): com.tripwise.core.network.api.PlacesApi =
-        retrofit.create(com.tripwise.core.network.api.PlacesApi::class.java)
-
-    @Provides @Singleton
     fun provideItineraryApi(@Authenticated retrofit: Retrofit): com.tripwise.core.network.api.ItineraryApi =
         retrofit.create(com.tripwise.core.network.api.ItineraryApi::class.java)
 

@@ -43,15 +43,3 @@ data class Attraction(
     val estimatedCost: Money,
     val description: String,
 )
-
-/** A live point of interest from Google Places near a location. */
-data class NearbyPlace(
-    val id: String,
-    val name: String,
-    val location: GeoPoint,
-    val rating: Double?,
-    val ratingCount: Int?,
-    val category: String?,
-    val address: String?,
-    val mapsUri: String?,
-)

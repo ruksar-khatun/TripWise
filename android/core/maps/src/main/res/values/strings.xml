@@ -1,6 +1,13 @@
 <resources>
-    <string name="core_maps_unavailable_title">Map unavailable</string>
-    <string name="core_maps_unavailable_body">Add a Google Maps API key (MAPS_API_KEY) to show maps.</string>
-    <string name="core_maps_open_map">Open map</string>
+    <string name="core_maps_card_title">Explore %1$s on Google Maps</string>
+    <string name="core_maps_card_body">Opens the Google Maps app (or google.com/maps) for live places, reviews and directions.</string>
+    <string name="core_maps_open_in_maps">Open in Google Maps</string>
     <string name="core_maps_directions">Directions</string>
+    <string name="core_maps_find_nearby">Find nearby</string>
+    <string name="core_maps_attractions">Attractions</string>
+    <string name="core_maps_restaurants">Restaurants</string>
+    <string name="core_maps_hotels">Hotels</string>
+    <string name="core_maps_cafes">Cafés</string>
+    <string name="core_maps_shopping">Markets</string>
+    <string name="core_maps_transport">Stations</string>
 </resources>

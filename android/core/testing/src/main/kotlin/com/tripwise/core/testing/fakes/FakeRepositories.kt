@@ -111,12 +111,6 @@ class FakeUserRepository(profile: UserProfile? = null) : UserRepository {
     override fun observeProfile(): Flow<UserProfile> = profile.filterNotNull()
 }
 
-class FakePlacesRepository(var result: com.tripwise.core.common.result.Outcome<List<com.tripwise.core.model.NearbyPlace>> =
-    com.tripwise.core.common.result.Outcome.Success(emptyList())) : com.tripwise.core.domain.repository.PlacesRepository {
-    var calls = 0
-    override suspend fun nearby(center: com.tripwise.core.model.GeoPoint, radiusMeters: Int) = result.also { calls++ }
-}
-
 class FakeAssistantRepository : com.tripwise.core.domain.repository.AssistantRepository {
     var events: List<com.tripwise.core.domain.repository.AssistantEvent> =
         listOf(com.tripwise.core.domain.repository.AssistantEvent.Delta("Hi"), com.tripwise.core.domain.repository.AssistantEvent.Done)

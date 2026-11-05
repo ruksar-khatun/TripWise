@@ -3,159 +3,144 @@ package com.tripwise.core.maps
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.annotation.StringRes
+import com.tripwise.core.designsystem.component.TwButton
+import com.tripwise.core.designsystem.component.TwOutlinedButton
 import com.tripwise.core.designsystem.icon.TwIcons
 import com.tripwise.core.designsystem.theme.TripWiseTheme
-import com.tripwise.core.model.GeoPoint
 
-enum class PinKind { DESTINATION, ATTRACTION, NEARBY }
+/**
+ * Google Maps without an API key: every map feature hands off to the Google Maps app
+ * (or google.com/maps in the browser) through public Maps URLs.
+ * https://developers.google.com/maps/documentation/urls/get-started
+ */
+object GoogleMapsLinks {
+    private const val BASE = "https://www.google.com/maps"
 
-data class MapPin(val id: String, val title: String, val position: GeoPoint, val kind: PinKind, val snippet: String? = null)
+    /** Search results / a single place for a free-text [query], e.g. "Amber Fort, Jaipur, Rajasthan". */
+    fun searchUrl(query: String): String = "$BASE/search/?api=1&query=${Uri.encode(query)}"
 
-private fun GeoPoint.toLatLng() = LatLng(latitude, longitude)
+    /** Turn-by-turn directions from the user's location to [destination] (a place name). */
+    fun directionsUrl(destination: String): String = "$BASE/dir/?api=1&destination=${Uri.encode(destination)}"
 
-private val PinKind.hue: Float
-    get() = when (this) {
-        PinKind.DESTINATION -> BitmapDescriptorFactory.HUE_AZURE
-        PinKind.ATTRACTION -> BitmapDescriptorFactory.HUE_CYAN
-        PinKind.NEARBY -> BitmapDescriptorFactory.HUE_ORANGE
-    }
+    /** "Restaurants near Jaipur, Rajasthan, India". */
+    fun nearbyQuery(what: String, place: String): String = "$what near $place"
+}
 
-/** True when the app was built with a Maps API key (manifest meta-data is non-empty). */
-fun isMapsConfigured(context: Context): Boolean = runCatching {
-    context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-        .metaData?.getString("com.google.android.geo.API_KEY").orEmpty().isNotBlank()
-}.getOrDefault(false)
+/** Human-readable place string used in Maps queries: "Jaipur, Rajasthan, India". */
+fun placeLabel(name: String, region: String? = null, country: String? = null): String =
+    listOfNotNull(name, region?.takeIf { it.isNotBlank() && it != name }, country?.takeIf { it.isNotBlank() }).joinToString(", ")
 
-/** Opens Google Maps (or any maps app / the browser) with directions to [target]. */
-fun openDirections(context: Context, target: GeoPoint, label: String) {
-    val nav = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=${target.latitude},${target.longitude}")
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, nav))
+/** Opens [url] in Google Maps (app if installed, otherwise the browser). Returns false if nothing can open it. */
+fun openInGoogleMaps(context: Context, url: String): Boolean {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return try {
+        context.startActivity(intent.setPackage(GOOGLE_MAPS_PACKAGE))
+        true
     } catch (_: ActivityNotFoundException) {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("geo:${target.latitude},${target.longitude}?q=${Uri.encode(label)}")))
+        try {
+            context.startActivity(intent.setPackage(null))
+            true
+        } catch (_: ActivityNotFoundException) {
+            false
+        }
     }
 }
 
-@Composable
-private fun MapUnavailable(modifier: Modifier) {
-    Surface(modifier, color = TripWiseTheme.colors.surfaceContainerHigh, shape = TripWiseTheme.shapes.card) {
-        Row(Modifier.padding(TripWiseTheme.spacing.lg), verticalAlignment = Alignment.CenterVertically) {
-            Icon(TwIcons.Map, contentDescription = null, tint = TripWiseTheme.colors.secondary)
-            Column(Modifier.padding(start = TripWiseTheme.spacing.md)) {
-                Text(stringResource(R.string.core_maps_unavailable_title), style = TripWiseTheme.typography.titleSmall)
-                Text(
-                    stringResource(R.string.core_maps_unavailable_body),
-                    style = TripWiseTheme.typography.bodySmall,
-                    color = TripWiseTheme.colors.onSurfaceVariant,
-                )
-            }
-        }
-    }
+private const val GOOGLE_MAPS_PACKAGE = "com.google.android.apps.maps"
+
+fun openSearch(context: Context, query: String) = openInGoogleMaps(context, GoogleMapsLinks.searchUrl(query))
+fun openDirections(context: Context, destination: String) = openInGoogleMaps(context, GoogleMapsLinks.directionsUrl(destination))
+
+/** Things to look up around a destination; each opens a Google Maps search. */
+enum class MapsShortcut(@StringRes val label: Int, val query: String, val icon: ImageVector) {
+    ATTRACTIONS(R.string.core_maps_attractions, "Tourist attractions", TwIcons.Activity),
+    RESTAURANTS(R.string.core_maps_restaurants, "Restaurants", TwIcons.Food),
+    HOTELS(R.string.core_maps_hotels, "Hotels", TwIcons.Lodging),
+    CAFES(R.string.core_maps_cafes, "Cafes", TwIcons.Food),
+    SHOPPING(R.string.core_maps_shopping, "Markets and shopping", TwIcons.Shopping),
+    TRANSPORT(R.string.core_maps_transport, "Railway station and bus stand", TwIcons.Transport),
 }
 
 /**
- * Small, non-interactive map (lite mode: a static, cheap bitmap) that opens the full map on tap.
+ * Card that replaces an embedded map: open the destination in Google Maps, get directions,
+ * or search what is around it. [place] is a [placeLabel].
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TwMapPreview(center: GeoPoint, pins: List<MapPin>, onOpen: () -> Unit, modifier: Modifier = Modifier) {
+fun GoogleMapsCard(name: String, place: String, modifier: Modifier = Modifier, shortcuts: List<MapsShortcut> = MapsShortcut.entries) {
     val context = LocalContext.current
-    if (LocalInspectionMode.current || !isMapsConfigured(context)) return MapUnavailable(modifier)
-    val openLabel = stringResource(R.string.core_maps_open_map)
-    Box(modifier) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(center.toLatLng(), 11f) },
-            googleMapOptionsFactory = { GoogleMapOptions().liteMode(true).mapToolbarEnabled(false) },
-            uiSettings = MapUiSettings(zoomControlsEnabled = false, mapToolbarEnabled = false),
-            onMapClick = { onOpen() },
-        ) {
-            pins.forEach { pin -> key(pin.id) { Marker(state = remember { MarkerState(pin.position.toLatLng()) }, title = pin.title) } }
+    Surface(modifier.fillMaxWidth(), color = TripWiseTheme.colors.surfaceContainerLow, shape = TripWiseTheme.shapes.card) {
+        Column(Modifier.padding(TripWiseTheme.spacing.lg), verticalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.md)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(TwIcons.Map, contentDescription = null, tint = TripWiseTheme.colors.secondary)
+                Column(Modifier.padding(start = TripWiseTheme.spacing.md)) {
+                    Text(stringResource(R.string.core_maps_card_title, name), style = TripWiseTheme.typography.titleSmall)
+                    Text(
+                        stringResource(R.string.core_maps_card_body),
+                        style = TripWiseTheme.typography.bodySmall,
+                        color = TripWiseTheme.colors.onSurfaceVariant,
+                    )
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
+                TwButton(
+                    stringResource(R.string.core_maps_open_in_maps),
+                    onClick = { openSearch(context, place) },
+                    leadingIcon = TwIcons.Map,
+                    modifier = Modifier.weight(1f),
+                )
+                TwOutlinedButton(
+                    stringResource(R.string.core_maps_directions),
+                    onClick = { openDirections(context, place) },
+                    leadingIcon = TwIcons.Place,
+                )
+            }
+            if (shortcuts.isNotEmpty()) {
+                Text(stringResource(R.string.core_maps_find_nearby), style = TripWiseTheme.typography.labelLarge)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(TripWiseTheme.spacing.sm)) {
+                    shortcuts.forEach { s -> MapsShortcutChip(s, place) }
+                }
+            }
         }
-        // Transparent overlay: one large, accessible tap target for the whole preview.
-        Box(
-            Modifier.fillMaxSize().clickable(onClick = onOpen).semantics {
-                role = Role.Button
-                contentDescription = openLabel
-            },
-        )
     }
 }
 
-/** Interactive map that frames all [pins]; [focus] animates the camera to a pin. */
 @Composable
-fun TwFullMap(
-    pins: List<MapPin>,
-    fallbackCenter: GeoPoint,
-    modifier: Modifier = Modifier,
-    focus: MapPin? = null,
-    onPinClick: (MapPin) -> Unit = {},
-    cameraState: CameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(fallbackCenter.toLatLng(), 11f)
-    },
-) {
+fun MapsShortcutChip(shortcut: MapsShortcut, place: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    if (LocalInspectionMode.current || !isMapsConfigured(context)) return MapUnavailable(modifier.padding(TripWiseTheme.spacing.lg))
-    GoogleMap(
+    AssistChip(
+        onClick = { openSearch(context, GoogleMapsLinks.nearbyQuery(shortcut.query, place)) },
+        label = { Text(stringResource(shortcut.label)) },
+        leadingIcon = { Icon(shortcut.icon, contentDescription = null, modifier = Modifier.size(AssistChipDefaults.IconSize)) },
+        colors = AssistChipDefaults.assistChipColors(leadingIconContentColor = TripWiseTheme.colors.secondary),
         modifier = modifier,
-        cameraPositionState = cameraState,
-        uiSettings = MapUiSettings(zoomControlsEnabled = false, mapToolbarEnabled = false),
-        onMapLoaded = {
-            if (pins.size > 1) {
-                val bounds = LatLngBounds.builder().apply { pins.forEach { include(it.position.toLatLng()) } }.build()
-                cameraState.move(CameraUpdateFactory.newLatLngBounds(bounds, 120))
-            }
-        },
-    ) {
-        pins.forEach { pin ->
-            key(pin.id) {
-                Marker(
-                    state = remember { MarkerState(pin.position.toLatLng()) },
-                    title = pin.title,
-                    snippet = pin.snippet,
-                    icon = BitmapDescriptorFactory.defaultMarker(pin.kind.hue),
-                    onClick = { onPinClick(pin); false },
-                )
-            }
-        }
-    }
-    LaunchedEffect(focus) {
-        focus?.let { cameraState.animate(CameraUpdateFactory.newLatLngZoom(it.position.toLatLng(), 14f), 600) }
-    }
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun GoogleMapsCardPreview() = TripWiseTheme {
+    GoogleMapsCard("Jaipur", placeLabel("Jaipur", "Rajasthan", "India"), Modifier.padding(TripWiseTheme.spacing.lg))
 }

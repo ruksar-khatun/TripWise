@@ -19,7 +19,6 @@ import com.tripwise.feature.destination.DestinationDetailScreen
 import com.tripwise.feature.destination.navigation.destinationScreen
 import com.tripwise.feature.destination.navigation.navigateToActivities
 import com.tripwise.feature.destination.navigation.navigateToDestination
-import com.tripwise.feature.destination.navigation.navigateToDestinationMap
 import com.tripwise.feature.explore.navigation.ExploreRoute
 import com.tripwise.feature.explore.navigation.exploreSection
 import com.tripwise.feature.home.HomeNavigation
@@ -52,7 +51,6 @@ fun TripWiseNavHost(appState: TripWiseAppState, modifier: Modifier = Modifier) {
         onPlanTrip = { nav.navigateToCreateTrip(it) },
         onPlanWithAi = { nav.navigateToPlanner(destinationId = it) },
         onOpenActivities = { nav.navigateToActivities(it) },
-        onOpenMap = { nav.navigateToDestinationMap(it) },
     )
     // Tablet two-pane: detail rendered next to the list, "back" closes the pane.
     val detailPane: DetailPane = { id, onClose ->

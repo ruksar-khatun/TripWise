@@ -10,9 +10,9 @@ A new, from-scratch travel planner: Android (Kotlin, Jetpack Compose, Material 3
 |---|---|---|
 | Home | Greeting, search, featured + popular carousels, upcoming trip, interests, recently saved | Backend |
 | Explore | 16 Indian destinations: search by name/state, interest filters, adaptive grid, tablet list–detail | Backend |
-| Destination | Photo, facts, highlights, food, things to do, map preview, save/share | Backend (map: `MAPS_API_KEY`) |
-| Activities | Curated attractions by category, nearby places from Google | Nearby: `PLACES_API_KEY` on backend |
-| Maps | Full map with destination, attractions and nearby pins; directions | `MAPS_API_KEY` in `android/local.properties` |
+| Destination | Photo, facts, highlights, food, things to do, Google Maps card, save/share | Backend |
+| Activities | Curated attractions by category; "On Google Maps" shortcuts (attractions, restaurants, hotels, cafés, markets, stations) | – |
+| Maps | No in-app map and **no Maps API key**: "Open in Google Maps", Directions and every "Show on map" hand off to the Google Maps app (or google.com/maps) via free [Maps URLs](https://developers.google.com/maps/documentation/urls/get-started), searching by place name + city | – |
 | AI assistant | Streaming travel chat with trip/destination context, retry/stop | `GEMINI_API_KEY` on backend |
 | AI itinerary | Destination, days, pace, budget, interests → day-by-day plan → save to a trip | `GEMINI_API_KEY` (falls back to a curated basic plan) |
 | Expenses | Cost estimate by category (currency-converted), planned amounts, expense log, totals | Backend (rates) |
@@ -23,9 +23,9 @@ A new, from-scratch travel planner: Android (Kotlin, Jetpack Compose, Material 3
 
 ## API keys
 
-- **Backend** (`backend/.env`, or Cloud Run secrets): `GEMINI_API_KEY` (Google AI Studio), `PLACES_API_KEY` (Google Cloud, *Places API (New)* enabled), `JWT_SECRET`, `DATABASE_URL`.
-- **Android** (`android/local.properties`): `MAPS_API_KEY` (Google Cloud, *Maps SDK for Android* enabled, restricted to package `com.tripwise.app` / `.debug` + your signing SHA-1).
-- **CI emulator tour**: repository secrets `GEMINI_API_KEY` and `MAPS_API_KEY` (the tour also passes the Maps key to the backend as the Places key, so that key must not be restricted to Android apps only).
+- **Backend** (`backend/.env`, or Cloud Run secrets): `GEMINI_API_KEY` (Google AI Studio), `JWT_SECRET`, `DATABASE_URL`. Optional: `GEMINI_MODEL` (default `gemini-3.5-flash`) and `GEMINI_FALLBACK_MODELS` (tried in order when a model is retired, overloaded or rate-limited).
+- **Android:** no API keys. Maps open in Google Maps; Gemini is only called by the backend.
+- **CI emulator tour**: repository secret `GEMINI_API_KEY`.
 
 Without keys the app still runs; those features show a clear "not set up" state.
 
@@ -70,7 +70,7 @@ Features never depend on other features. `:app` wires cross-feature navigation.
 - **Repositories:** return `Outcome<T>` or `Flow<T>` and never throw. Errors are `AppError`, mapped to text in `core:ui`.
 - **Backend errors:** always `{ "error": { code, message, details?, serverVersion? } }`. Codes are shared with `ApiErrorCode` on Android.
 - **Navigation:** each feature exposes a `@Serializable` route, `NavController.navigateToXxx()` and `NavGraphBuilder.xxxSection()`.
-- **Secrets:** the Maps key and backend URLs come from `android/local.properties`. The Gemini key is only ever on the backend.
+- **Secrets:** backend URLs come from `android/local.properties`. The Gemini key is only ever on the backend; the app has no keys.
 
 ## Android: getting started
 

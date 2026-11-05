@@ -19,8 +19,6 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // Maps/Places key is injected into the manifest; never committed. Used from the Maps phase on.
-        manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY") ?: ""
     }
 
     buildFeatures.buildConfig = true

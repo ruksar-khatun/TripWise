@@ -12,7 +12,6 @@
     <string name="feature_destination_why_visit">Why visit</string>
     <string name="feature_destination_food">Must-try food</string>
     <string name="feature_destination_map">On the map</string>
-    <string name="feature_destination_map_placeholder">Interactive map arrives with the Maps phase</string>
     <string name="feature_destination_plan_ai">Plan with AI</string>
     <string name="feature_destination_plan_trip">Plan a trip</string>
     <string name="feature_destination_not_found_title">Destination not found</string>
@@ -24,11 +23,10 @@
     <string name="feature_destination_see_all">See all</string>
     <string name="feature_destination_activities_title">Things to do in %1$s</string>
     <string name="feature_destination_tab_curated">Curated</string>
-    <string name="feature_destination_tab_nearby">Nearby now</string>
+    <string name="feature_destination_tab_google_maps">On Google Maps</string>
     <string name="feature_destination_all_categories">All</string>
-    <string name="feature_destination_nearby_body">Popular places around %1$s from Google.</string>
-    <string name="feature_destination_nearby_empty">No nearby places found.</string>
-    <string name="feature_destination_map_title">%1$s map</string>
+    <string name="feature_destination_google_maps_body">Live places, opening hours and reviews around %1$s open in Google Maps.</string>
+    <string name="feature_destination_near">Near %1$s</string>
     <string name="feature_destination_approx_note">Curated locations are approximate.</string>
     <string name="feature_destination_rating_count">%1$s (%2$d)</string>
     <string name="feature_destination_open_in_maps">Open in Google Maps</string>

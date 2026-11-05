@@ -57,16 +57,18 @@ class AppTourTest {
         t.clickDescription("Save Jaipur")
         t.shot("destination-saved", settleMs = 1_000)
 
-        // Things to do (curated + nearby from Google Places) and the map
+        // Things to do (curated + Google Maps hand-off; no Maps API key needed)
         t.scrollTo("Things to do")
         t.shot("destination-things-to-do", settleMs = 2_000)
         if (t.click("See all", required = false)) {
             t.waitFor("Things to do in", substring = true)
             t.shot("activities-curated", settleMs = 1_500)
-            t.click("Nearby now", required = false)
-            t.shot("activities-nearby", settleMs = 5_000)
+            t.click("On Google Maps", required = false)
+            t.shot("activities-google-maps", settleMs = 1_500)
             t.back()
         }
+        t.scrollTo("Explore Jaipur on Google Maps")
+        t.shot("destination-google-maps-card", settleMs = 1_000)
         // AI itinerary planner → save as a new trip
         t.scrollTo("Plan with AI")
         if (t.click("Plan with AI", required = false)) {

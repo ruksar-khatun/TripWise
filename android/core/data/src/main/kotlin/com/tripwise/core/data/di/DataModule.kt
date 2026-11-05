@@ -43,7 +43,6 @@ internal abstract class DataModule {
 
     @Binds @Singleton abstract fun bindCurrencyRepository(impl: com.tripwise.core.data.repository.DefaultCurrencyRepository): com.tripwise.core.domain.repository.CurrencyRepository
 
-    @Binds abstract fun bindPlacesRepository(impl: com.tripwise.core.data.repository.DefaultPlacesRepository): com.tripwise.core.domain.repository.PlacesRepository
 
     @Binds @Singleton abstract fun bindDestinationRepository(impl: CatalogDestinationRepository): DestinationRepository
 }
