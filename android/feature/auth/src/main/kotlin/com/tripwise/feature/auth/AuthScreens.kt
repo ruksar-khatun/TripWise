@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -183,18 +182,18 @@ private fun BrandHeader() {
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Surface(shape = RoundedCornerShape(20.dp), color = BrandColors.AzureMist, modifier = Modifier.size(64.dp)) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(TwIcons.Place, contentDescription = null, tint = BrandColors.DuskBlue, modifier = Modifier.size(36.dp))
-                }
-            }
+            // The logo carries the "TripWise" wordmark, so it is the brand title for accessibility too.
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(com.tripwise.core.designsystem.R.drawable.tripwise_logo),
+                contentDescription = stringResource(R.string.feature_auth_brand),
+                modifier = Modifier.size(128.dp).semantics { heading() },
+            )
             Text(
-                stringResource(R.string.feature_auth_brand),
-                style = TripWiseTheme.typography.headlineLarge,
+                stringResource(R.string.feature_auth_tagline),
+                style = TripWiseTheme.typography.bodyMedium,
                 color = BrandColors.AzureMist,
                 modifier = Modifier.padding(top = TripWiseTheme.spacing.md),
             )
-            Text(stringResource(R.string.feature_auth_tagline), style = TripWiseTheme.typography.bodyMedium, color = BrandColors.AzureMist)
         }
     }
 }
