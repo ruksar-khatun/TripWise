@@ -51,7 +51,8 @@ class StandaloneTourTest {
         t.click("Estimate")
         t.waitFor("Estimated total", timeoutMs = 15_000) // fallback exchange rates
         t.shot("standalone-budget", settleMs = 1_500)
-        t.back()
+        t.back() // trip → destination
+        t.back() // destination → Explore (tab bar visible)
 
         t.click("Profile")
         t.waitFor("Guest traveller", timeoutMs = 15_000)
