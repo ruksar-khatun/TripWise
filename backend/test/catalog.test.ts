@@ -27,6 +27,9 @@ describe('catalog seed', () => {
       expect(d.images.length).toBeGreaterThan(0);
       expect(d.attractions.length).toBeGreaterThanOrEqual(5);
       expect(new Set(d.attractions.map((a) => a.id)).size).toBe(d.attractions.length);
+      expect(d.country).toBe('India');
+      expect(d.currency).toBe('INR');
+      expect(d.rating).toBeNull(); // no invented ratings
     }
   });
 });
@@ -41,8 +44,10 @@ describe('GET /api/v1/destinations', () => {
   });
 
   it('searches name and country case-insensitively, and filters', async () => {
-    const jp = await request(app).get('/api/v1/destinations?query=JAPAN');
-    expect(jp.body.items.map((d: { id: string }) => d.id).sort()).toEqual(['kyoto', 'tokyo']);
+    const raj = await request(app).get('/api/v1/destinations?query=JAIPUR');
+    expect(raj.body.items.map((d: { id: string }) => d.id)).toEqual(['jaipur']);
+    const india = await request(app).get('/api/v1/destinations?query=india');
+    expect(india.body.total).toBe(16); // country search
     const beaches = await request(app).get('/api/v1/destinations?interest=BEACHES');
     expect(beaches.body.items.every((d: { interests: string[] }) => d.interests.includes('BEACHES'))).toBe(true);
     const featured = await request(app).get('/api/v1/destinations?featured=true');
@@ -57,8 +62,8 @@ describe('GET /api/v1/destinations', () => {
   });
 
   it('returns details with attractions, 404 for unknown', async () => {
-    const res = await request(app).get('/api/v1/destinations/kyoto');
-    expect(res.body.attractions[0]).toMatchObject({ id: 'kyoto-1', name: 'Fushimi Inari Taisha' });
+    const res = await request(app).get('/api/v1/destinations/agra');
+    expect(res.body.attractions[0]).toMatchObject({ id: 'agra-1', name: 'Taj Mahal' });
     expect((await request(app).get('/api/v1/destinations/atlantis')).status).toBe(404);
     expect((await request(app).get('/api/v1/destinations/BAD!')).status).toBe(400);
   });

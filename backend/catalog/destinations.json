@@ -1,5 +1,5 @@
 {
-  "_comment": "Curated TripWise catalog (India only). Attraction coordinates, durations, entry fees and daily costs are editorial approximations in INR (fees for Indian residents; verify before publishing). dailyCostInr = typical mid-range spend per person per day. No ratings: there is no review source yet. Photos: see each image's author/license; relevance reviewed via the CI contact sheets.",
+  "_comment": "Curated TripWise catalog (India only). Attraction coordinates, durations, entry fees and daily costs are editorial approximations in INR (fees for Indian residents; verify before publishing). dailyCostInr = typical mid-range spend per person per day. No ratings: there is no review source yet. Photos: Wikimedia Commons (author, license and source page per image) or Unsplash; each was reviewed by eye on the CI contact sheets.",
   "destinations": [
     {
       "id": "agra",
@@ -378,7 +378,14 @@
       ],
       "featured": true,
       "popularity": 92,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Palolem_Beach%2C_South_Goa.jpg/1280px-Palolem_Beach%2C_South_Goa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "iMahesh",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Palolem_Beach,_South_Goa.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "goa-1",
@@ -485,7 +492,14 @@
       ],
       "featured": true,
       "popularity": 85,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Scindia_Ghat_in_morning%2C_Varanasi%2C_Uttar_Pradesh%2C_India_%282012%29.jpg/1280px-Scindia_Ghat_in_morning%2C_Varanasi%2C_Uttar_Pradesh%2C_India_%282012%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "travelwayoflife",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Scindia_Ghat_in_morning,_Varanasi,_Uttar_Pradesh,_India_(2012).jpg",
+          "license": "CC BY-SA 2.0"
+        }
+      ],
       "attractions": [
         {
           "id": "varanasi-1",
@@ -591,7 +605,14 @@
       ],
       "featured": true,
       "popularity": 82,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Backside_view_of_City_palace_%28Lake_Pichola%2C_Udaipur%29.jpg/1280px-Backside_view_of_City_palace_%28Lake_Pichola%2C_Udaipur%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Kshitiz Sikka",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Backside_view_of_City_palace_(Lake_Pichola,_Udaipur).jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "udaipur-1",
@@ -699,7 +720,14 @@
       ],
       "featured": true,
       "popularity": 80,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Pangong_Tso%2C_Ladakh_2016_June.jpg/1280px-Pangong_Tso%2C_Ladakh_2016_June.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Vimal Chaunkaria",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pangong_Tso,_Ladakh_2016_June.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "ladakh-1",
@@ -807,7 +835,14 @@
       ],
       "featured": false,
       "popularity": 75,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Ram_Jhula_bridge%2C_Rishikesh_and_nearby_views_-_during_LGFC_-_VOF_2019_%2815%29.jpg/1280px-Ram_Jhula_bridge%2C_Rishikesh_and_nearby_views_-_during_LGFC_-_VOF_2019_%2815%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Vinayaraj",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ram_Jhula_bridge,_Rishikesh_and_nearby_views_-_during_LGFC_-_VOF_2019_(15).jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "rishikesh-1",
@@ -916,7 +951,14 @@
       ],
       "featured": false,
       "popularity": 86,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Gateway_of_India_in_the_evening%2C_Mumbai%2C_India.jpg/1280px-Gateway_of_India_in_the_evening%2C_Mumbai%2C_India.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "SriSriChinmaya",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gateway_of_India_in_the_evening,_Mumbai,_India.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "mumbai-1",
@@ -1025,7 +1067,14 @@
       ],
       "featured": false,
       "popularity": 93,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/India_Gate%2C_New_Delhi_from_West.jpg/1280px-India_Gate%2C_New_Delhi_from_West.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Nikhilb239",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:India_Gate,_New_Delhi_from_West.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "delhi-1",
@@ -1131,7 +1180,14 @@
       ],
       "featured": false,
       "popularity": 70,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Complex_of_Virupaksha_Temple%2C_Hampi_%2801%29.jpg/1280px-Complex_of_Virupaksha_Temple%2C_Hampi_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "iMahesh",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Complex_of_Virupaksha_Temple,_Hampi_(01).jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "hampi-1",
@@ -1238,7 +1294,14 @@
       ],
       "featured": false,
       "popularity": 72,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Kanchenjunga_above_roofs_of_Darjeeling_1.jpg/1280px-Kanchenjunga_above_roofs_of_Darjeeling_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "DaLoetz",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kanchenjunga_above_roofs_of_Darjeeling_1.jpg",
+          "license": "CC BY 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "darjeeling-1",
@@ -1345,7 +1408,14 @@
       ],
       "featured": false,
       "popularity": 68,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Munnar_-_Tea_Plantations.jpg/1280px-Munnar_-_Tea_Plantations.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Ingo Mehling",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Munnar_-_Tea_Plantations.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "munnar-1",
@@ -1454,7 +1524,14 @@
       ],
       "featured": false,
       "popularity": 74,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Havelock_Island%2C_Radhanagar_Beach%2C_tropical_bliss%2C_Andaman_Islands.jpg/1280px-Havelock_Island%2C_Radhanagar_Beach%2C_tropical_bliss%2C_Andaman_Islands.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Vyacheslav Argenberg",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Havelock_Island,_Radhanagar_Beach,_tropical_bliss,_Andaman_Islands.jpg",
+          "license": "CC BY 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "andaman-1",
@@ -1561,7 +1638,14 @@
       ],
       "featured": false,
       "popularity": 73,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Jaisalmer_Fort%2C_India.jpg/1280px-Jaisalmer_Fort%2C_India.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Clément Bardot",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jaisalmer_Fort,_India.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "jaisalmer-1",
@@ -1668,7 +1752,14 @@
       ],
       "featured": false,
       "popularity": 78,
-      "images": [],
+      "images": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Golden_Temple%2C_Amritsar_02.jpg/1280px-Golden_Temple%2C_Amritsar_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "author": "Bernard Gagnon",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Temple,_Amritsar_02.jpg",
+          "license": "CC BY-SA 4.0"
+        }
+      ],
       "attractions": [
         {
           "id": "amritsar-1",

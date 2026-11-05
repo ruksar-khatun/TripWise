@@ -18,7 +18,8 @@ export const Attraction = z.object({
   category: ActivityCategory,
   location: LatLng,
   durationMinutes: z.number().int().positive(),
-  estimatedCostUsd: z.number().nonnegative(),
+  /** Typical cost per person in INR (entry fees for Indian residents). */
+  estimatedCostInr: z.number().nonnegative(),
   description: z.string(),
 });
 
@@ -26,15 +27,16 @@ export const Attraction = z.object({
 export const CatalogDestination = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
   name: z.string(),
-  country: z.string(),
+  country: z.literal('India'),
   region: z.string(),
   summary: z.string(),
   highlights: z.array(z.string()),
   localFood: z.array(z.string()),
   interests: z.array(Interest).min(1),
   location: LatLng,
-  rating: z.number().min(0).max(5),
-  ratingCount: z.number().int().nonnegative(),
+  /** Null until there is a real review source; never invented. */
+  rating: z.number().min(0).max(5).nullable(),
+  ratingCount: z.number().int().nonnegative().nullable(),
   bestTimeToVisit: z.string(),
   currency: z.string().regex(/^[A-Z]{3}$/),
   languages: z.array(z.string()),
@@ -42,7 +44,7 @@ export const CatalogDestination = z.object({
   popularity: z.number().int(),
   images: z.array(CatalogImage).min(1),
   attractions: z.array(Attraction),
-  /** Typical mid-range spend per person per day, USD. Used by expense estimation. */
-  dailyCostUsd: z.record(CostCategory, z.number().nonnegative()),
+  /** Typical mid-range spend per person per day, INR. Used by expense estimation. */
+  dailyCostInr: z.record(CostCategory, z.number().nonnegative()),
 });
 export type CatalogDestination = z.infer<typeof CatalogDestination>;

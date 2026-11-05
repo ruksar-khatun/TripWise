@@ -22,7 +22,7 @@ data class PlanItem(
     val title: String,
     val category: ActivityCategory,
     val durationMinutes: Int,
-    /** Per person, USD. */
+    /** Per person (INR from the backend). */
     val estimatedCost: Money,
     val notes: String?,
     val attractionId: String?,

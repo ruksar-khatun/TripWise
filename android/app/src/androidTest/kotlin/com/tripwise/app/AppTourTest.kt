@@ -39,7 +39,7 @@ class AppTourTest {
         t.click("Ask TripWise")
         t.waitFor("How can I help you travel?")
         t.shot("assistant-empty", settleMs = 1_000)
-        t.click("Where should I go in December?", required = false)
+        t.click("Where in India should I go in December?", required = false)
         runCatching { t.waitFor("Thinking…", timeoutMs = 5_000) }
         Thread.sleep(12_000) // let the streamed reply arrive
         t.shot("assistant-reply", settleMs = 1_000)
@@ -49,12 +49,12 @@ class AppTourTest {
         t.click("Explore")
         t.waitFor("destinations", substring = true)
         t.shot("explore", settleMs = 4_000)
-        t.click("Kyoto")
+        t.click("Jaipur")
         t.waitFor("Why visit")
         t.shot("destination-detail", settleMs = 4_000)
         t.swipeUp()
         t.shot("destination-detail-scrolled", settleMs = 2_500)
-        t.clickDescription("Save Kyoto")
+        t.clickDescription("Save Jaipur")
         t.shot("destination-saved", settleMs = 1_000)
 
         // Things to do (curated + nearby from Google Places) and the map
@@ -111,8 +111,8 @@ class AppTourTest {
         t.click("My Trips", required = false)
         t.shot("my-trips", settleMs = 2_000)
         if (t.click("New trip", required = false) || t.click("Plan a trip", required = false)) {
-            t.type("Trip name", "Kyoto in Spring", required = false)
-            t.type("Destination", "Kyoto", required = false)
+            t.type("Trip name", "Udaipur by the lakes", required = false)
+            t.type("Destination", "Udaipur", required = false)
             t.shot("create-trip")
             t.back()
             t.back()

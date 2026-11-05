@@ -36,7 +36,7 @@ class BudgetAndItineraryTest {
     private val clock = Clock.fixed(Instant.parse("2026-03-01T10:00:00Z"), ZoneOffset.UTC)
     private val usd = CurrencyCode("USD")
     private val inr = CurrencyCode("INR")
-    private val kyoto = TestData.destination("kyoto").copy(dailyCostUsd = mapOf(ExpenseCategory.FOOD to Money(5_000, usd)))
+    private val kyoto = TestData.destination("kyoto").copy(dailyCost = mapOf(ExpenseCategory.FOOD to Money(5_000, usd)))
     private val trip = TestData.trip("t1", LocalDate.of(2026, 4, 1), days = 2, destinationId = "kyoto").copy(budget = null)
 
     @Test fun `amount parsing respects the currency's minor units`() {

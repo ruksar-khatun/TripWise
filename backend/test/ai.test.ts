@@ -56,14 +56,15 @@ describe('POST /api/v1/ai/chat', () => {
   beforeEach(() => setup());
 
   it('streams deltas as server-sent events and ends with done', async () => {
-    const res = await chat({ ...userSays('What should I eat in Kyoto?'), context: { destinationId: 'kyoto' } });
+    const res = await chat({ ...userSays('What should I eat in Varanasi?'), context: { destinationId: 'varanasi' } });
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toContain('text/event-stream');
     expect(res.text).toBe('data: {"delta":"Hello"}\n\ndata: {"delta":" traveller!"}\n\ndata: {"done":true}\n\n');
     // Destination context comes from the curated catalog.
-    expect(ai.lastSystem).toContain('Kyoto, Japan');
-    expect(ai.lastSystem).toContain('Fushimi Inari Taisha');
-    expect(ai.lastTurns).toEqual([{ role: 'user', text: 'What should I eat in Kyoto?' }]);
+    expect(ai.lastSystem).toContain('Varanasi, India');
+    expect(ai.lastSystem).toContain('Sarnath');
+    expect(ai.lastSystem).toContain('travel within India');
+    expect(ai.lastTurns).toEqual([{ role: 'user', text: 'What should I eat in Varanasi?' }]);
   });
 
   it('maps assistant history to model turns and validates input', async () => {
@@ -106,8 +107,8 @@ const validDraft = (days: number) => ({
     day: i + 7, // wrong numbering is normalised
     theme: 'Temples',
     items: [
-      { startTime: '14:00', title: 'Nishiki Market', category: 'FOOD', durationMinutes: 90, estimatedCostUsd: 20, attractionId: 'kyoto-5' },
-      { startTime: '08:00', title: 'Fushimi Inari', category: 'SIGHTSEEING', durationMinutes: 150, estimatedCostUsd: 0, attractionId: 'made-up' },
+      { startTime: '14:00', title: 'Nishiki Market', category: 'FOOD', durationMinutes: 90, estimatedCostInr: 20, attractionId: 'agra-5' },
+      { startTime: '08:00', title: 'Fushimi Inari', category: 'SIGHTSEEING', durationMinutes: 150, estimatedCostInr: 0, attractionId: 'made-up' },
     ],
   })),
 });
@@ -118,19 +119,19 @@ describe('POST /api/v1/ai/itineraries', () => {
 
   it('returns a validated, normalised AI plan', async () => {
     ai.json = [validDraft(2)];
-    const res = await generate({ destinationId: 'kyoto', days: 2, pace: 'RELAXED', interests: ['FOOD'] });
+    const res = await generate({ destinationId: 'agra', days: 2, pace: 'RELAXED', interests: ['FOOD'] });
     expect(res.status).toBe(200);
     expect(res.body.source).toBe('ai');
     expect(res.body.days.map((d: { day: number }) => d.day)).toEqual([1, 2]);
     const items = res.body.days[0].items;
     expect(items.map((i: { startTime: string }) => i.startTime)).toEqual(['08:00', '14:00']); // sorted
     expect(items[0].attractionId).toBeNull(); // unknown id dropped
-    expect(items[1].attractionId).toBe('kyoto-5');
+    expect(items[1].attractionId).toBe('agra-5');
   });
 
   it('retries once on invalid output, then falls back to the curated template', async () => {
     ai.json = [{ nonsense: true }, validDraft(1)]; // wrong day count on retry too
-    const res = await generate({ destinationId: 'kyoto', days: 3 });
+    const res = await generate({ destinationId: 'agra', days: 3 });
     expect(ai.jsonCalls).toBe(2);
     expect(res.body.source).toBe('template');
     expect(res.body.days).toHaveLength(3);
@@ -142,10 +143,10 @@ describe('POST /api/v1/ai/itineraries', () => {
 
   it('uses the template without AI and validates the request', async () => {
     ai.configured = false;
-    const res = await generate({ destinationId: 'bali', days: 1, pace: 'PACKED' });
+    const res = await generate({ destinationId: 'goa', days: 1, pace: 'PACKED' });
     expect(res.body.source).toBe('template');
     expect(res.body.days[0].items).toHaveLength(5);
-    expect((await generate({ destinationId: 'bali', days: 0 })).status).toBe(400);
+    expect((await generate({ destinationId: 'goa', days: 0 })).status).toBe(400);
     expect((await generate({ destinationId: 'atlantis', days: 2 })).status).toBe(404);
   });
 });

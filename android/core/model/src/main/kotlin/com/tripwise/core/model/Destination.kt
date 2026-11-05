@@ -21,8 +21,8 @@ data class Destination(
     val featured: Boolean = false,
     /** Curated things to do, in editorial order. */
     val attractions: List<Attraction> = emptyList(),
-    /** Typical mid-range spend per person per day (USD), by category. Basis for expense estimates. */
-    val dailyCostUsd: Map<ExpenseCategory, Money> = emptyMap(),
+    /** Typical mid-range spend per person per day (in the catalog's currency, INR), by category. Basis for expense estimates. */
+    val dailyCost: Map<ExpenseCategory, Money> = emptyMap(),
 ) {
     val coverImage: ImageRef? get() = images.firstOrNull()
 }

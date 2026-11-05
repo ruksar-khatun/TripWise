@@ -16,7 +16,7 @@ import java.math.RoundingMode
 import javax.inject.Inject
 
 /**
- * Transparent, deterministic estimate (no AI): the destination's typical daily spend per person
+ * Transparent, deterministic estimate (no AI): the destination's typical daily spend per person (any currency)
  * × days × travellers × a style factor, with activities taking the larger of the daily allowance
  * and what's already planned in the itinerary. Long-distance flights are not included.
  */
@@ -30,7 +30,7 @@ class EstimateTripCostUseCase @Inject constructor(private val currency: Currency
         itinerary: List<ItineraryItem>,
         target: CurrencyCode,
     ): Outcome<CostEstimate> {
-        if (destination.dailyCostUsd.isEmpty()) return Outcome.Failure(AppError.NotFound)
+        if (destination.dailyCost.isEmpty()) return Outcome.Failure(AppError.NotFound)
         val rates = when (val r = currency.usdRates()) {
             is Outcome.Success -> r.value
             is Outcome.Failure -> return r
@@ -54,25 +54,23 @@ class EstimateTripCostUseCase @Inject constructor(private val currency: Currency
             target: CurrencyCode,
             rates: ExchangeRates,
         ): Outcome<CostEstimate> {
-            val rate = rates.usdTo[target.code] ?: return Outcome.Failure(AppError.NotFound)
+            val targetRate = rates.usdTo[target.code] ?: return Outcome.Failure(AppError.NotFound)
+            /** Amount in [target] major units, or null if the source currency has no rate. */
+            fun convert(m: Money): Double? = rates.usdTo[m.currency.code]?.let { rate -> toMajor(m) / rate * targetRate }
+
             val people = travellers.coerceAtLeast(1)
             val f = factor(level)
-            val usdPerCategory = destination.dailyCostUsd.mapValues { (category, perDay) ->
-                val base = perDay.amountMinor / 100.0 * days * people * f
+            val perCategory = mutableMapOf<ExpenseCategory, Money>()
+            for ((category, perDay) in destination.dailyCost) {
+                val daily = convert(perDay) ?: return Outcome.Failure(AppError.NotFound)
+                var amount = daily * days * people * f
                 if (category == ExpenseCategory.ACTIVITIES) {
-                    // Itinerary costs are per person, USD (as generated) or already in target currency.
-                    val planned = itinerary.sumOf { item ->
-                        val cost = item.estimatedCost ?: return@sumOf 0.0
-                        val inUsd = if (cost.currency.code == "USD") cost.amountMinor / 100.0
-                        else (rates.usdTo[cost.currency.code])?.let { r -> toMajor(cost) / r } ?: 0.0
-                        inUsd * people
-                    }
-                    maxOf(base, planned)
-                } else {
-                    base
+                    // Planned itinerary costs are per person; use them when higher than the daily allowance.
+                    val planned = itinerary.sumOf { item -> item.estimatedCost?.let(::convert) ?: 0.0 } * people
+                    amount = maxOf(amount, planned)
                 }
+                perCategory[category] = money(amount, target)
             }
-            val perCategory = usdPerCategory.mapValues { (_, usd) -> money(usd * rate, target) }
             val total = Money(perCategory.values.sumOf { it.amountMinor }, target)
             return Outcome.Success(CostEstimate(perCategory, total, level, days, people, rates.live))
         }

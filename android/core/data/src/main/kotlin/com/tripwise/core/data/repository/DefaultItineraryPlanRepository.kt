@@ -3,7 +3,7 @@ package com.tripwise.core.data.repository
 import com.tripwise.core.common.result.Outcome
 import com.tripwise.core.common.result.map
 import com.tripwise.core.data.mapper.enumOr
-import com.tripwise.core.data.mapper.usd
+import com.tripwise.core.data.mapper.inr
 import com.tripwise.core.domain.repository.ItineraryPlanRepository
 import com.tripwise.core.model.ActivityCategory
 import com.tripwise.core.model.ItineraryPlan
@@ -47,7 +47,7 @@ internal class DefaultItineraryPlanRepository @Inject constructor(
                         title = item.title,
                         category = enumOr(item.category, ActivityCategory.OTHER),
                         durationMinutes = item.durationMinutes,
-                        estimatedCost = usd(item.estimatedCostUsd),
+                        estimatedCost = inr(item.estimatedCostInr),
                         notes = item.notes,
                         attractionId = item.attractionId,
                     )

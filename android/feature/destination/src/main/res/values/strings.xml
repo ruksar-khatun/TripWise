@@ -17,7 +17,7 @@
     <string name="feature_destination_plan_trip">Plan a trip</string>
     <string name="feature_destination_not_found_title">Destination not found</string>
     <string name="feature_destination_not_found_body">It may have been removed from the catalog.</string>
-    <string name="feature_destination_photo_credit">Photo: %1$s</string>
+    <string name="feature_destination_photo_credit">Photo: %1$s · %2$s</string>
     <string name="feature_destination_photo">Photo of %1$s</string>
     <string name="feature_destination_photo_page">Photo %1$d of %2$d</string>
     <string name="feature_destination_things_to_do">Things to do</string>

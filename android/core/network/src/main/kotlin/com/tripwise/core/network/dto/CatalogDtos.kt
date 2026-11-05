@@ -14,7 +14,7 @@ data class AttractionDto(
     val category: String,
     val location: LatLngDto,
     val durationMinutes: Int,
-    val estimatedCostUsd: Double,
+    val estimatedCostInr: Double,
     val description: String,
 )
 
@@ -38,7 +38,7 @@ data class DestinationDto(
     val popularity: Int = 0,
     val images: List<CatalogImageDto> = emptyList(),
     val attractions: List<AttractionDto> = emptyList(),
-    val dailyCostUsd: Map<String, Double> = emptyMap(),
+    val dailyCostInr: Map<String, Double> = emptyMap(),
 )
 
 @Serializable

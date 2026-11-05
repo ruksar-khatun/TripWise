@@ -25,7 +25,7 @@ class EstimateTripCostTest {
     private val kyoto = Destination(
         "kyoto", "Kyoto", "Japan", "Asia", "", emptyList(), emptyList(), emptyList(), GeoPoint(0.0, 0.0), emptySet(),
         null, null, "", jpy, emptyList(),
-        dailyCostUsd = mapOf(ExpenseCategory.ACCOMMODATION to Money(9_000, usd), ExpenseCategory.FOOD to Money(4_500, usd), ExpenseCategory.ACTIVITIES to Money(2_000, usd)),
+        dailyCost = mapOf(ExpenseCategory.ACCOMMODATION to Money(9_000, usd), ExpenseCategory.FOOD to Money(4_500, usd), ExpenseCategory.ACTIVITIES to Money(2_000, usd)),
     )
 
     private fun item(cost: Money) = ItineraryItem("i", "t", LocalDate.of(2026, 1, 1), null, "x", ActivityCategory.ACTIVITY, cost, false)
@@ -46,6 +46,12 @@ class EstimateTripCostTest {
         val plan = listOf(item(Money(25_000, usd)), item(Money(5_000, usd))) // $300 per person
         val e = (EstimateTripCostUseCase.estimate(kyoto, 1, 2, BudgetLevel.MID, plan, usd, rates) as Outcome.Success).value
         assertEquals(Money(60_000, usd), e.perCategory[ExpenseCategory.ACTIVITIES]) // 300 × 2 people > 20 × 1 × 2
+    }
+
+    @Test fun `rupee daily costs need no conversion for rupee trips`() {
+        val goa = kyoto.copy(dailyCost = mapOf(ExpenseCategory.FOOD to Money(100_000, inr))) // ₹1,000 per day
+        val e = (EstimateTripCostUseCase.estimate(goa, 3, 2, BudgetLevel.BUDGET, emptyList(), inr, rates) as Outcome.Success).value
+        assertEquals(Money(360_000, inr), e.perCategory[ExpenseCategory.FOOD]) // 1,000 × 3 × 2 × 0.6
     }
 
     @Test fun `unknown target currency fails`() {

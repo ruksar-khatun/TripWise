@@ -288,7 +288,7 @@ private fun Hero(d: Destination) {
             }
             d.coverImage?.attribution?.let {
                 Text(
-                    stringResource(R.string.feature_destination_photo_credit, it.author),
+                    stringResource(R.string.feature_destination_photo_credit, it.author, it.license.orEmpty()).trimEnd(' ', '·'),
                     style = TripWiseTheme.typography.labelSmall,
                     color = TripWiseTheme.extendedColors.onImage.copy(alpha = 0.85f),
                     modifier = Modifier.padding(top = TripWiseTheme.spacing.xs),

@@ -9,7 +9,7 @@ A new, from-scratch travel planner: Android (Kotlin, Jetpack Compose, Material 3
 | Area | What it does | Needs |
 |---|---|---|
 | Home | Greeting, search, featured + popular carousels, upcoming trip, interests, recently saved | Backend |
-| Explore | Search by name/country, interest filters, adaptive grid, tablet list–detail | Backend |
+| Explore | 16 Indian destinations: search by name/state, interest filters, adaptive grid, tablet list–detail | Backend |
 | Destination | Photo, facts, highlights, food, things to do, map preview, save/share | Backend (map: `MAPS_API_KEY`) |
 | Activities | Curated attractions by category, nearby places from Google | Nearby: `PLACES_API_KEY` on backend |
 | Maps | Full map with destination, attractions and nearby pins; directions | `MAPS_API_KEY` in `android/local.properties` |
@@ -18,7 +18,7 @@ A new, from-scratch travel planner: Android (Kotlin, Jetpack Compose, Material 3
 | Expenses | Cost estimate by category (currency-converted), planned amounts, expense log, totals | Backend (rates) |
 | My Trips | Create, view, delete trips; add/edit/delete itinerary activities; budget | – |
 | Saved | Save/remove with undo, sorting, consistent hearts everywhere | – |
-| Images | Curated photos with a CI contact sheet to verify relevance; gradient fallback | – |
+| Images | Curated Indian destination photos (Wikimedia Commons with author/licence credit, or Unsplash), each reviewed on a CI contact sheet; gradient fallback | – |
 | Account | Email/password sign-up/in, session restore, sign-out, account deletion | Backend |
 
 ## API keys

@@ -17,6 +17,6 @@ object AppModule {
     fun provideNetworkConfig(): NetworkConfig = NetworkConfig(
         baseUrl = BuildConfig.BACKEND_BASE_URL,
         enableHttpLogging = BuildConfig.DEBUG,
-        userAgent = "TripWise-Android/${BuildConfig.VERSION_NAME}",
+        userAgent = "TripWise-Android/${BuildConfig.VERSION_NAME} (+https://github.com/ruksar-khatun/TripWise-v2)",
     )
 }

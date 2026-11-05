@@ -8,7 +8,7 @@ mkdir -p out/thumbs
 fail=0
 while IFS=$'\t' read -r id name url; do
   thumb="out/thumbs/${id}.jpg"
-  read -r code type < <(curl -sL -o "$thumb" -w '%{http_code} %{content_type}\n' "${url/w=1200/w=480}")
+  read -r code type < <(curl -sL -A "TripWise-catalog-check/1.0 (+https://github.com/ruksar-khatun/TripWise-v2)" -o "$thumb" -w '%{http_code} %{content_type}\n' "$(echo "$url" | sed -e "s/w=1200/w=480/" -e "s#/1280px-#/500px-#")")
   if [[ "$code" == "200" && "$type" == image/* ]]; then
     echo "OK   $id"
     convert "$thumb" -resize 480x320^ -gravity center -extent 480x320 \

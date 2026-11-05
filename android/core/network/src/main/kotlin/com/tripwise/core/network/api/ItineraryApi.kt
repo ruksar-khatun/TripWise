@@ -19,7 +19,7 @@ import retrofit2.http.POST
     val title: String,
     val category: String,
     val durationMinutes: Int,
-    val estimatedCostUsd: Double,
+    val estimatedCostInr: Double,
     val notes: String? = null,
     val attractionId: String? = null,
 )

@@ -13,9 +13,10 @@ import com.tripwise.core.model.TravelInterest
 import com.tripwise.core.network.dto.DestinationDto
 import kotlin.math.roundToLong
 
-private val USD = CurrencyCode("USD")
+private val INR = CurrencyCode("INR")
 
-internal fun usd(amount: Double) = Money((amount * 100).roundToLong(), USD)
+/** Catalog amounts are rupees; stored as paise. */
+internal fun inr(amount: Double) = Money((amount * 100).roundToLong(), INR)
 
 internal fun DestinationDto.toModel() = Destination(
     id = id,
@@ -42,11 +43,11 @@ internal fun DestinationDto.toModel() = Destination(
             category = enumOr(a.category, ActivityCategory.OTHER),
             location = GeoPoint(a.location.lat, a.location.lng),
             durationMinutes = a.durationMinutes,
-            estimatedCost = usd(a.estimatedCostUsd),
+            estimatedCost = inr(a.estimatedCostInr),
             description = a.description,
         )
     },
-    dailyCostUsd = dailyCostUsd.mapNotNull { (key, value) ->
-        ExpenseCategory.entries.firstOrNull { it.name == key }?.let { it to usd(value) }
+    dailyCost = dailyCostInr.mapNotNull { (key, value) ->
+        ExpenseCategory.entries.firstOrNull { it.name == key }?.let { it to inr(value) }
     }.toMap(),
 )

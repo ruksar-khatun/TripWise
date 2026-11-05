@@ -90,8 +90,8 @@ fun AttractionCard(
 @Composable
 private fun AttractionCardPreview() = TripWiseTheme {
     AttractionCard(
-        Attraction("k1", "kyoto", "Fushimi Inari Taisha", ActivityCategory.SIGHTSEEING, GeoPoint(0.0, 0.0), 150,
-            Money(0, CurrencyCode("USD")), "Thousands of vermilion torii gates winding up Mount Inari."),
+        Attraction("agra-1", "agra", "Taj Mahal", ActivityCategory.SIGHTSEEING, GeoPoint(0.0, 0.0), 180,
+            Money(5_000, CurrencyCode("INR")), "Marble mausoleum, best at sunrise from the main gate."),
         onShowOnMap = {},
     )
 }

@@ -14,7 +14,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class CatalogMapperTest {
-    @Test fun `maps catalog dto, ignoring unknown enum values and converting USD to cents`() {
+    @Test fun `maps catalog dto, ignoring unknown enum values and converting rupees to paise`() {
         val dto = DestinationDto(
             id = "kyoto", name = "Kyoto", country = "Japan", region = "East Asia", summary = "s",
             highlights = listOf("h"), localFood = listOf("f"), interests = listOf("CULTURE", "SPACE"),
@@ -23,14 +23,14 @@ class CatalogMapperTest {
             images = listOf(CatalogImageDto("https://x/y.jpg", "A. Person", "https://unsplash.com", "Unsplash License")),
             attractions = listOf(AttractionDto("kyoto-1", "Fushimi Inari", "SIGHTSEEING", LatLngDto(1.0, 2.0), 150, 3.5, "d"),
                 AttractionDto("kyoto-2", "Mystery", "TELEPORT", LatLngDto(1.0, 2.0), 30, 0.0, "d")),
-            dailyCostUsd = mapOf("FOOD" to 45.0, "UNKNOWN" to 1.0),
+            dailyCostInr = mapOf("FOOD" to 450.0, "UNKNOWN" to 1.0),
         )
         val d = dto.toModel()
         assertEquals(setOf(TravelInterest.CULTURE), d.interests)
         assertEquals("A. Person", d.coverImage?.attribution?.author)
-        assertEquals(Money(350, CurrencyCode("USD")), d.attractions[0].estimatedCost)
+        assertEquals(Money(350, CurrencyCode("INR")), d.attractions[0].estimatedCost)
         assertEquals(ActivityCategory.OTHER, d.attractions[1].category)
-        assertEquals(mapOf(ExpenseCategory.FOOD to Money(4_500, CurrencyCode("USD"))), d.dailyCostUsd)
+        assertEquals(mapOf(ExpenseCategory.FOOD to Money(45_000, CurrencyCode("INR"))), d.dailyCost)
         assertEquals("kyoto", d.attractions[0].destinationId)
     }
 }
