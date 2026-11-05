@@ -56,7 +56,7 @@ import com.tripwise.core.ui.error.messageRes
 @Composable
 internal fun SignInScreen(sessionExpired: Boolean, onCreateAccount: () -> Unit, viewModel: SignInViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    AuthScreen(signUp = false, state, viewModel::onAction, onSwitch = onCreateAccount, sessionExpired = sessionExpired)
+    AuthScreen(signUp = false, state, viewModel::onAction, onSwitch = onCreateAccount, sessionExpired = sessionExpired, onGuest = viewModel::continueAsGuest)
 }
 
 @Composable
@@ -82,6 +82,7 @@ internal fun AuthScreen(
     onAction: (AuthAction) -> Unit,
     onSwitch: () -> Unit,
     sessionExpired: Boolean = false,
+    onGuest: (() -> Unit)? = null,
 ) {
     val focus = LocalFocusManager.current
     fun errorFor(field: AuthField): String? = state.serverFieldErrors[field]
@@ -156,6 +157,22 @@ internal fun AuthScreen(
                         stringResource(if (signUp) R.string.feature_auth_back_to_sign_in else R.string.feature_auth_create_one),
                         onClick = onSwitch,
                         enabled = !state.submitting,
+                    )
+                }
+                if (onGuest != null) {
+                    com.tripwise.core.designsystem.component.TwOutlinedButton(
+                        stringResource(R.string.feature_auth_guest),
+                        onClick = { focus.clearFocus(); onGuest() },
+                        enabled = !state.submitting,
+                        leadingIcon = TwIcons.Explore,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Text(
+                        stringResource(R.string.feature_auth_guest_note),
+                        style = TripWiseTheme.typography.bodySmall,
+                        color = TripWiseTheme.colors.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
                 if (signUp) {

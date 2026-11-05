@@ -1,5 +1,6 @@
 package com.tripwise.core.data.repository
 
+import com.tripwise.core.common.error.AppError
 import com.tripwise.core.common.result.Outcome
 import com.tripwise.core.common.result.map
 import com.tripwise.core.data.mapper.enumOr
@@ -16,13 +17,26 @@ import com.tripwise.core.network.api.ItineraryRequestDto
 import com.tripwise.core.network.error.ApiErrorMapper
 import com.tripwise.core.network.error.call
 import java.time.LocalTime
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 internal class DefaultItineraryPlanRepository @Inject constructor(
     private val api: ItineraryApi,
     private val errors: ApiErrorMapper,
+    private val destinations: com.tripwise.core.domain.repository.DestinationRepository,
+    private val tokens: com.tripwise.core.network.auth.TokenStore,
 ) : ItineraryPlanRepository {
-    override suspend fun generate(request: ItineraryRequest): Outcome<ItineraryPlan> = errors.call {
+    /** AI plan from the server; if the server can't be reached (or the user is a guest), the curated plan built on-device. */
+    override suspend fun generate(request: ItineraryRequest): Outcome<ItineraryPlan> {
+        // Guests have no account, so the server would refuse anyway: plan on the phone straight away.
+        val remote = if (tokens.get() == null) Outcome.Failure(AppError.Unauthorized) else fromServer(request)
+        val error = (remote as? Outcome.Failure)?.error ?: return remote
+        if (!OfflinePlanner.canReplace(error)) return remote
+        val destination = runCatching { destinations.observeDestination(request.destinationId).first() }.getOrNull() ?: return remote
+        return Outcome.Success(OfflinePlanner.plan(destination, request))
+    }
+
+    private suspend fun fromServer(request: ItineraryRequest): Outcome<ItineraryPlan> = errors.call {
         api.generate(
             ItineraryRequestDto(
                 destinationId = request.destinationId,

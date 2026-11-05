@@ -21,4 +21,11 @@
     <string name="feature_profile_delete_body">This permanently deletes your TripWise account and signs you out. Enter your password to confirm.</string>
     <string name="feature_profile_password">Password</string>
     <string name="feature_profile_delete_confirm">Delete account</string>
+
+    <string name="feature_profile_create_account">Create account or sign in</string>
+    <string name="feature_profile_create_account_subtitle">Unlocks TripMate AI. Trips on this phone are kept.</string>
+    <string name="feature_profile_exit_guest">Exit guest mode</string>
+    <string name="feature_profile_exit_guest_subtitle">Removes trips and saved places from this phone</string>
+    <string name="feature_profile_exit_guest_title">Exit guest mode?</string>
+    <string name="feature_profile_exit_guest_body">Your trips, saved places and chats on this phone will be deleted. To keep them, choose Create account instead.</string>
 </resources>

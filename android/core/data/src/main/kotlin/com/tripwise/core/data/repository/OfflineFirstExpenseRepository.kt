@@ -86,7 +86,16 @@ internal class DefaultCurrencyRepository @Inject constructor(
         when (val r = errors.call { api.rates() }) {
             is Outcome.Success -> ExchangeRates(r.value.rates, live = r.value.source == "live")
                 .also { if (it.live) cached = it }.let { Outcome.Success(it) }
-            is Outcome.Failure -> r
+            // No server: approximate rates (same table as the backend's fallback) so estimates still work offline.
+            is Outcome.Failure -> Outcome.Success(ExchangeRates(FALLBACK_USD_RATES, live = false))
         }
+    }
+
+    private companion object {
+        val FALLBACK_USD_RATES = mapOf(
+            "USD" to 1.0, "EUR" to 0.92, "GBP" to 0.79, "INR" to 83.5, "JPY" to 150.0, "KRW" to 1_350.0, "THB" to 36.0,
+            "SGD" to 1.35, "AED" to 3.67, "IDR" to 15_800.0, "VND" to 25_000.0, "MVR" to 15.4, "CHF" to 0.88,
+            "TRY" to 32.0, "AUD" to 1.52, "CAD" to 1.36,
+        )
     }
 }

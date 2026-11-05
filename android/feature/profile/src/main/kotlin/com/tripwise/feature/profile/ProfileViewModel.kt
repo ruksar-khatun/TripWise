@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 data class ProfileContent(val profile: UserProfile, val stats: TravelStats)
 
-enum class ProfileDialog { SIGN_OUT, DELETE_ACCOUNT }
+enum class ProfileDialog { SIGN_OUT, DELETE_ACCOUNT, EXIT_GUEST }
 
 data class ProfileUiState(
     val content: LoadState<ProfileContent> = LoadState.Loading,
@@ -37,6 +37,8 @@ sealed interface ProfileAction {
     data object DismissDialog : ProfileAction
     data object ConfirmSignOut : ProfileAction
     data class ConfirmDelete(val password: String) : ProfileAction
+    /** Guest → sign-in screen, keeping this phone's trips for the account. */
+    data object CreateAccount : ProfileAction
 }
 
 @HiltViewModel
@@ -60,6 +62,7 @@ class ProfileViewModel @Inject constructor(
             ProfileAction.DismissDialog -> ui.update { if (it.busy) it else it.copy(dialog = null, deleteError = null) }
             // Session change swaps the whole UI to the sign-in screen; nothing else to do here.
             ProfileAction.ConfirmSignOut -> launchBusy { auth.signOut() }
+            ProfileAction.CreateAccount -> launchBusy { auth.leaveGuestMode() }
             is ProfileAction.ConfirmDelete -> launchBusy {
                 val result = auth.deleteAccount(action.password)
                 if (result is Outcome.Failure) ui.update { it.copy(deleteError = result.error) }

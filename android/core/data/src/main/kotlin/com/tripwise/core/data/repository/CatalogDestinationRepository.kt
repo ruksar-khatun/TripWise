@@ -34,12 +34,13 @@ import javax.inject.Singleton
  * Curated catalog from the backend. The catalog is small, so it's fetched whole and searched on-device:
  *  - first subscriber: show the on-disk copy (if any) immediately, then refresh from the network
  *  - offline with a cached copy: keep showing it
- *  - offline without one: emit AppError (screens show their error/retry state); retrying re-fetches
+ *  - no cached copy yet (first launch, or no server reachable): the catalog bundled in the APK
+ *    (assets/catalog/destinations.json, a copy of backend/catalog/destinations.json), so the app works standalone
  */
 @Singleton
 internal class CatalogDestinationRepository @Inject constructor(
     private val network: CatalogNetworkDataSource,
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     @Dispatcher(TripWiseDispatcher.IO) private val io: CoroutineDispatcher,
 ) : DestinationRepository {
 
@@ -74,7 +75,7 @@ internal class CatalogDestinationRepository @Inject constructor(
         val current = state.value
         if (current is State.Ready && refreshedThisSession) return@withLock
         if (current !is State.Ready) {
-            readCache()?.let { state.value = State.Ready(it) } ?: run { state.value = State.Loading }
+            (readCache() ?: readBundled())?.let { state.value = State.Ready(it) } ?: run { state.value = State.Loading }
         }
         when (val result = network.fetchAll()) {
             is Outcome.Success -> {
@@ -90,6 +91,16 @@ internal class CatalogDestinationRepository @Inject constructor(
         runCatching { cacheFile.takeIf { it.exists() }?.readText()?.let { json.decodeFromString(serializer, it) } }
             .onFailure { Log.w(TAG, "Catalog cache unreadable; ignoring", it) }
             .getOrNull()?.map { it.toModel() }
+    }
+
+    @kotlinx.serialization.Serializable private data class BundledCatalog(val destinations: List<DestinationDto>)
+
+    /** The curated catalog shipped inside the APK, in the API's order (popularity, then id). */
+    private suspend fun readBundled(): List<Destination>? = withContext(io) {
+        runCatching {
+            context.assets.open(BUNDLED_ASSET).bufferedReader().use { json.decodeFromString(BundledCatalog.serializer(), it.readText()) }
+                .destinations.sortedWith(compareByDescending<DestinationDto> { it.popularity }.thenBy { it.id })
+        }.onFailure { Log.w(TAG, "Bundled catalog unreadable", it) }.getOrNull()?.map { it.toModel() }
     }
 
     private suspend fun writeCache(items: List<DestinationDto>) = withContext(io) {
@@ -118,5 +129,8 @@ internal class CatalogDestinationRepository @Inject constructor(
 
     override fun observeDestination(id: String): Flow<Destination?> = catalog().map { all -> all.firstOrNull { it.id == id } }
 
-    private companion object { const val TAG = "Catalog" }
+    private companion object {
+        const val BUNDLED_ASSET = "catalog/destinations.json"
+        const val TAG = "Catalog"
+    }
 }

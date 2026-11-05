@@ -20,3 +20,10 @@ sealed interface SessionState {
 
     data class SignedIn(val user: UserProfile) : SessionState
 }
+
+/** Reserved id of the on-device guest profile (no account, no tokens; everything stays on this phone). */
+const val GUEST_USER_ID = "guest"
+
+val UserProfile.isGuest: Boolean get() = id == GUEST_USER_ID
+
+fun guestProfile(): UserProfile = UserProfile(GUEST_USER_ID, "Guest traveller", "Not signed in", null, CurrencyCode("INR"))

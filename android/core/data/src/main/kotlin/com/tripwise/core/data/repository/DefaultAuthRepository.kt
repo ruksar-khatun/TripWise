@@ -10,6 +10,8 @@ import com.tripwise.core.domain.repository.AuthRepository
 import com.tripwise.core.domain.repository.UserRepository
 import com.tripwise.core.model.SessionState
 import com.tripwise.core.model.UserProfile
+import com.tripwise.core.model.guestProfile
+import com.tripwise.core.model.isGuest
 import com.tripwise.core.network.auth.AuthTokens
 import com.tripwise.core.network.auth.SessionEvents
 import com.tripwise.core.network.auth.TokenStore
@@ -60,6 +62,8 @@ internal class DefaultAuthRepository @Inject constructor(
         if (tokens != null && cached != null) {
             _session.value = SessionState.SignedIn(cached)
             network.me().onSuccess { dto -> updateProfile(dto.toModel()) }
+        } else if (tokens == null && cached?.isGuest == true) {
+            _session.value = SessionState.SignedIn(cached) // guest mode: works with no server at all
         } else {
             if (tokens != null || cached != null) clearLocal() // half-written state: start clean
             _session.value = SessionState.SignedOut()
@@ -74,6 +78,18 @@ internal class DefaultAuthRepository @Inject constructor(
 
     override suspend fun signOut() = endSession(expired = false, notifyServer = true)
 
+    override suspend fun continueAsGuest() = transition.withLock {
+        tokenStore.clear()
+        val guest = guestProfile()
+        profileCache.save(guest)
+        _session.value = SessionState.SignedIn(guest)
+    }
+
+    override suspend fun leaveGuestMode() = transition.withLock {
+        if (profileCache.get()?.isGuest == true) profileCache.clear() // local trips are kept on purpose
+        _session.value = SessionState.SignedOut()
+    }
+
     override suspend fun deleteAccount(password: String): Outcome<Unit> =
         network.deleteAccount(password).onSuccess { endSession(expired = false, notifyServer = false) }
 
@@ -81,7 +97,9 @@ internal class DefaultAuthRepository @Inject constructor(
         result.onSuccess { response ->
             val user = response.user.toModel()
             // A different account than last time: never show the previous user's local data.
-            if (profileCache.get()?.id != user.id) localData.clear()
+            // Coming from guest mode (or a fresh install) keeps the trips made on this phone.
+            val previous = profileCache.get()
+            if (previous != null && !previous.isGuest && previous.id != user.id) localData.clear()
             tokenStore.save(AuthTokens(response.tokens.accessToken, response.tokens.refreshToken))
             profileCache.save(user)
             _session.value = SessionState.SignedIn(user)
@@ -104,10 +122,11 @@ internal class DefaultAuthRepository @Inject constructor(
         _session.value = SessionState.SignedOut(expired)
     }
 
+    /** Order matters: user data goes before the profile, so "no cached profile" always means "no previous user's data". */
     private suspend fun clearLocal() {
         tokenStore.clear()
-        profileCache.clear()
         localData.clear()
+        profileCache.clear()
     }
 
     private companion object {

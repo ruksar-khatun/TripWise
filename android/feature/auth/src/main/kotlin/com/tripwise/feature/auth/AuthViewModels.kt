@@ -67,6 +67,11 @@ abstract class AuthFormViewModel(private val signUp: Boolean) : ViewModel() {
 @HiltViewModel
 class SignInViewModel @Inject constructor(private val auth: AuthRepository) : AuthFormViewModel(signUp = false) {
     override suspend fun submit(state: AuthFormState) = auth.signIn(state.email, state.password)
+
+    /** No account or server needed: explore, plan and keep trips on this phone. */
+    fun continueAsGuest() {
+        viewModelScope.launch { auth.continueAsGuest() }
+    }
 }
 
 @HiltViewModel

@@ -125,7 +125,7 @@ All screenshots come from the automated emulator tour (`AppTourTest`) running on
 
 | Area | What it does | Needs |
 |---|---|---|
-| **Account** | Email/password sign-up and sign-in, session restore, sign-out, account deletion (asks for the password again) | Backend |
+| **Account** | Email/password sign-up and sign-in, session restore, sign-out, account deletion (asks for the password again); **guest mode** with no account or server (trips stay on the phone and carry over when you create an account) | Backend (guest: –) |
 | **Home** | Greeting, search, featured and popular carousels, upcoming trip, browse by interest, Ask TripMate AI card | Backend |
 | **Explore** | 16 Indian destinations; search by name or state, interest filters, adaptive grid, tablet list–detail layout | Backend |
 | **Destination details** | Photo pager with credits, facts (best time, currency, languages), about, why visit, must-try food, things to do, Ask TripMate AI, Google Maps card, save and share | Backend |
@@ -737,8 +737,19 @@ cd android
 ./gradlew :app:connectedDebugAndroidTest     # instrumented tests, including the app tour
 ```
 
-**Physical device:** set `BACKEND_BASE_URL` to your computer's LAN address and add that host to
-`app/src/debug/res/xml/network_security_config.xml`.
+**Physical device:** see [Run it on your phone](#run-it-on-your-phone).
+
+### Run it on your phone
+
+**Option A, no computer needed (guest mode).** Install the APK from the `ci-apk` branch
+(`TripWise.apk`, rebuilt on every push), then tap **Continue as guest**.
+The APK bundles the destination catalog and builds itineraries, cost estimates and trips on the phone.
+TripMate AI and accounts need the backend, so guests get a clear "sign in to use this" message there.
+If Android asks, allow *Install unknown apps* for your browser or file manager.
+
+**Option B, everything including TripMate AI.** Run the backend on your computer and connect the phone:
+- *USB:* set `BACKEND_BASE_URL=http://localhost:3000/` in `android/local.properties`, run `adb reverse tcp:3000 tcp:3000`, then run `app` from Android Studio.
+- *Same Wi-Fi:* set `BACKEND_BASE_URL=http://<your computer's LAN IP>:3000/`. Debug builds allow plain HTTP for this; release builds are HTTPS-only.
 
 ### 3. Deploy (Cloud Run)
 

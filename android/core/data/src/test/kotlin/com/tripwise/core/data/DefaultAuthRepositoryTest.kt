@@ -9,6 +9,7 @@ import com.tripwise.core.datastore.ProfileCache
 import com.tripwise.core.model.CurrencyCode
 import com.tripwise.core.model.SessionState
 import com.tripwise.core.model.UserProfile
+import com.tripwise.core.model.isGuest
 import com.tripwise.core.network.auth.AuthTokens
 import com.tripwise.core.network.auth.SessionEvents
 import com.tripwise.core.network.auth.TokenStore
@@ -108,7 +109,7 @@ class DefaultAuthRepositoryTest {
         val baseline = local.clears
         assertEquals(Outcome.Success(Unit), repo.signIn(" u1@example.com ", "pw"))
         assertEquals(AuthTokens("access-u1", "refresh-u1"), tokens.tokens)
-        assertEquals(baseline + 1, local.clears) // no previous profile → treated as different
+        assertEquals(baseline, local.clears) // no previous profile → nothing of another user's to wipe
         repo.signOut()
         network.loginResult = Outcome.Success(FakeAuthNetwork.response("u2"))
         repo.signIn("u2@example.com", "pw")
@@ -156,5 +157,37 @@ class DefaultAuthRepositoryTest {
         network.deleteResult = Outcome.Success(Unit)
         repo.deleteAccount("right")
         assertEquals(SessionState.SignedOut(), repo.session.value)
+    }
+
+    @Test fun `guest mode needs no server, survives restart, and its trips carry into a new account`() = runTest {
+        val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
+        repo.continueAsGuest()
+        val guest = (repo.session.value as SessionState.SignedIn).user
+        assertEquals(true, guest.isGuest)
+        assertNull(tokens.tokens)
+
+        // App restart with no tokens: still the guest (previously this was treated as half-written state).
+        val restarted = repo()
+        assertEquals(true, ((restarted.awaitSession { it is SessionState.SignedIn }) as SessionState.SignedIn).user.isGuest)
+
+        // Create an account from guest mode: local data is kept.
+        val before = local.clears
+        restarted.leaveGuestMode()
+        assertEquals(SessionState.SignedOut(), restarted.session.value)
+        restarted.signUp("Ann", "u1@example.com", "pw")
+        assertEquals("u1", (restarted.session.value as SessionState.SignedIn).user.id)
+        assertEquals(before, local.clears)
+    }
+
+    @Test fun `exiting guest mode deletes the guest data`() = runTest {
+        val repo = repo()
+        repo.awaitSession { it != SessionState.Unknown }
+        repo.continueAsGuest()
+        val before = local.clears
+        repo.signOut()
+        assertEquals(before + 1, local.clears)
+        assertNull(cache.get())
+        assertEquals(listOf<String>(), network.loggedOut) // no tokens, so nothing to revoke
     }
 }

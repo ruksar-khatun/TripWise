@@ -21,4 +21,7 @@
     <string name="feature_auth_error_name">Enter your name</string>
     <string name="feature_auth_session_expired">Your session expired. Please sign in again.</string>
     <string name="feature_auth_terms">By continuing you agree to TripWise\'s Terms and Privacy Policy.</string>
+
+    <string name="feature_auth_guest">Continue as guest</string>
+    <string name="feature_auth_guest_note">No account or server needed: explore destinations and plan trips on this phone. Sign in later to use TripMate AI.</string>
 </resources>

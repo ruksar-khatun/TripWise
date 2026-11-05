@@ -104,7 +104,7 @@ internal abstract class NetworkBindingsModule {
 }
 
 internal fun buildOkHttpClient(config: NetworkConfig): OkHttpClient = OkHttpClient.Builder()
-    .connectTimeout(15, TimeUnit.SECONDS)
+    .connectTimeout(8, TimeUnit.SECONDS) // fail fast when no server is reachable (e.g. a phone without the dev backend)
     .readTimeout(30, TimeUnit.SECONDS)
     .writeTimeout(30, TimeUnit.SECONDS)
     .addInterceptor(userAgentInterceptor(config.userAgent))

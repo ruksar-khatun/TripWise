@@ -16,4 +16,10 @@ interface AuthRepository {
 
     /** Deletes the account on the server (password re-confirmed), then ends the local session. */
     suspend fun deleteAccount(password: String): Outcome<Unit>
+
+    /** Uses the app without an account or server: an on-device guest profile; trips stay on this phone. */
+    suspend fun continueAsGuest()
+
+    /** Leaves guest mode for the sign-in screen, keeping the guest's local trips for the account they sign in to. */
+    suspend fun leaveGuestMode()
 }

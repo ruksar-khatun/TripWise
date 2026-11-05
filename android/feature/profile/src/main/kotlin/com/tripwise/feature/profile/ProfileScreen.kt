@@ -1,5 +1,6 @@
 package com.tripwise.feature.profile
 
+import com.tripwise.core.model.isGuest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,8 @@ internal fun ProfileScreen(state: ProfileUiState, onAction: (ProfileAction) -> U
                 is LoadState.Failed -> ErrorState(content.error, onRetry = {})
                 is LoadState.Ready -> Header(content.data)
             }
-            Settings(appVersion, (state.content as? LoadState.Ready)?.data?.profile?.homeCurrency?.code, onAction)
+            val profile = (state.content as? LoadState.Ready)?.data?.profile
+            Settings(appVersion, profile?.homeCurrency?.code, guest = profile?.isGuest == true, onAction)
         }
     }
 
@@ -95,6 +97,21 @@ internal fun ProfileScreen(state: ProfileUiState, onAction: (ProfileAction) -> U
             },
         )
         ProfileDialog.DELETE_ACCOUNT -> DeleteAccountDialog(state, onAction)
+        ProfileDialog.EXIT_GUEST -> AlertDialog(
+            onDismissRequest = { onAction(ProfileAction.DismissDialog) },
+            title = { Text(stringResource(R.string.feature_profile_exit_guest_title)) },
+            text = { Text(stringResource(R.string.feature_profile_exit_guest_body)) },
+            confirmButton = {
+                TextButton(onClick = { onAction(ProfileAction.ConfirmSignOut) }, enabled = !state.busy) {
+                    Text(stringResource(R.string.feature_profile_exit_guest))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onAction(ProfileAction.DismissDialog) }, enabled = !state.busy) {
+                    Text(stringResource(R.string.feature_profile_cancel))
+                }
+            },
+        )
         null -> Unit
     }
 }
@@ -161,7 +178,7 @@ private fun Stats(stats: TravelStats, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Settings(appVersion: String, currency: String?, onAction: (ProfileAction) -> Unit) {
+private fun Settings(appVersion: String, currency: String?, guest: Boolean, onAction: (ProfileAction) -> Unit) {
     val later = stringResource(R.string.feature_profile_later_phase)
     SectionTitle(stringResource(R.string.feature_profile_preferences))
     TwListRow(stringResource(R.string.feature_profile_theme), icon = TwIcons.Theme,
@@ -170,6 +187,18 @@ private fun Settings(appVersion: String, currency: String?, onAction: (ProfileAc
         trailing = currency, subtitle = later, enabled = false, onClick = {})
     HorizontalDivider(Modifier.padding(vertical = TripWiseTheme.spacing.sm))
     SectionTitle(stringResource(R.string.feature_profile_account))
+    if (guest) {
+        TwListRow(
+            stringResource(R.string.feature_profile_create_account), icon = TwIcons.Profile,
+            subtitle = stringResource(R.string.feature_profile_create_account_subtitle),
+            onClick = { onAction(ProfileAction.CreateAccount) },
+        )
+        TwListRow(
+            stringResource(R.string.feature_profile_exit_guest), icon = TwIcons.SignOut,
+            subtitle = stringResource(R.string.feature_profile_exit_guest_subtitle),
+            onClick = { onAction(ProfileAction.OpenDialog(ProfileDialog.EXIT_GUEST)) },
+        )
+    } else {
     TwListRow(stringResource(R.string.feature_profile_sign_out), icon = TwIcons.SignOut,
         onClick = { onAction(ProfileAction.OpenDialog(ProfileDialog.SIGN_OUT)) })
     TwListRow(
@@ -178,6 +207,7 @@ private fun Settings(appVersion: String, currency: String?, onAction: (ProfileAc
         contentColor = TripWiseTheme.colors.error,
         onClick = { onAction(ProfileAction.OpenDialog(ProfileDialog.DELETE_ACCOUNT)) },
     )
+    }
     HorizontalDivider(Modifier.padding(vertical = TripWiseTheme.spacing.sm))
     SectionTitle(stringResource(R.string.feature_profile_about))
     TwListRow(stringResource(R.string.feature_profile_version, appVersion), icon = TwIcons.Info)

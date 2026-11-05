@@ -36,6 +36,16 @@ class FakeAuthRepository(initial: SessionState = SessionState.SignedOut()) : Aut
         session.value = SessionState.SignedOut()
     }
 
+    override suspend fun continueAsGuest() {
+        calls += "guest"
+        session.value = SessionState.SignedIn(com.tripwise.core.model.guestProfile())
+    }
+
+    override suspend fun leaveGuestMode() {
+        calls += "leaveGuest"
+        session.value = SessionState.SignedOut()
+    }
+
     override suspend fun deleteAccount(password: String): Outcome<Unit> {
         calls += "delete"
         return nextResult.also { if (it is Outcome.Success) session.value = SessionState.SignedOut() }

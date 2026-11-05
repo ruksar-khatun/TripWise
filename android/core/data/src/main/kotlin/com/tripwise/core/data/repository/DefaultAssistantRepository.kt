@@ -23,6 +23,7 @@ import com.tripwise.core.network.datasource.ChatTripDto
 import com.tripwise.core.network.error.ApiErrorMapper
 import com.tripwise.core.network.error.call
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -31,8 +32,15 @@ internal class DefaultAssistantRepository @Inject constructor(
     private val network: AssistantNetworkDataSource,
     private val recommendations: RecommendationApi,
     private val errors: ApiErrorMapper,
+    private val tokens: com.tripwise.core.network.auth.TokenStore,
 ) : AssistantRepository {
-    override fun reply(history: List<ChatMessage>, context: AssistantContext): Flow<AssistantEvent> =
+    /** TripMate AI needs an account; guests get an immediate "sign in" answer instead of a slow network failure. */
+    override fun reply(history: List<ChatMessage>, context: AssistantContext): Flow<AssistantEvent> = kotlinx.coroutines.flow.flow {
+        if (tokens.get() == null) { emit(AssistantEvent.Failed(com.tripwise.core.common.error.AppError.Unauthorized)); return@flow }
+        emitAll(streamReply(history, context))
+    }
+
+    private fun streamReply(history: List<ChatMessage>, context: AssistantContext): Flow<AssistantEvent> =
         network.chat(buildChatRequest(history, context)).map {
             when (it) {
                 is ChatStreamEvent.Delta -> AssistantEvent.Delta(it.text)
@@ -42,7 +50,7 @@ internal class DefaultAssistantRepository @Inject constructor(
         }
 
     override suspend fun recommend(destinationId: String, kind: PlaceKind, preferences: TripPreferences, notes: String?): Outcome<List<PlaceSuggestion>> =
-        errors.call {
+        if (tokens.get() == null) Outcome.Failure(com.tripwise.core.common.error.AppError.Unauthorized) else errors.call {
             recommendations.recommend(
                 RecommendationRequestDto(
                     destinationId = destinationId,
