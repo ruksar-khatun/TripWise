@@ -1,0 +1,25 @@
+name: Image candidates
+
+# Finds freely licensed candidate photos on Wikimedia Commons for catalog curation and publishes
+# contact sheets + metadata to the `ci-image-candidates` branch. A person picks the right photo.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [scripts/image-queries.json, scripts/find-image-candidates.sh]
+
+permissions:
+  contents: write
+
+jobs:
+  candidates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y -qq imagemagick jq > /dev/null
+      - run: ./scripts/find-image-candidates.sh
+      - name: Publish
+        run: |
+          cd out && git init -q -b ci-image-candidates && git add -A
+          git -c user.name=tripwise-ci -c user.email=ci@users.noreply.github.com commit -qm "Image candidates for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-image-candidates

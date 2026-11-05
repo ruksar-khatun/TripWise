@@ -1,0 +1,18 @@
+{
+  "_comment": "Wikimedia Commons search queries used to find candidate photos per destination (see find-image-candidates.sh).",
+  "queries": {
+    "goa": "Palolem beach Goa",
+    "varanasi": "Varanasi ghats Ganges",
+    "udaipur": "Lake Pichola City Palace Udaipur",
+    "ladakh": "Pangong Tso Ladakh",
+    "rishikesh": "Rishikesh Ganges bridge",
+    "mumbai": "Gateway of India Mumbai",
+    "delhi": "India Gate New Delhi",
+    "hampi": "Hampi Virupaksha temple",
+    "darjeeling": "Darjeeling Kanchenjunga",
+    "munnar": "Munnar tea plantation",
+    "andaman": "Radhanagar beach Havelock Andaman",
+    "jaisalmer": "Jaisalmer Fort",
+    "amritsar": "Golden Temple Amritsar"
+  }
+}
