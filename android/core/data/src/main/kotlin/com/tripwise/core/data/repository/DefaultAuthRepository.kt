@@ -78,11 +78,17 @@ internal class DefaultAuthRepository @Inject constructor(
 
     override suspend fun signOut() = endSession(expired = false, notifyServer = true)
 
-    override suspend fun continueAsGuest() = transition.withLock {
-        tokenStore.clear()
-        val guest = guestProfile()
-        profileCache.save(guest)
-        _session.value = SessionState.SignedIn(guest)
+    override suspend fun continueAsGuest() {
+        android.util.Log.i(TAG, "guest: requested")
+        transition.withLock {
+            android.util.Log.i(TAG, "guest: lock held, clearing tokens")
+            tokenStore.clear()
+            android.util.Log.i(TAG, "guest: saving profile")
+            val guest = guestProfile()
+            profileCache.save(guest)
+            _session.value = SessionState.SignedIn(guest)
+            android.util.Log.i(TAG, "guest: signed in")
+        }
     }
 
     override suspend fun leaveGuestMode() = transition.withLock {
@@ -131,6 +137,7 @@ internal class DefaultAuthRepository @Inject constructor(
 
     private companion object {
         const val LOGOUT_TIMEOUT_MS = 5_000L
+        const val TAG = "Session"
     }
 }
 
