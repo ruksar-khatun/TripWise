@@ -1,0 +1,82 @@
+name: Promo recording
+
+# Boots a real Android emulator with the backend, runs the paced PromoTourTest while recording
+# the screen (one MP4 per feature) and publishes the clips to the `ci-promo-recordings` branch.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tour:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Start backend (embedded Postgres)
+        working-directory: backend
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JWT_SECRET: ci-demo-secret-ci-demo-secret-ci-demo-secret
+          NODE_ENV: development
+          LOG_LEVEL: warn
+        run: |
+          npm ci
+          npm run build
+          nohup node dist/server.js > ../backend.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf localhost:3000/api/v1/health && break; sleep 1; done
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Build test APKs
+        working-directory: android
+        run: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+
+      - name: Record promo clips on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          working-directory: android
+          script: |
+            adb shell settings put system screen_off_timeout 1800000
+            adb shell settings put global hide_error_dialogs 1
+            adb shell pm disable-user --user 0 com.google.android.apps.nexuslauncher || true
+            adb shell am force-stop com.google.android.apps.nexuslauncher || true
+            adb install -r -g app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell am instrument -w -e class com.tripwise.app.PromoTourTest com.tripwise.app.debug.test/androidx.test.runner.AndroidJUnitRunner | tee ../promo-result.txt
+            mkdir -p ../promo && adb pull /sdcard/Download/promo/. ../promo/ || true
+            adb logcat -d -s PromoTour:* AppTour:* TestRunner:* AndroidRuntime:E > ../promo/logcat.txt || true
+
+      - name: Publish clips to ci-promo-recordings branch
+        if: always()
+        run: |
+          mkdir -p out && cp -r promo/* out/ 2>/dev/null || true
+          cp promo-result.txt backend.log out/ 2>/dev/null || true
+          ls -la out
+          cd out
+          git init -q -b ci-promo-recordings
+          git add -A
+          git -c user.name=tripwise-ci -c user.email=ci@users.noreply.github.com commit -qm "Promo clips for ${GITHUB_SHA}" || exit 0
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-promo-recordings
