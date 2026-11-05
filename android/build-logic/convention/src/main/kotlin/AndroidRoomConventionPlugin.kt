@@ -1,5 +1,6 @@
 import androidx.room.gradle.RoomExtension
 import com.tripwise.buildlogic.libs
+import com.tripwise.buildlogic.serializeKspTasks
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -10,6 +11,7 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("androidx.room")
         pluginManager.apply("com.google.devtools.ksp")
+        serializeKspTasks()
 
         extensions.configure<RoomExtension> {
             schemaDirectory("$projectDir/schemas")
