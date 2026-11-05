@@ -117,11 +117,11 @@ class AssistantViewModel @Inject constructor(
             }
             // One-shot launch arguments; cleared so a recreated screen doesn't send them again.
             savedStateHandle.get<String>(ARG_STARTER)?.let { s ->
-                savedStateHandle[ARG_STARTER] = null
+                savedStateHandle.remove<String>(ARG_STARTER)
                 PlaceKind.entries.firstOrNull { it.name == s }?.let(::recommend)
             }
             savedStateHandle.get<String>(ARG_PROMPT)?.takeIf { it.isNotBlank() }?.let { p ->
-                savedStateHandle[ARG_PROMPT] = null
+                savedStateHandle.remove<String>(ARG_PROMPT)
                 send(p.take(MAX_INPUT))
             }
         }
@@ -214,7 +214,7 @@ class AssistantViewModel @Inject constructor(
         stop()
         conversationId = null
         pending = null
-        savedStateHandle[ARG_CONVERSATION] = null
+        savedStateHandle.remove<String>(ARG_CONVERSATION)
         _uiState.update { it.copy(messages = emptyList(), input = "", error = null) }
     }
 

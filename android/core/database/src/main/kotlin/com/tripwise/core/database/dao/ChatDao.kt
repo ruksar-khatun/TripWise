@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
 @Dao
-interface ChatDao {
+abstract class ChatDao {
     @Query(
         """
         SELECT c.*, (SELECT m.text FROM chat_messages m WHERE m.conversation_id = c.id AND m.text != ''
@@ -19,31 +19,31 @@ interface ChatDao {
         FROM chat_conversations c ORDER BY c.updated_at DESC
         """,
     )
-    fun observeConversations(): Flow<List<ChatConversationSummary>>
+    abstract fun observeConversations(): Flow<List<ChatConversationSummary>>
 
     @Query("SELECT * FROM chat_conversations WHERE id = :id")
-    suspend fun conversation(id: String): ChatConversationEntity?
+    abstract suspend fun conversation(id: String): ChatConversationEntity?
 
     @Query("SELECT * FROM chat_messages WHERE conversation_id = :conversationId ORDER BY created_at ASC, rowid ASC")
-    suspend fun messages(conversationId: String): List<ChatMessageEntity>
+    abstract suspend fun messages(conversationId: String): List<ChatMessageEntity>
 
-    @Upsert suspend fun upsertConversation(conversation: ChatConversationEntity)
+    @Upsert abstract suspend fun upsertConversation(conversation: ChatConversationEntity)
 
-    @Upsert suspend fun upsertMessage(message: ChatMessageEntity)
+    @Upsert abstract suspend fun upsertMessage(message: ChatMessageEntity)
 
     @Query("UPDATE chat_conversations SET updated_at = :now WHERE id = :id")
-    suspend fun touch(id: String, now: Instant)
+    abstract suspend fun touch(id: String, now: Instant)
 
     /** Saves a message and bumps its conversation to the top of the history. */
     @Transaction
-    suspend fun saveMessage(message: ChatMessageEntity, now: Instant) {
+    open suspend fun saveMessage(message: ChatMessageEntity, now: Instant) {
         upsertMessage(message)
         touch(message.conversationId, now)
     }
 
     @Query("DELETE FROM chat_conversations WHERE id = :id")
-    suspend fun deleteConversation(id: String)
+    abstract suspend fun deleteConversation(id: String)
 
     @Query("DELETE FROM chat_conversations")
-    suspend fun deleteAll()
+    abstract suspend fun deleteAll()
 }
