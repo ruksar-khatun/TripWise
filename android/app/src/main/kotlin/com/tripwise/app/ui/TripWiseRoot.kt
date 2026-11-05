@@ -30,7 +30,6 @@ import com.tripwise.feature.auth.navigation.authGraph
 @Composable
 fun TripWiseRoot(authRepository: AuthRepository, networkMonitor: NetworkMonitor) {
     val session by authRepository.session.collectAsStateWithLifecycle()
-    androidx.compose.runtime.LaunchedEffect(session) { android.util.Log.i("Session", "ui: ${session::class.simpleName}") }
     AnimatedContent(
         targetState = session,
         contentKey = { it::class to (it as? SessionState.SignedIn)?.user?.id },

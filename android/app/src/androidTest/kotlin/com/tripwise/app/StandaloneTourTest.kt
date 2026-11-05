@@ -27,7 +27,8 @@ class StandaloneTourTest {
         t.shot("standalone-after-guest", settleMs = 3_000)
 
         t.waitFor("Where to next?", timeoutMs = 30_000)
-        t.waitFor("Jaipur", timeoutMs = 30_000) // bundled catalog, no server
+        t.waitFor("Featured destinations", timeoutMs = 30_000)
+        t.waitFor("Goa", timeoutMs = 30_000) // bundled catalog, no server
         t.shot("standalone-home", settleMs = 4_000)
 
         t.click("Explore")

@@ -70,7 +70,6 @@ class SignInViewModel @Inject constructor(private val auth: AuthRepository) : Au
 
     /** No account or server needed: explore, plan and keep trips on this phone. */
     fun continueAsGuest() {
-        android.util.Log.i("Session", "guest: button tapped")
         viewModelScope.launch { auth.continueAsGuest() }
     }
 }
