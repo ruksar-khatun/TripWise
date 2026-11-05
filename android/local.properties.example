@@ -1,9 +1,6 @@
 # Copy to local.properties (git-ignored) and fill in.
 sdk.dir=/path/to/Android/sdk
 
-# Google Maps / Places key (restrict it to this app's package + SHA-1 in Google Cloud Console)
-MAPS_API_KEY=
-
 # TripWise backend. 10.0.2.2 = host machine from the Android emulator.
 BACKEND_BASE_URL=http://10.0.2.2:3000/
 # Release builds (HTTPS only).
