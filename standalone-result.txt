@@ -1,0 +1,8 @@
+
+com.tripwise.app.StandaloneTourTest:.
+
+Time: 42.217
+
+OK (1 test)
+
+

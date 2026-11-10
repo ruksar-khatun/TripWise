@@ -1,0 +1,40 @@
+--------- beginning of crash
+E/AndroidRuntime(  833): FATAL EXCEPTION: main
+E/AndroidRuntime(  833): Process: com.android.systemui, PID: 833
+E/AndroidRuntime(  833): java.lang.RuntimeException: Error receiving broadcast Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 (has extras) } in com.android.systemui.recents.OverviewProxyService$2@75cd957
+E/AndroidRuntime(  833): 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1810)
+E/AndroidRuntime(  833): 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$gDuJqgxY6Zb-ifyeubKeivTLAwk(Unknown Source:0)
+E/AndroidRuntime(  833): 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(Unknown Source:2)
+E/AndroidRuntime(  833): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/AndroidRuntime(  833): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/AndroidRuntime(  833): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/AndroidRuntime(  833): 	at android.os.Looper.loop(Looper.java:294)
+E/AndroidRuntime(  833): 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+E/AndroidRuntime(  833): 	at java.lang.reflect.Method.invoke(Native Method)
+E/AndroidRuntime(  833): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+E/AndroidRuntime(  833): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+E/AndroidRuntime(  833): Caused by: java.lang.NullPointerException: Attempt to read from field 'android.content.pm.ServiceInfo android.content.pm.ResolveInfo.serviceInfo' on a null object reference in method 'void com.android.systemui.recents.OverviewProxyService$2.onReceive(android.content.Context, android.content.Intent)'
+E/AndroidRuntime(  833): 	at com.android.systemui.recents.OverviewProxyService$2.onReceive(go/retraceme 19693c2b0a8439b7183751b64d60893829dbf56dc1e08e0669fc0cfc55754948:44)
+E/AndroidRuntime(  833): 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1802)
+E/AndroidRuntime(  833): 	... 10 more
+--------- beginning of main
+I/TestRunner( 3743): run started: 1 tests
+I/TestRunner( 3743): started: standalone(com.tripwise.app.StandaloneTourTest)
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/01-standalone-sign-in.png
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/02-standalone-after-guest.png
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/03-standalone-home.png
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/04-standalone-destination.png
+W/AppTour ( 3743): scrollTo(Plan with AI) failed: No node found that matches Text + InputText + EditableText contains 'Plan with AI' (ignoreCase: false) as substring in scrollable container
+W/AppTour ( 3743): Semantics of the node:
+W/AppTour ( 3743): Node #496 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+W/AppTour ( 3743): CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@7df6dfd'
+W/AppTour ( 3743): IsTraversalGroup = 'true'
+W/AppTour ( 3743): VerticalScrollAxisRange = 'ScrollAxisRange(value=3556.0, maxValue=3556.0, reverseScrolling=false)'
+W/AppTour ( 3743): Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+W/AppTour ( 3743): Has 13 children, 2 siblings
+W/AppTour ( 3743): Selector used: ((ScrollBy is defined)[0])
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/05-standalone-plan.png
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/06-standalone-budget.png
+I/AppTour ( 3743): Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/07-standalone-profile.png
+I/TestRunner( 3743): finished: standalone(com.tripwise.app.StandaloneTourTest)
+I/TestRunner( 3743): run finished: 1 tests, 0 failed, 0 ignored
