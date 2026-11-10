@@ -1,0 +1,8 @@
+
+com.tripwise.app.AppTourTest:.
+
+Time: 160.301
+
+OK (1 test)
+
+

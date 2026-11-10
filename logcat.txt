@@ -1,0 +1,64 @@
+--------- beginning of crash
+11-10 13:38:47.326   832   832 E AndroidRuntime: FATAL EXCEPTION: main
+11-10 13:38:47.326   832   832 E AndroidRuntime: Process: com.android.systemui, PID: 832
+11-10 13:38:47.326   832   832 E AndroidRuntime: java.lang.RuntimeException: Error receiving broadcast Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 (has extras) } in com.android.systemui.recents.OverviewProxyService$2@7c000c3
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1810)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$gDuJqgxY6Zb-ifyeubKeivTLAwk(Unknown Source:0)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(Unknown Source:2)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:958)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:205)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:294)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+11-10 13:38:47.326   832   832 E AndroidRuntime: Caused by: java.lang.NullPointerException: Attempt to read from field 'android.content.pm.ServiceInfo android.content.pm.ResolveInfo.serviceInfo' on a null object reference in method 'void com.android.systemui.recents.OverviewProxyService$2.onReceive(android.content.Context, android.content.Intent)'
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at com.android.systemui.recents.OverviewProxyService$2.onReceive(go/retraceme 19693c2b0a8439b7183751b64d60893829dbf56dc1e08e0669fc0cfc55754948:44)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1802)
+11-10 13:38:47.326   832   832 E AndroidRuntime: 	... 10 more
+--------- beginning of main
+11-10 13:38:52.663  3476  3741 I TestRunner: run started: 1 tests
+11-10 13:38:52.664  3476  3741 I TestRunner: started: tour(com.tripwise.app.AppTourTest)
+11-10 13:39:02.961  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/01-sign-in.png
+11-10 13:39:09.483  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/02-sign-up.png
+11-10 13:39:16.005  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/03-home.png
+11-10 13:39:20.334  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/04-home-scrolled.png
+11-10 13:39:22.308  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/05-tripmate-intro.png
+11-10 13:39:25.335  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/06-tripmate-preferences.png
+11-10 13:39:44.218  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/07-tripmate-reply.png
+11-10 13:39:45.631  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/08-tripmate-history.png
+11-10 13:39:50.873  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/09-explore.png
+11-10 13:39:55.910  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/10-destination-detail.png
+11-10 13:39:58.783  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/11-destination-detail-scrolled.png
+11-10 13:40:00.222  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/12-destination-saved.png
+11-10 13:40:02.645  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/13-destination-things-to-do.png
+11-10 13:40:04.522  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/14-activities-curated.png
+11-10 13:40:06.334  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/15-activities-google-maps.png
+11-10 13:40:08.045  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/16-destination-google-maps-card.png
+11-10 13:40:09.175  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/17-destination-tripmate.png
+11-10 13:40:55.994  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/18-tripmate-restaurants.png
+11-10 13:40:56.414  3476  3741 W AppTour : scrollTo(Plan with AI) failed: No node found that matches Text + InputText + EditableText contains 'Plan with AI' (ignoreCase: false) as substring in scrollable container
+11-10 13:40:56.414  3476  3741 W AppTour : Semantics of the node:
+11-10 13:40:56.414  3476  3741 W AppTour : Node #2403 at (l=0.0, t=0.0, r=1080.0, b=2400.0)px
+11-10 13:40:56.414  3476  3741 W AppTour : CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo@e6a45c0'
+11-10 13:40:56.414  3476  3741 W AppTour : IsTraversalGroup = 'true'
+11-10 13:40:56.414  3476  3741 W AppTour : VerticalScrollAxisRange = 'ScrollAxisRange(value=3556.0, maxValue=3556.0, reverseScrolling=false)'
+11-10 13:40:56.414  3476  3741 W AppTour : Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+11-10 13:40:56.414  3476  3741 W AppTour : Has 13 children, 2 siblings
+11-10 13:40:56.414  3476  3741 W AppTour : Selector used: ((ScrollBy is defined)[0])
+11-10 13:40:57.773  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/19-planner-preferences.png
+11-10 13:41:00.104  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/20-planner-result.png
+11-10 13:41:01.780  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/21-planner-result-scrolled.png
+11-10 13:41:04.790  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/22-trip-from-plan-overview.png
+11-10 13:41:06.711  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/23-tripmate-trip.png
+11-10 13:41:08.937  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/24-trip-from-plan-itinerary.png
+11-10 13:41:11.431  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/25-trip-budget-estimate.png
+11-10 13:41:13.354  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/26-trip-budget-plan.png
+11-10 13:41:17.074  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/27-saved.png
+11-10 13:41:19.478  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/28-my-trips.png
+11-10 13:41:24.485  3476  3741 W AppTour : optional click 'New trip' skipped: Condition still not satisfied after 5000 ms
+11-10 13:41:29.501  3476  3741 W AppTour : optional click 'Plan a trip' skipped: Condition still not satisfied after 5000 ms
+11-10 13:41:31.802  3476  3741 I AppTour : Saved /storage/emulated/0/Android/data/com.tripwise.app.debug/files/tour/29-profile.png
+11-10 13:41:32.909  3476  3741 I TestRunner: finished: tour(com.tripwise.app.AppTourTest)
+11-10 13:41:32.964  3476  3741 I TestRunner: run finished: 1 tests, 0 failed, 0 ignored
